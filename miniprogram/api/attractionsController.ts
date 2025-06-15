@@ -1,5 +1,8 @@
-import { request } from '../utils/request'
+// @ts-ignore
+/* eslint-disable */
+import { request } from "../utils/request";
 
+/** 此处后端没有提供注释 POST /api/attractions/add */
 export async function addAttractions(
   body: API.AttractionsAddRequest,
   options?: { [key: string]: any }
@@ -14,6 +17,7 @@ export async function addAttractions(
   });
 }
 
+/** 此处后端没有提供注释 POST /api/attractions/delete */
 export async function deleteAttractions(
   body: API.DeleteRequest,
   options?: { [key: string]: any }
@@ -28,6 +32,7 @@ export async function deleteAttractions(
   });
 }
 
+/** 此处后端没有提供注释 GET /api/attractions/get/vo */
 export async function getAttractionsVoById(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getAttractionsVOByIdParams,
@@ -42,6 +47,7 @@ export async function getAttractionsVoById(
   });
 }
 
+/** 此处后端没有提供注释 POST /api/attractions/list/page */
 export async function listAttractionsByPage(
   body: API.AttractionsQueryRequest,
   options?: { [key: string]: any }
@@ -59,6 +65,7 @@ export async function listAttractionsByPage(
   );
 }
 
+/** 此处后端没有提供注释 POST /api/attractions/list/page/vo */
 export async function listAttractionsVoByPage(
   body: API.AttractionsQueryRequest,
   options?: { [key: string]: any }
@@ -76,6 +83,7 @@ export async function listAttractionsVoByPage(
   );
 }
 
+/** 此处后端没有提供注释 POST /api/attractions/my/list/page/vo */
 export async function listMyAttractionsVoByPage(
   body: API.AttractionsQueryRequest,
   options?: { [key: string]: any }
@@ -93,6 +101,7 @@ export async function listMyAttractionsVoByPage(
   );
 }
 
+/** 此处后端没有提供注释 POST /api/attractions/update */
 export async function updateAttractions(
   body: API.AttractionsUpdateRequest,
   options?: { [key: string]: any }

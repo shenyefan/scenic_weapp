@@ -1,5 +1,8 @@
-import request from "../utils/request";
+// @ts-ignore
+/* eslint-disable */
+import { request } from "../utils/request";
 
+/** 此处后端没有提供注释 POST /api/attractions/type/add */
 export async function addAttractionsType(
   body: API.AttractionsTypeAddRequest,
   options?: { [key: string]: any }
@@ -14,6 +17,7 @@ export async function addAttractionsType(
   });
 }
 
+/** 此处后端没有提供注释 POST /api/attractions/type/delete */
 export async function deleteAttractionsType(
   body: API.DeleteRequest,
   options?: { [key: string]: any }
@@ -28,6 +32,7 @@ export async function deleteAttractionsType(
   });
 }
 
+/** 此处后端没有提供注释 GET /api/attractions/type/list */
 export async function getAllTypes(options?: { [key: string]: any }) {
   return request<API.BaseResponseListAttractionsTypeVO>(
     "/api/attractions/type/list",
@@ -38,6 +43,7 @@ export async function getAllTypes(options?: { [key: string]: any }) {
   );
 }
 
+/** 此处后端没有提供注释 GET /api/attractions/type/list/page */
 export async function listAttractionsTypeByPage(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.listAttractionsTypeByPageParams,
@@ -59,7 +65,7 @@ export async function listAttractionsTypeByPage(
   );
 }
 
-
+/** 此处后端没有提供注释 POST /api/attractions/type/update */
 export async function updateAttractionsType(
   body: API.AttractionsTypeUpdateRequest,
   options?: { [key: string]: any }

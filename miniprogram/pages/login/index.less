@@ -1,0 +1,125 @@
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 150rpx 60rpx 60rpx;
+  background-color: #ffffff;
+  min-height: 100vh;
+  box-sizing: border-box;
+  position: relative;
+
+  // LOGO区域
+  .logo {
+    text-align: center;
+    animation: fadeInDown 0.8s ease-out;
+
+    .login-logo {
+      width: 500rpx;
+      height: auto;
+      filter: drop-shadow(0 8rpx 16rpx rgba(0, 0, 0, 0.1));
+    }
+  }
+
+  // 登录表单
+  .login-form {
+    width: 100%;
+    max-width: 600rpx;
+    padding: 60rpx 40rpx;
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+
+    // 输入框样式
+    .login-field {
+      margin-bottom: 32rpx;
+      border-radius: 16rpx;
+      background: #f8f9fa;
+      border: 2rpx solid transparent;
+      transition: all 0.3s ease;
+
+      &:focus-within {
+        border-color: #20B080 ;
+        background: #fff;
+      }
+
+      // 输入框内部样式
+      .van-field__control {
+        font-size: 32rpx;
+        color: #333;
+      }
+
+      .van-field__placeholder {
+        color: #999;
+      }
+    }
+
+    // 登录控制区域
+    .login-control {
+      margin-top: 48rpx;
+
+      // 登录按钮
+      .login-btn {
+        height: 96rpx;
+        border-radius: 48rpx;
+        background: linear-gradient(135deg, #20B080 0%, #31C88B 100%);
+        border: none;
+        font-size: 36rpx;
+        font-weight: 600;
+        box-shadow: 0 8rpx 24rpx rgba(102, 126, 234, 0.3);
+        transition: all 0.3s ease;
+
+        &:active {
+          transform: translateY(2rpx);
+          box-shadow: 0 4rpx 12rpx rgba(102, 126, 234, 0.3);
+        }
+
+      }
+
+      // 链接栏
+      .link-bar {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 16rpx;
+
+        .link-text {
+          font-size: 28rpx;
+          color: #999;
+          font-weight: 500;
+          transition: all 0.3s ease;
+          position: relative;
+        }
+      }
+    }
+  }
+
+  // 底部背景
+  .footer-bg {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+}
+
+// 动画定义
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-60rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(60rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -47,13 +47,9 @@ export async function getWeatherInfo(
         }
       })
     })
-    
-    console.log('天气API响应:', res)
-    
+
     if (res.statusCode === 200 && res.data.code === '200') {
       const weatherData = res.data.now
-      console.log('天气数据:', weatherData)
-      
       return {
         temperature: weatherData.temp,
         text: weatherData.text

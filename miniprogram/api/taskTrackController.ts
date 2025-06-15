@@ -1,6 +1,8 @@
-import request from "../utils/request";
+// @ts-ignore
+/* eslint-disable */
+import { request } from "../utils/request";
 
-
+/** 此处后端没有提供注释 GET /api/task/track/detail/${param0} */
 export async function getTaskTrackDetail(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getTaskTrackDetailParams,
@@ -17,7 +19,7 @@ export async function getTaskTrackDetail(
   );
 }
 
-
+/** 此处后端没有提供注释 POST /api/task/track/end */
 export async function endTrack(
   body: API.TaskTrackEndRequest,
   options?: { [key: string]: any }
@@ -32,7 +34,7 @@ export async function endTrack(
   });
 }
 
-
+/** 此处后端没有提供注释 POST /api/task/track/list/page/vo */
 export async function listTaskTrackVoByPage(
   body: API.TaskTrackQueryRequest,
   options?: { [key: string]: any }
@@ -50,7 +52,7 @@ export async function listTaskTrackVoByPage(
   );
 }
 
-
+/** 此处后端没有提供注释 POST /api/task/track/point */
 export async function addTrackPoint(
   body: API.TaskTrackPointAddRequest,
   options?: { [key: string]: any }
@@ -65,7 +67,7 @@ export async function addTrackPoint(
   });
 }
 
-
+/** 此处后端没有提供注释 POST /api/task/track/start */
 export async function startTrack(
   body: API.TaskTrackStartRequest,
   options?: { [key: string]: any }

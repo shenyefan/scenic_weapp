@@ -14,14 +14,22 @@ export function request<T>(url: string, options: any = {}): Promise<T> {
       fullUrl += '?' + queryString
     }
     
+    // 自动添加token到请求头
+    const token = wx.getStorageSync('token')
+    const requestHeaders = {
+      'Content-Type': 'application/json',
+      ...headers
+    }
+    
+    if (token) {
+      requestHeaders['Authorization'] = `Bearer ${token}`
+    }
+    
     wx.request({
       url: fullUrl,
       method: method as any,
       data: data,
-      header: {
-        'Content-Type': 'application/json',
-        ...headers
-      },
+      header: requestHeaders,
       timeout: 10000,
       success: (res) => {
         resolve(res.data as T)

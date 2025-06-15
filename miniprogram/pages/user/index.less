@@ -1,0 +1,125 @@
+.user-page {
+  min-height: 100vh;
+  background: #fff;
+  padding: 0;
+}
+
+.profile-container {
+  padding: 40rpx 30rpx 30rpx;
+}
+
+/* 用户头像和基本信息区域 */
+.user-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 40rpx;
+  padding: 0 10rpx;
+}
+
+.avatar-section {
+  position: relative;
+  margin-right: 30rpx;
+}
+
+.avatar-edit-icon {
+  position: absolute;
+  bottom: -5rpx;
+  right: -5rpx;
+  background: #1989fa;
+  color: white;
+  border-radius: 50%;
+  width: 40rpx;
+  height: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20rpx;
+  border: 3rpx solid white;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.15);
+}
+
+.user-basic-info {
+  flex: 1;
+}
+
+.username {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 600;
+  margin-bottom: 8rpx;
+}
+
+.user-role {
+  display: block;
+  font-size: 26rpx;
+  color: #999;
+}
+
+/* 功能区域通用样式 */
+.account-section,
+.profile-section,
+.system-section {
+  margin-bottom: 30rpx;
+}
+
+.account-section .van-cell-group,
+.profile-section .van-cell-group,
+.system-section .van-cell-group {
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+  background: white;
+}
+
+/* 退出登录区域 */
+.logout-section {
+  margin-top: 50rpx;
+  padding: 0 10rpx;
+}
+
+.logout-btn {
+  border-radius: 16rpx;
+  height: 88rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  box-shadow: 0 4rpx 16rpx rgba(238, 10, 36, 0.2);
+}
+
+/* 弹窗统一样式 */
+.popup-content {
+    padding: 40rpx;
+    width: 600rpx; /* 根据实际需要调整宽度 */
+    box-sizing: border-box;
+  }
+  
+  .popup-title {
+    font-size: 36rpx;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 40rpx;
+    color: #333;
+  }
+  
+  .popup-buttons {
+    display: flex;
+    justify-content: space-between; /* 或者使用 flex-end, center 等根据设计调整 */
+    margin-top: 50rpx;
+  }
+  
+  .popup-buttons .van-button {
+    flex: 1; /* 让按钮平分空间 */
+    margin: 0 10rpx; /* 按钮之间的间距 */
+  }
+  
+  /* 针对输入框的调整 */
+  .popup-content .van-field {
+    margin-bottom: 20rpx;
+    border: 1px solid #eee;
+    border-radius: 8rpx;
+    padding: 15rpx 20rpx !important; /* 使用 !important 覆盖 Vant 内部样式 */
+  }
+  
+  .popup-content .van-field__control {
+    font-size: 28rpx;
+  }
+  

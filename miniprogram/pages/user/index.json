@@ -1,0 +1,13 @@
+{
+  "navigationBarTitleText": "用户中心",
+  "usingComponents": {
+    "van-notify": "@vant/weapp/notify/index",
+    "van-image": "@vant/weapp/image/index",
+    "van-button": "@vant/weapp/button/index",
+    "van-cell": "@vant/weapp/cell/index",
+    "van-cell-group": "@vant/weapp/cell-group/index",
+    "van-icon": "@vant/weapp/icon/index",
+    "van-popup": "@vant/weapp/popup/index",
+    "van-field": "@vant/weapp/field/index"
+  }
+}

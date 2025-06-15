@@ -1,4 +1,5 @@
 <view>
+<van-notify id="van-notify"/>
 <!-- 顶部 banner -->
 <van-image
   src="https://dlhqn.moenya.net/static/banner.png"

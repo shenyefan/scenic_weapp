@@ -1,0 +1,76 @@
+<view class="login-page">
+  <van-notify id="van-notify" />
+
+  <!-- LOGO -->
+  <view class="logo">
+    <image 
+      class="login-logo" 
+      src="/image/login/logo.png" 
+      mode="widthFix" 
+    />
+  </view>
+
+  <!-- 登录表单 -->
+  <view class="login-form">
+    <form bindsubmit="formSubmit">
+      <!-- 手机号输入 -->
+      <van-field
+        name="account"
+        value="{{ formData.account }}"
+        placeholder="请输入账号"
+        left-icon="contact"
+        type="text"
+        minlength="4"
+        maxlength="20"
+        custom-class="login-field"
+      />
+
+      <!-- 密码输入 -->
+      <van-field
+        name="password"
+        value="{{ formData.password }}"
+        type="password"
+        placeholder="请输入密码"
+        left-icon="lock"
+        minlength="6"
+        custom-class="login-field"
+      />
+
+      <!-- 登录按钮 -->
+      <view class="login-control">
+        <van-button 
+          type="primary"
+          size="large"
+          form-type="submit"
+          loading="{{ loading }}"
+          disabled="{{ disabled }}"
+          custom-class="login-btn"
+          block
+          round
+        >
+          {{ loading ? '登录中...' : '登录' }}
+        </van-button>
+        
+        <view class="link-bar">
+          <text 
+            class="link-text" 
+            bind:tap="openRegister"
+          >
+            注册 >
+          </text>
+          <text 
+            class="link-text" 
+            bind:tap="openForget"
+          >
+            忘记密码？
+          </text>
+        </view>
+      </view>
+    </form>
+  </view>
+
+  <!-- 底部背景 -->
+  <view>
+    <image class="footer-bg" src="/image/login/bg.png" mode="widthFix"/>
+  </view>
+</view>

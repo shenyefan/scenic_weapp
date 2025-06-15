@@ -1,6 +1,8 @@
-import request from "../utils/request";
+// @ts-ignore
+/* eslint-disable */
+import { request } from "../utils/request";
 
-
+/** 此处后端没有提供注释 POST /api/natural/disasters/add */
 export async function addDisasters(
   body: API.NaturalDisastersAddRequest,
   options?: { [key: string]: any }
@@ -15,6 +17,7 @@ export async function addDisasters(
   });
 }
 
+/** 此处后端没有提供注释 POST /api/natural/disasters/delete */
 export async function deleteDisasters(
   body: API.DeleteRequest,
   options?: { [key: string]: any }
@@ -29,7 +32,7 @@ export async function deleteDisasters(
   });
 }
 
-
+/** 此处后端没有提供注释 GET /api/natural/disasters/get/vo */
 export async function getDisastersVoById(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getDisastersVOByIdParams,
@@ -47,7 +50,7 @@ export async function getDisastersVoById(
   );
 }
 
-
+/** 此处后端没有提供注释 POST /api/natural/disasters/list/page/vo */
 export async function listDisastersVoByPage(
   body: API.NaturalDisastersQueryRequest,
   options?: { [key: string]: any }
@@ -65,7 +68,7 @@ export async function listDisastersVoByPage(
   );
 }
 
-
+/** 此处后端没有提供注释 POST /api/natural/disasters/update */
 export async function updateDisasters(
   body: API.NaturalDisastersUpdateRequest,
   options?: { [key: string]: any }

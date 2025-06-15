@@ -10,7 +10,7 @@ Component({
 			{
 				icon: 'user-o',
 				text: '我的',
-				url: '/pages/my/index'
+				url: '/pages/user/index'
 			}
 		]
 	},

@@ -1,6 +1,8 @@
-import request from "../utils/request";
+// @ts-ignore
+/* eslint-disable */
+import { request } from "../utils/request";
 
-
+/** 此处后端没有提供注释 POST /api/task/disposal/add */
 export async function addTaskDisposal(
   body: API.TaskDisposalAddRequest,
   options?: { [key: string]: any }
@@ -15,7 +17,7 @@ export async function addTaskDisposal(
   });
 }
 
-
+/** 此处后端没有提供注释 POST /api/task/disposal/delete */
 export async function deleteTaskDisposal(
   body: API.DeleteRequest,
   options?: { [key: string]: any }
@@ -30,7 +32,7 @@ export async function deleteTaskDisposal(
   });
 }
 
-
+/** 此处后端没有提供注释 GET /api/task/disposal/get */
 export async function getTaskDisposalById(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getTaskDisposalByIdParams,
@@ -45,7 +47,7 @@ export async function getTaskDisposalById(
   });
 }
 
-
+/** 此处后端没有提供注释 GET /api/task/disposal/get/vo */
 export async function getTaskDisposalVoById(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getTaskDisposalVOByIdParams,
@@ -60,7 +62,7 @@ export async function getTaskDisposalVoById(
   });
 }
 
-
+/** 此处后端没有提供注释 POST /api/task/disposal/list/my/page/vo */
 export async function listMyTaskDisposalVoByPage(
   body: API.TaskDisposalQueryRequest,
   options?: { [key: string]: any }
@@ -78,7 +80,7 @@ export async function listMyTaskDisposalVoByPage(
   );
 }
 
-
+/** 此处后端没有提供注释 POST /api/task/disposal/list/page/vo */
 export async function listTaskDisposalVoByPage(
   body: API.TaskDisposalQueryRequest,
   options?: { [key: string]: any }
@@ -96,7 +98,7 @@ export async function listTaskDisposalVoByPage(
   );
 }
 
-
+/** 此处后端没有提供注释 POST /api/task/disposal/update */
 export async function updateTaskDisposal(
   body: API.TaskDisposalUpdateRequest,
   options?: { [key: string]: any }

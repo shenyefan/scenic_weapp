@@ -1,6 +1,8 @@
-import request from "../utils/request";
+// @ts-ignore
+/* eslint-disable */
+import { request } from "../utils/request";
 
-
+/** 此处后端没有提供注释 POST /api/user/add */
 export async function addUser(
   body: API.UserAddRequest,
   options?: { [key: string]: any }
@@ -15,7 +17,7 @@ export async function addUser(
   });
 }
 
-
+/** 此处后端没有提供注释 POST /api/user/delete */
 export async function deleteUser(
   body: API.DeleteRequest,
   options?: { [key: string]: any }
@@ -30,7 +32,7 @@ export async function deleteUser(
   });
 }
 
-
+/** 此处后端没有提供注释 GET /api/user/get */
 export async function getUserById(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getUserByIdParams,
@@ -45,7 +47,7 @@ export async function getUserById(
   });
 }
 
-
+/** 此处后端没有提供注释 GET /api/user/get/login */
 export async function getLoginUser(options?: { [key: string]: any }) {
   return request<API.BaseResponseLoginUserVO>("/api/user/get/login", {
     method: "GET",
@@ -53,7 +55,7 @@ export async function getLoginUser(options?: { [key: string]: any }) {
   });
 }
 
-
+/** 此处后端没有提供注释 GET /api/user/get/vo */
 export async function getUserVoById(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getUserVOByIdParams,
@@ -68,7 +70,7 @@ export async function getUserVoById(
   });
 }
 
-
+/** 此处后端没有提供注释 POST /api/user/list/page */
 export async function listUserByPage(
   body: API.UserQueryRequest,
   options?: { [key: string]: any }
@@ -83,7 +85,7 @@ export async function listUserByPage(
   });
 }
 
-
+/** 此处后端没有提供注释 POST /api/user/list/page/vo */
 export async function listUserVoByPage(
   body: API.UserQueryRequest,
   options?: { [key: string]: any }
@@ -98,7 +100,7 @@ export async function listUserVoByPage(
   });
 }
 
-
+/** 此处后端没有提供注释 POST /api/user/login */
 export async function userLogin(
   body: API.UserLoginRequest,
   options?: { [key: string]: any }
@@ -113,7 +115,7 @@ export async function userLogin(
   });
 }
 
-
+/** 此处后端没有提供注释 POST /api/user/logout */
 export async function userLogout(options?: { [key: string]: any }) {
   return request<API.BaseResponseBoolean>("/api/user/logout", {
     method: "POST",
@@ -121,7 +123,7 @@ export async function userLogout(options?: { [key: string]: any }) {
   });
 }
 
-
+/** 此处后端没有提供注释 POST /api/user/register */
 export async function userRegister(
   body: API.UserRegisterRequest,
   options?: { [key: string]: any }
@@ -136,7 +138,7 @@ export async function userRegister(
   });
 }
 
-
+/** 此处后端没有提供注释 POST /api/user/update */
 export async function updateUser(
   body: API.UserUpdateRequest,
   options?: { [key: string]: any }
@@ -151,7 +153,7 @@ export async function updateUser(
   });
 }
 
-
+/** 此处后端没有提供注释 POST /api/user/update/my */
 export async function updateMyUser(
   body: API.UserUpdateMyRequest,
   options?: { [key: string]: any }

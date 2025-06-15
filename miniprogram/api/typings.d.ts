@@ -457,6 +457,7 @@ declare namespace API {
     userRole?: string;
     createTime?: string;
     updateTime?: string;
+    token?: string;
   };
 
   type NaturalDisastersAddRequest = {

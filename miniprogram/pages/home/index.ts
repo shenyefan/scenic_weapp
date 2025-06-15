@@ -3,6 +3,7 @@ import { listPublicizeVideoVoByPage } from '../../api/publicizeVideoController'
 import { listPublicizeWxPlatformVoByPage } from '../../api/publicizeWxPlatformController'
 import { getWeatherInfo, WeatherData } from '../../utils/weather'
 import { getCurrentDateString } from '../../utils/date'
+import Notify from '@vant/weapp/notify/notify';
 
 Page({
   data: {
@@ -145,9 +146,8 @@ Page({
       this.setData({
         weather: weatherData
       })
-      console.log('设置后的数据:', this.data.weather)
     } else {
-      console.log('获取天气信息失败，使用默认值')
+      this.showError('获取天气信息失败')
     }
   },
 
@@ -250,11 +250,7 @@ Page({
   
   // 显示错误信息
   showError(message) {
-    wx.showToast({
-      title: message,
-      icon: 'none',
-      duration: 2000
-    })
+    Notify({ type: 'danger', message: message ,safeAreaInsetTop: true });
   },
   
   // 获取视频列表

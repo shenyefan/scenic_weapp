@@ -1,6 +1,8 @@
-import request from "../utils/request";
+// @ts-ignore
+/* eslint-disable */
+import { request } from "../utils/request";
 
-
+/** 此处后端没有提供注释 POST /api/task/checkin/add */
 export async function addTaskCheckin(
   body: API.TaskCheckinAddRequest,
   options?: { [key: string]: any }
@@ -15,7 +17,7 @@ export async function addTaskCheckin(
   });
 }
 
-
+/** 此处后端没有提供注释 POST /api/task/checkin/delete */
 export async function deleteTaskCheckin(
   body: API.DeleteRequest,
   options?: { [key: string]: any }
@@ -30,7 +32,7 @@ export async function deleteTaskCheckin(
   });
 }
 
-
+/** 此处后端没有提供注释 GET /api/task/checkin/get */
 export async function getTaskCheckinById(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getTaskCheckinByIdParams,
@@ -45,7 +47,7 @@ export async function getTaskCheckinById(
   });
 }
 
-
+/** 此处后端没有提供注释 GET /api/task/checkin/get/vo */
 export async function getTaskCheckinVoById(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getTaskCheckinVOByIdParams,
@@ -60,7 +62,7 @@ export async function getTaskCheckinVoById(
   });
 }
 
-
+/** 此处后端没有提供注释 POST /api/task/checkin/list/my/page/vo */
 export async function listMyTaskCheckinVoByPage(
   body: API.TaskCheckinQueryRequest,
   options?: { [key: string]: any }
@@ -78,7 +80,7 @@ export async function listMyTaskCheckinVoByPage(
   );
 }
 
-
+/** 此处后端没有提供注释 POST /api/task/checkin/list/page/vo */
 export async function listTaskCheckinVoByPage(
   body: API.TaskCheckinQueryRequest,
   options?: { [key: string]: any }
@@ -96,7 +98,7 @@ export async function listTaskCheckinVoByPage(
   );
 }
 
-
+/** 此处后端没有提供注释 POST /api/task/checkin/update */
 export async function updateTaskCheckin(
   body: API.TaskCheckinUpdateRequest,
   options?: { [key: string]: any }

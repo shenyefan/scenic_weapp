@@ -1,27 +1,32 @@
 {
   "pages": [
     "pages/home/index",
-    "pages/my/index"
+    "pages/user/index",
+    "pages/manage/index",
+    "pages/login/index"
+  ],
+  "subPackages": [
   ],
   "tabBar": {
     "custom": true,
-    "color": "#7A7E83",
-    "selectedColor": "#3cc51f",
-    "backgroundColor": "#ffffff",
+		"color": "#000000",
+		"selectedColor": "#000000",
+		"backgroundColor": "#000000",
     "list": [
       {
         "pagePath": "pages/home/index",
         "text": "首页"
       },
       {
-        "pagePath": "pages/my/index",
+        "pagePath": "pages/user/index",
         "text": "我的"
       }
     ]
   },
   "window": {
-    "navigationBarTextStyle": "black",
-    "navigationStyle": "custom"
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black"
   },
   "rendererOptions": {
     "skyline": {
