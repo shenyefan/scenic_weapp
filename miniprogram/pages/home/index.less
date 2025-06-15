@@ -1,0 +1,252 @@
+/* 页面容器 */
+page {
+  background: linear-gradient(to bottom, #fff , #fff);
+}
+
+/* Banner区域 */
+.banner {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  box-shadow: 0 8rpx 32rpx rgba(79, 172, 254, 0.15);
+  mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+}
+
+.banner-content {
+  background: #f8fffe;
+  border-radius: 24rpx;
+  padding: 32rpx 24rpx;
+  margin: -80rpx 30rpx 0;
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 12rpx 48rpx rgba(52, 152, 219, 0.12);
+  border: 2rpx solid rgba(52, 152, 219, 0.08);
+}
+
+/* 标题 */
+.title .title-zh {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.title .title-en {
+  font-size: 18rpx;
+  color: #7f8c8d;
+  margin-bottom: 12rpx;
+}
+
+/* 右侧日期天气 */
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.info .date {
+  font-size: 26rpx;
+  color: #3498db;
+  margin-bottom: 8rpx;
+  text-align: right;
+}
+
+.info .temperature {
+  font-size: 24rpx;
+  color: #3498db;
+  text-align: right;
+}
+
+/* 卡片区容器间距 */
+.card-section {
+  margin-top: 32rpx;
+}
+
+/* 通用卡片样式 */
+.card {
+  height: 120rpx;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.card-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #2c3e50;
+  z-index: 2;
+  position: relative;
+  line-height: 1.2;
+}
+
+.card-icon {
+  width: 100rpx;
+  height: 100rpx;
+  position: absolute;
+  bottom: 16rpx;
+  right: 16rpx;
+  opacity: 0.8;
+}
+
+/* 地图卡片 */
+.map-card {
+  background: linear-gradient(135deg, #e8f8f5 0%, #d1f2eb 100%);
+  border: 2rpx solid rgba(26, 188, 156, 0.2);
+}
+
+.map-card .card-title {
+  color: #16a085;
+}
+
+/* 购票卡片 */
+.ticket-card {
+  background: linear-gradient(135deg, #fef9e7 0%, #fcf3cf 100%);
+  border: 2rpx solid rgba(241, 196, 15, 0.2);
+}
+
+.ticket-card .card-title {
+  color: #d68910;
+}
+
+.card-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.card-title {
+  position: relative;
+  z-index: 2;
+  color: white;
+}
+
+/* 功能图标区 */
+.icon-grid {
+  margin: 30rpx;
+}
+
+/* 通知栏 */
+.notice-bar {
+  background: linear-gradient(90deg, #f0fdf4 0%, #dcfce7 100%);
+  border: 2rpx solid rgba(34, 197, 94, 0.2);
+  box-shadow: 0 4rpx 12rpx rgba(34, 197, 94, 0.1);
+}
+
+.notice-bar .van-notice-bar__content {
+    color: black !important;
+}
+  
+.notice-bar .van-icon {
+    color: #2c3e50;
+}
+
+/* Tab区域 */
+.van-tabs {
+  margin-top: 32rpx;
+}
+
+.van-tab {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #7f8c8d;
+}
+
+.van-tabs__content {
+  background: #ffffff;
+  padding: 24rpx;
+}
+
+.van-cell-group {
+  margin: 0 10rpx;
+  border-radius: 0;
+  border: 0;
+  background: transparent;
+}
+
+.van-cell .van-cell__title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 12rpx;
+}
+
+.van-cell .van-cell__label {
+  font-size: 26rpx;
+  color: #7f8c8d;
+  margin-top: 8rpx;
+}
+
+/* 空状态样式 */
+.data-empty {
+  padding: 80rpx 32rpx;
+  margin: 32rpx 0;
+}
+
+/* 弹窗样式优化 */
+.van-popup {
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+  
+/* 加载中样式 */
+.loading-view {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.van-loading {
+  padding: 40rpx;
+  margin: 40rpx;
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 没有更多数据提示样式 */
+.van-divider {
+    padding: 40rpx;
+    margin: 40rpx;
+    font-size: 28rpx;
+    color: #999;
+}
+
+/* 响应式适配 */
+@media (max-width: 750rpx) {
+  .welcome-zh {
+    font-size: 32rpx;
+  }
+  
+  .card-title {
+    font-size: 28rpx;
+  }
+  
+  .icon-grid {
+    margin: 24rpx 16rpx;
+  }
+}
+
+/* 动画效果 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.attraction-cell-group,
+.video-cell-group,
+.news-cell-group {
+  animation: fadeInUp 0.6s ease-out;
+}

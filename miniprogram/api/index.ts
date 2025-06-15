@@ -1,0 +1,29 @@
+import * as userController from "./userController";
+import * as taskTrackController from "./taskTrackController";
+import * as taskInspectionController from "./taskInspectionController";
+import * as taskDisposalController from "./taskDisposalController";
+import * as taskCheckinController from "./taskCheckinController";
+import * as publicizeWxPlatformController from "./publicizeWxPlatformController";
+import * as publicizeVideoController from "./publicizeVideoController";
+import * as naturalWeatherController from "./naturalWeatherController";
+import * as naturalDisastersController from "./naturalDisastersController";
+import * as fileController from "./fileController";
+import * as attractionsController from "./attractionsController";
+import * as attractionsTypeController from "./attractionsTypeController";
+import * as attractionsRouteController from "./attractionsRouteController";
+
+export default {
+  userController,
+  taskTrackController,
+  taskInspectionController,
+  taskDisposalController,
+  taskCheckinController,
+  publicizeWxPlatformController,
+  publicizeVideoController,
+  naturalWeatherController,
+  naturalDisastersController,
+  fileController,
+  attractionsController,
+  attractionsTypeController,
+  attractionsRouteController,
+};
