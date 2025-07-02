@@ -1,0 +1,72 @@
+<view class="user-info-page">
+  <van-notify id="van-notify"/>
+  
+  <!-- 用户信息展示区域 -->
+  <view class="user-info-container">
+    <!-- 头像区域 -->
+    <view class="avatar-container">
+        <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+            <image class="avatar" src="{{avatarUrl || '/image/login/avatar-default.png'}}"></image>
+        </button>
+    </view>
+
+    <!-- 用户信息表单 -->
+    <form bindsubmit="onFormSubmit">
+      <view class="user-form">
+        <!-- 用户名 -->
+        <view class="form-item">
+          <input 
+            type="nickname" 
+            name="userName" 
+            class="weui-input" 
+            placeholder="请输入昵称" 
+            value="{{userInfo.userName}}"
+          />
+        </view>
+
+        <!-- 手机号 -->
+        <view class="form-item phone-item">
+          <input 
+            name="userPhone" 
+            type="text"
+            class="weui-input"
+            value="{{userInfo.userPhone}}"
+            placeholder="请输入手机号"
+          />
+        </view>
+
+        <!-- 邮箱 -->
+        <view class="form-item">
+          <input 
+            name="userEmail" 
+            type="text"
+            class="weui-input"
+            value="{{userInfo.userEmail}}"
+            placeholder="请输入邮箱"
+          />
+        </view>
+
+        <!-- 简介 -->
+        <view class="form-item">
+          <textarea 
+            name="userProfile" 
+            class="weui-textarea"
+            value="{{userInfo.userProfile}}"
+            placeholder="请输入简介"
+          />
+        </view>
+      </view>
+
+      <!-- 保存按钮 -->
+      <view class="save-section">
+        <button
+          form-type="submit"
+          class="save-btn"
+          type="primary"
+        >
+          保存
+        </button>
+      </view>
+    </form>
+  </view>
+</view>

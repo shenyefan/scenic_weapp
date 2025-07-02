@@ -13,7 +13,7 @@
       "outputPath": ""
     },
     "coverView": false,
-    "postcss": false,
+    "postcss": true,
     "minified": true,
     "enhance": false,
     "showShadowRootInWxmlPanel": false,
@@ -28,7 +28,7 @@
     "skylineRenderEnable": true,
     "es6": false,
     "compileWorklet": false,
-    "uglifyFileName": false,
+    "uglifyFileName": true,
     "uploadWithSourceMap": true,
     "packNpmManually": true,
     "minifyWXSS": true,

@@ -16,7 +16,7 @@
     "noUnusedParameters": true,
     "strict": true,
     "strictPropertyInitialization": true,
-    "lib": ["ES6"],
+    "lib": ["ES2020"],
     "baseUrl": ".",
     "types": ["miniprogram-api-typings"],
     "paths": {

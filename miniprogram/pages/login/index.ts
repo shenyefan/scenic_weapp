@@ -72,9 +72,7 @@ Page({
       disabled: true 
     })
 
-    wx.showLoading({
-      title: '登录中...'
-    })
+    Notify({ type: 'primary', message: '登录中...' })
 
     try {
       const res = await userLogin({

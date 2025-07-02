@@ -223,12 +223,6 @@ declare namespace API {
     message?: string;
   };
 
-  type BaseResponsePageAttractionsTypeVO = {
-    code?: number;
-    data?: PageAttractionsTypeVO;
-    message?: string;
-  };
-
   type BaseResponsePageAttractionsVO = {
     code?: number;
     data?: PageAttractionsVO;
@@ -443,17 +437,14 @@ declare namespace API {
     id: number;
   };
 
-  type listAttractionsTypeByPageParams = {
-    current?: number;
-    size?: number;
-  };
-
   type LoginUserVO = {
     id?: number;
     userAccount?: string;
     userName?: string;
     userAvatar?: string;
     userProfile?: string;
+    userPhone?: string;
+    userEmail?: string;
     userRole?: string;
     createTime?: string;
     updateTime?: string;
@@ -595,20 +586,6 @@ declare namespace API {
     orders?: OrderItem[];
     optimizeCountSql?: PageAttractionsRouteVO;
     searchCount?: PageAttractionsRouteVO;
-    optimizeJoinOfCountSql?: boolean;
-    maxLimit?: number;
-    countId?: string;
-    pages?: number;
-  };
-
-  type PageAttractionsTypeVO = {
-    records?: AttractionsTypeVO[];
-    total?: number;
-    size?: number;
-    current?: number;
-    orders?: OrderItem[];
-    optimizeCountSql?: PageAttractionsTypeVO;
-    searchCount?: PageAttractionsTypeVO;
     optimizeJoinOfCountSql?: boolean;
     maxLimit?: number;
     countId?: string;
@@ -1110,6 +1087,8 @@ declare namespace API {
     userName?: string;
     userAvatar?: string;
     userProfile?: string;
+    userPhone?: string;
+    userEmail?: string;
     userRole?: string;
     createTime?: string;
     updateTime?: string;
@@ -1121,8 +1100,10 @@ declare namespace API {
     userAccount?: string;
     userAvatar?: string;
     userPassword?: string;
-    userRole?: string;
     userProfile?: string;
+    userPhone?: string;
+    userEmail?: string;
+    userRole?: string;
   };
 
   type UserLoginRequest = {
@@ -1140,6 +1121,8 @@ declare namespace API {
     userAccount?: string;
     userAvatar?: string;
     userProfile?: string;
+    userPhone?: string;
+    userEmail?: string;
     userRole?: string;
   };
 
@@ -1155,6 +1138,8 @@ declare namespace API {
     userAvatar?: string;
     userProfile?: string;
     userPassword?: string;
+    userPhone?: string;
+    userEmail?: string;
   };
 
   type UserUpdateRequest = {
@@ -1164,6 +1149,8 @@ declare namespace API {
     userPassword?: string;
     userAvatar?: string;
     userProfile?: string;
+    userPhone?: string;
+    userEmail?: string;
     userRole?: string;
   };
 
@@ -1172,6 +1159,8 @@ declare namespace API {
     userName?: string;
     userAvatar?: string;
     userProfile?: string;
+    userPhone?: string;
+    userEmail?: string;
     userRole?: string;
     createTime?: string;
   };

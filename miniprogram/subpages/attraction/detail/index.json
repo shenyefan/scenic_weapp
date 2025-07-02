@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "景点详情",
+  "usingComponents": {
+    "van-loading": "@vant/weapp/loading/index",
+    "van-empty": "@vant/weapp/empty/index",
+    "van-tag": "@vant/weapp/tag/index",
+    "van-divider": "@vant/weapp/divider/index",
+    "van-notify": "@vant/weapp/notify/index"
+  }
+}

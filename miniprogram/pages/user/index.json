@@ -1,5 +1,6 @@
 {
   "navigationBarTitleText": "用户中心",
+  "navigationBarBackgroundColor": "#e6f2ff",
   "usingComponents": {
     "van-notify": "@vant/weapp/notify/index",
     "van-image": "@vant/weapp/image/index",

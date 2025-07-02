@@ -6,12 +6,26 @@
     "pages/login/index"
   ],
   "subPackages": [
+    {
+      "root": "subpages/attraction",
+      "name": "attraction",
+      "pages": [
+        "detail/index"
+      ]
+    },
+    {
+      "root": "subpages/user",
+      "name": "user",
+      "pages": [
+        "info/index"
+      ]
+    }
   ],
   "tabBar": {
     "custom": true,
-		"color": "#000000",
-		"selectedColor": "#000000",
-		"backgroundColor": "#000000",
+    "color": "#000000",
+    "selectedColor": "#000000",
+    "backgroundColor": "#000000",
     "list": [
       {
         "pagePath": "pages/home/index",

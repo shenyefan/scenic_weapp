@@ -1,0 +1,93 @@
+<view class="attraction-detail">
+  <van-notify id="van-notify"/>
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-container">
+    <van-loading size="24px" vertical>加载中...</van-loading>
+  </view>
+
+  <!-- 景点详情内容 -->
+  <view wx:elif="{{attraction}}" class="detail-content">
+    <!-- 头部图片 -->
+    <view class="header-image" wx:if="{{attraction.attractionsImg}}">
+      <image 
+        src="{{attraction.attractionsImg}}" 
+        mode="aspectFill"
+        class="attraction-image"
+        bindtap="previewImage"
+      />
+      <view class="image-overlay">
+        <text class="tap-hint">点击查看大图</text>
+      </view>
+    </view>
+
+    <!-- 景点信息 -->
+    <view class="info-section">
+      <!-- 景点名称 -->
+      <view class="attraction-name">{{attraction.attractionsName || '未命名景点'}}</view>
+      
+      <!-- 景点类型 -->
+      <view class="types-container" wx:if="{{attraction.attractionsTypes && attraction.attractionsTypes.length > 0}}">
+        <van-tag 
+          wx:for="{{attraction.attractionsTypes}}" 
+          wx:key="id"
+          type="primary" 
+          size="large"
+          class="type-tag"
+        >
+          {{item.typeName}}
+        </van-tag>
+      </view>
+    </view>
+
+    <van-divider />
+
+    <!-- 景点描述 -->
+    <view class="description-section">
+      <view class="section-title">景点介绍</view>
+      <view class="description-content">
+        {{attraction.attractionsNote || '暂无详细介绍'}}
+      </view>
+    </view>
+
+    <!-- 视频信息 -->
+    <view class="video-section" wx:if="{{attraction.attractionsVideo}}">
+      <van-divider />
+      <view class="section-title">相关视频</view>
+      <view class="video-container">
+        <video 
+          src="{{attraction.attractionsVideo}}"
+          controls
+          autoplay="{{false}}"
+          loop="{{false}}"
+          muted="{{false}}"
+          show-center-play-btn="{{true}}"
+          show-play-btn="{{true}}"
+          show-fullscreen-btn="{{true}}"
+          class="video-player"
+          bindplay="onVideoPlay"
+          bindpause="onVideoPause"
+          bindended="onVideoEnded"
+          binderror="onVideoError"
+        ></video>
+      </view>
+    </view>
+
+    <!-- 位置信息 -->
+    <view class="location-section" wx:if="{{attraction.attractionsLng && attraction.attractionsLat}}">
+      <van-divider />
+      <view class="section-title">位置信息</view>
+      <view class="location-info">
+        <text class="location-text">经度：{{attraction.attractionsLng}}</text>
+        <text class="location-text">纬度：{{attraction.attractionsLat}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:else class="empty-container">
+    <van-empty description="景点信息不存在" />
+  </view>
+</view>
+
+<!-- 通知组件 -->
+<van-notify id="van-notify" />

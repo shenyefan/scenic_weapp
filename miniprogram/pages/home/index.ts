@@ -7,6 +7,7 @@ import Notify from '@vant/weapp/notify/notify';
 
 Page({
   data: {
+    active: 0,
     // 弹窗相关
     show: false,
     popupImg: '',
@@ -147,7 +148,7 @@ Page({
         weather: weatherData
       })
     } else {
-      this.showError('获取天气信息失败')
+      Notify({ type: 'danger', message: '获取天气信息失败' ,safeAreaInsetTop: true });
     }
   },
 
@@ -219,11 +220,11 @@ Page({
           'attractionPage.hasMore': newList.length < res.data.total
         })
       } else {
-        this.showError('获取景点数据失败')
+        Notify({ type: 'danger', message: '获取景点数据失败' ,safeAreaInsetTop: true });
       }
     } catch (error) {
       console.error('获取景点列表失败:', error)
-      this.showError('网络请求失败，请稍后重试')
+      Notify({ type: 'danger', message: '网络请求失败，请稍后重试' ,safeAreaInsetTop: true });
     } finally {
       this.setData({ loading: false })
     }
@@ -246,11 +247,6 @@ Page({
         types: item.attractionsTypes || []
       }
     })
-  },
-  
-  // 显示错误信息
-  showError(message) {
-    Notify({ type: 'danger', message: message ,safeAreaInsetTop: true });
   },
   
   // 获取视频列表
@@ -281,11 +277,11 @@ Page({
           'videoPage.hasMore': newList.length < res.data.total
         })
       } else {
-        this.showError('获取视频数据失败')
+        Notify({ type: 'danger', message: '获取视频数据失败' ,safeAreaInsetTop: true });
       }
     } catch (error) {
       console.error('获取视频列表失败:', error)
-      this.showError('网络请求失败，请稍后重试')
+      Notify({ type: 'danger', message: '网络请求失败，请稍后重试' ,safeAreaInsetTop: true });
     } finally {
       this.setData({ loading: false })
     }
@@ -331,11 +327,11 @@ Page({
           'newsPage.hasMore': newList.length < res.data.total
         })
       } else {
-        this.showError('获取新闻数据失败')
+        Notify({ type: 'danger', message: '获取新闻数据失败' ,safeAreaInsetTop: true });
       }
     } catch (error) {
       console.error('获取新闻列表失败:', error)
-      this.showError('网络请求失败，请稍后重试')
+      Notify({ type: 'danger', message: '网络请求失败，请稍后重试' ,safeAreaInsetTop: true });
     } finally {
       this.setData({ loading: false })
     }
@@ -378,9 +374,9 @@ Page({
     if (!id) return
     
     wx.navigateTo({
-      url: `/pages/attraction-detail/index?id=${id}`,
+      url: `/subpages/attraction/detail/index?id=${id}`,
       fail: () => {
-        this.showError('页面跳转失败')
+        Notify({ type: 'danger', message: '页面跳转失败' ,safeAreaInsetTop: true });
       }
     })
   },
@@ -391,7 +387,7 @@ Page({
     const newsItem = this.data.newsList.find(item => item.id === id)
     
     if (!newsItem) {
-      this.showError('新闻数据无效')
+      Notify({ type: 'danger', message: '新闻数据无效' ,safeAreaInsetTop: true });
       return
     }
     

@@ -1,197 +1,101 @@
+<wxs module="roleUtils">
+var getRoleName = function(role) {
+  var roleMap = {
+    'user': '游客',
+    'admin': '管理员', 
+    'inspector': '巡查员',
+    'disposer': '处置员',
+    'ban': '被封号'
+  };
+  return roleMap[role] || '普通用户';
+};
+
+module.exports.getRoleName = getRoleName;
+</wxs>
+
 <view class="user-page">
-  <van-notify id="van-notify"/>
-  
-  <view class="profile-container">
-    <!-- 用户头像和基本信息区域 -->
-    <view class="user-header">
-      <view class="avatar-section" bind:click="changeAvatar">
-        <van-image
-          src="{{userInfo.userAvatar || '/image/home/avatar-default.png'}}"
-          width="120rpx"
-          height="120rpx"
-          round
-          class="user-avatar"
-          bind:click="changeAvatar"
-        />
-        <van-icon name="edit" class="avatar-edit-icon" bind:click="changeAvatar" wx:if="{{isLoggedIn}}" />
+  <van-notify id="van-notify" />
+  <!-- 用户信息区域 -->
+  <view class="user-header" bind:tap="onUserInfoClick">
+    <view class="user-avatar">
+      <van-image
+        src="{{userInfo.userAvatar || '/image/login/avatar-default.png'}}"
+        width="120rpx"
+        height="120rpx"
+        round
+      />
+    </view>
+    <view class="user-info">
+      <view class="username">
+        {{userInfo.userName || '登录/注册'}}
+        <van-icon name="edit" wx:if="{{isLoggedIn}}" />
       </view>
-      
-      <view class="user-basic-info">
-        <text class="username">{{userInfo.userName || userInfo.userAccount}}</text>
-        <text class="user-role" wx:if="{{isLoggedIn}}">{{getRoleDisplayName(userInfo.userRole)}}</text>
-        <text class="user-role" wx:else>点击下方按钮登录</text>
-      </view>
-    </view>
-
-    <!-- 个人信息功能区域 -->
-    <view class="profile-section">
-      <van-cell-group>
-        <van-cell
-          title="个人简介"
-          icon="description"
-          is-link="{{isLoggedIn}}"
-          disabled="{{!isLoggedIn}}"
-          bind:click="editProfile"
-        />
-      </van-cell-group>
-    </view>
-
-    <!-- 账户管理功能区域 -->
-    <view class="account-section">
-      <van-cell-group>
-        <van-cell
-          title="修改昵称"
-          icon="manager"
-          is-link="{{isLoggedIn}}"
-          disabled="{{!isLoggedIn}}"
-          bind:click="editUsername"
-        />
-        <van-cell
-          title="修改密码"
-          icon="lock"
-          is-link="{{isLoggedIn}}"
-          disabled="{{!isLoggedIn}}"
-          bind:click="changePassword"
-        />
-      </van-cell-group>
-    </view>
-
-    <!-- 系统信息区域 -->
-    <view class="system-section">
-      <van-cell-group>
-        <van-cell
-          title="关于"
-          icon="info"
-          is-link
-          bind:click="aboutSystem"
-        />
-      </van-cell-group>
-    </view>
-
-    <!-- 退出登录/立即登录按钮 -->
-    <view class="logout-section">
-      <van-button
-        type="{{isLoggedIn ? 'danger' : 'primary'}}"
-        size="large"
-        class="logout-btn"
-        bind:click="handleLoginLogout"
-        block
-      >
-        {{isLoggedIn ? '退出登录' : '立即登录'}}
-      </van-button>
+      <view class="user-role">{{isLoggedIn ? roleUtils.getRoleName(userInfo.userRole) : '点击登录'}}</view>
     </view>
   </view>
 
-  <!-- 修改个人简介弹窗 -->
-  <van-popup
-    show="{{ showProfilePopup }}"
-    position="center"
-    round
-    bind:close="closeProfilePopup"
-  >
-    <view class="popup-content">
-      <view class="popup-title">修改个人简介</view>
-      <van-field
-        value="{{ newProfile }}"
-        type="textarea"
-        placeholder="请输入个人简介"
-        bind:change="onProfileChange"
-        maxlength="200"
-        autosize
-      />
-      <view class="popup-buttons">
-        <van-button
-          type="default"
-          size="small"
-          bind:click="closeProfilePopup"
-        >
-          取消
-        </van-button>
-        <van-button
-          type="primary"
-          size="small"
-          bind:click="confirmProfile"
-          loading="{{ updating }}"
-        >
-          确认
-        </van-button>
-      </view>
-    </view>
-  </van-popup>
-
-  <!-- 修改昵称弹窗 -->
-  <van-popup
-    show="{{ showUsernamePopup }}"
-    position="center"
-    round
-    bind:close="closeUsernamePopup"
-  >
-    <view class="popup-content">
-      <view class="popup-title">修改昵称</view>
-      <van-field
-        value="{{ newUsername }}"
-        placeholder="请输入新昵称"
-        bind:change="onUsernameChange"
-        maxlength="20"
-      />
-      <view class="popup-buttons">
-        <van-button
-          type="default"
-          size="small"
-          bind:click="closeUsernamePopup"
-        >
-          取消
-        </van-button>
-        <van-button
-          type="primary"
-          size="small"
-          bind:click="confirmUsername"
-          loading="{{ updating }}"
-        >
-          确认
-        </van-button>
-      </view>
-    </view>
-  </van-popup>
+  <!-- 功能列表 -->
+  <view class="function-list">
+    <van-cell
+      title="修改密码"
+      is-link
+      bind:click="changePassword"
+    />
+    <van-cell
+      title="问题反馈"
+      is-link
+      bind:click="feedback"
+    />
+    <van-cell
+      title="关于"
+      is-link
+      bind:click="about"
+    />
+    <van-cell
+      title="退出登录"
+      is-link
+      bind:click="logout"
+      wx:if="{{isLoggedIn}}"
+      custom-class="logout-cell"
+    />
+  </view>
 
   <!-- 修改密码弹窗 -->
   <van-popup
-    show="{{ showPasswordPopup }}"
-    position="center"
+    show="{{ showPasswordModal }}"
+    position="bottom"
     round
-    bind:close="closePasswordPopup"
+    closeable
+    safe-area-tab-bar
+    bind:close="closePasswordModal"
   >
-    <view class="popup-content">
-      <view class="popup-title">修改密码</view>
-      <van-field
-        value="{{ newPassword }}"
-        type="password"
-        placeholder="请输入新密码"
-        bind:change="onNewPasswordChange"
-      />
-      <van-field
-        value="{{ confirmPassword }}"
-        type="password"
-        placeholder="请确认新密码"
-        bind:change="onConfirmPasswordChange"
-      />
-      <view class="popup-buttons">
-        <van-button
-          type="default"
-          size="small"
-          bind:click="closePasswordPopup"
-        >
-          取消
-        </van-button>
+    <view class="password-modal">
+      <view class="modal-header">
+        <view class="modal-title">修改密码</view>
+      </view>
+      <view class="modal-content">
+        <van-field
+          value="{{ newPassword }}"
+          type="password"
+          placeholder="请输入新密码"
+          bind:change="onNewPasswordChange"
+        />
+        <van-field
+          value="{{ confirmPassword }}"
+          type="password"
+          placeholder="请确认新密码"
+          bind:change="onConfirmPasswordChange"
+        />
+      </view>
+      <view class="modal-footer">
         <van-button
           type="primary"
-          size="small"
-          bind:click="confirmPassword"
-          loading="{{ updating }}"
+          size="large"
+          bind:click="confirmChangePassword"
         >
-          确认
+          确认修改
         </van-button>
       </view>
     </view>
-  </van-popup>  
+  </van-popup>
 </view>
