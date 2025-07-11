@@ -6,7 +6,7 @@
     <!-- 头像区域 -->
     <view class="avatar-container">
         <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-            <image class="avatar" src="{{avatarUrl || '/image/login/avatar-default.png'}}"></image>
+            <image class="avatar" src="{{avatarUrl || '/image/user/avatar.png'}}"></image>
         </button>
     </view>
 

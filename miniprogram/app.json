@@ -19,6 +19,15 @@
       "pages": [
         "info/index"
       ]
+    },
+    {
+      "root": "subpages/manage",
+      "name": "manage",
+      "pages": [
+        "checkin/index",
+        "checkin_history/index",
+        "contacts/index"
+      ]
     }
   ],
   "tabBar": {
@@ -30,6 +39,10 @@
       {
         "pagePath": "pages/home/index",
         "text": "首页"
+      },
+      {
+        "pagePath": "pages/manage/index",
+        "text": "工作台"
       },
       {
         "pagePath": "pages/user/index",
@@ -52,5 +65,16 @@
   },
   "componentFramework": "glass-easel",
   "sitemapLocation": "sitemap.json",
-  "lazyCodeLoading": "requiredComponents"
+  "lazyCodeLoading": "requiredComponents",
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序位置接口的效果展示"
+    }
+  },
+  "requiredBackgroundModes": [
+    "location"
+  ],
+  "requiredPrivateInfos": [
+    "getLocation"
+  ]
 }

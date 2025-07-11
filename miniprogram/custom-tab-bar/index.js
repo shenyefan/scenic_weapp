@@ -6,6 +6,11 @@ Component({
 				icon: 'home-o',
 				text: '主页',
 				url: '/pages/home/index'
+      },
+      {
+				icon: 'apps-o',
+				text: '工作台',
+				url: '/pages/manage/index'
 			},
 			{
 				icon: 'user-o',

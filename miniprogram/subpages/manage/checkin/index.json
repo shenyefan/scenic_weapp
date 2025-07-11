@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "签到",
+  "usingComponents": {
+    "van-notify": "@vant/weapp/notify/index"
+  }
+}

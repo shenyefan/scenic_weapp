@@ -1,0 +1,66 @@
+<wxs module="roleUtils">
+var getRoleName = function(role) {
+  var roleMap = {
+    'user': '游客',
+    'admin': '管理员', 
+    'inspector': '巡查员',
+    'disposer': '处置员',
+    'ban': '被封号'
+  };
+  return roleMap[role] || '普通用户';
+};
+
+module.exports.getRoleName = getRoleName;
+</wxs>
+
+<view class="container">
+  <van-notify id="van-notify" />
+  
+  <!-- 搜索框 -->
+  <view class="search-container">
+    <van-search
+      value="{{ searchValue }}"
+      placeholder="请输入搜索关键词"
+      bind:change="onSearchChange"
+      bind:search="onSearch"
+      shape="round"
+      clearable
+    />
+  </view>
+  
+  <!-- 加载状态 -->
+  <view wx:if="{{ loading }}" class="loading-container">
+    <van-loading color="#1989fa" vertical>加载中...</van-loading>
+  </view>
+  
+  <!-- 空状态 -->
+  <van-empty wx:elif="{{ !filteredUserList.length }}" description="暂无联系人" />
+  
+  <!-- 联系人列表 -->
+  <view wx:else class="contact-list">
+    <van-cell-group>
+      <van-cell 
+        wx:for="{{ filteredUserList }}" 
+        wx:key="id"
+        clickable
+        bind:click="callPhone"
+        data-phone="{{ item.userPhone }}"
+        data-name="{{ item.userName }}"
+      >
+        <view slot="title" class="contact-item">
+          <van-image
+            round
+            width="40px"
+            height="40px"
+            src="{{ item.userAvatar || '/image/user/avatar.png' }}"
+            fit="cover"
+          />
+          <view class="contact-info">
+            <view class="contact-name">{{ item.userName }}</view>
+            <view class="contact-role">{{ roleUtils.getRoleName(item.userRole) }}</view>
+          </view>
+        </view>
+      </van-cell>
+    </van-cell-group>
+  </view>
+</view>

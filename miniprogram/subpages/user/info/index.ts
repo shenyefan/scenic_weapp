@@ -85,9 +85,6 @@ Page({
         filePath: avatarUrl,
         biz: 'user_avatar'
       });
-
-      Notify.clear();
-
       if (response && response.code === 200) {
         const uploadedAvatarUrl = response.data;
         
@@ -101,6 +98,7 @@ Page({
             'userInfo.userAvatar': uploadedAvatarUrl,
             avatarUrl: uploadedAvatarUrl
           });
+          Notify.clear();
           Notify({ type: 'success', message: '头像更新成功' });
         } else {
           // 如果更新失败，恢复原头像

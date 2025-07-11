@@ -1,0 +1,32 @@
+<view class="signin-history-page">
+  <van-notify id="van-notify" />
+
+  <!-- 加载中 -->
+  <view wx:if="{{ loading && checkinList.length === 0 }}" class="loading-container">
+    <van-loading size="24px">加载中...</van-loading>
+  </view>
+
+  <!-- 签到记录列表 -->
+  <van-cell-group wx:if="{{ !loading || checkinList.length > 0 }}" inset>
+    <van-cell 
+        wx:for="{{ checkinList }}" 
+        wx:key="id" 
+        title="{{ item.formattedTime }}"
+        label="{{ item.checkinAddress || '未知位置' }}"
+    >
+        <van-icon 
+            slot="right-icon" 
+            name="success" 
+            color="green" 
+            class="custom-icon" 
+      />
+    </van-cell>
+  </van-cell-group>
+  <!-- 空状态 -->
+  <van-empty 
+        wx:if="{{ !loading && checkinList.length === 0 }}"
+        image="search" 
+        description="暂无签到记录"
+        custom-class="empty-state"
+      />
+</view>

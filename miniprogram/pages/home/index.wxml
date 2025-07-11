@@ -1,235 +1,132 @@
 <view>
-<van-notify id="van-notify"/>
-<!-- 顶部 banner -->
-<van-image
-  src="https://dlhqn.moenya.net/static/banner.png"
-  width="100%"
-  height="300"
-  fit="cover"
-  custom-class="banner"
-/>
+  <van-notify id="van-notify" />
+  <!-- 顶部 banner -->
+  <van-image src="https://dlhqn.moenya.net/static/banner.png" width="100%" height="300" fit="cover" custom-class="banner" />
 
-<view class="banner-content">
-  <van-row gutter="10">
-    <!-- 标题 -->
-    <van-col span="15" class="title">
-      <view class="title-zh">世界文化遗产·国家级景区</view>
-      <view class="title-en">World Cultural Heritage · National Scenery Sites</view>
-    </van-col>
+  <view class="banner-content">
+    <van-row gutter="10">
+      <!-- 标题 -->
+      <van-col span="15" class="title">
+        <view class="title-zh">世界文化遗产·国家级景区</view>
+        <view class="title-en">World Cultural Heritage · National Scenery Sites</view>
+      </van-col>
 
-    <!-- 日期信息 -->
-    <van-col span="14" class="info">
-      <view class="date">{{ currentDate }}</view>
-    </van-col>
-  </van-row>
-  <van-row gutter="10">
-    <!-- 欢迎语 -->
-    <van-col span="15" class="title">
-      <view class="title-zh">大芦花风景区欢迎您</view>
-      <view class="title-en">Welcome to Daluhua</view>
-    </van-col>
+      <!-- 日期信息 -->
+      <van-col span="14" class="info">
+        <view class="date">{{ currentDate }}</view>
+      </van-col>
+    </van-row>
+    <van-row gutter="10">
+      <!-- 欢迎语 -->
+      <van-col span="15" class="title">
+        <view class="title-zh">大芦花风景区欢迎您</view>
+        <view class="title-en">Welcome to Daluhua</view>
+      </van-col>
 
-    <!-- 天气信息 -->
-    <van-col span="14" class="info">
-      <view class="temperature">{{ weather.temperature }}° {{ weather.text }}</view>
-    </van-col>
-  </van-row>
+      <!-- 天气信息 -->
+      <van-col span="14" class="info">
+        <view class="temperature">{{ weather.temperature }}° {{ weather.text }}</view>
+      </van-col>
+    </van-row>
 
-  <van-row gutter="16" class="card-section">
-    <!-- 景区地图卡片 -->
-    <van-col span="15">
-      <view class="card map-card" bindtap="onMapTap">
-        <text class="card-title">景区地图</text>
-        <image class="card-icon" src="/image/home/map.png" mode="aspectFit"></image>
-      </view>
-    </van-col>
+    <van-row gutter="16" class="card-section">
+      <!-- 景区地图卡片 -->
+      <van-col span="15">
+        <view class="card map-card" bindtap="onMapTap">
+          <text class="card-title">景区地图</text>
+          <image class="card-icon" src="/image/home/map.svg" mode="aspectFit"></image>
+        </view>
+      </van-col>
 
-    <!-- 预约购票卡片 -->
-    <van-col span="9">
-      <view class="card ticket-card" bindtap="onTicketTap">
-        <text class="card-title">预约购票</text>
-        <image class="card-icon" src="/image/home/ticket.png" mode="aspectFit"></image>
-      </view>
-    </van-col>
-  </van-row>
-</view>
-  
+      <!-- 预约购票卡片 -->
+      <van-col span="9">
+        <view class="card ticket-card" bindtap="onTicketTap">
+          <text class="card-title">预约购票</text>
+          <image class="card-icon" src="/image/home/ticket.svg" mode="aspectFit"></image>
+        </view>
+      </van-col>
+    </van-row>
+  </view>
+
   <!-- 功能图标区 -->
   <van-grid column-num="4" border="{{ false }}" custom-class="icon-grid">
-    <van-grid-item 
-      icon="/image/home/surrounding.png" 
-      text="周边门票" 
-      data-img="https://dlhqn.moenya.net/static/ticket.png"
-      bind:click="showPopup"
-    />
-    <van-grid-item 
-      icon="/image/home/daytour.png" 
-      text="一日游" 
-      data-img="https://dlhqn.moenya.net/static/ticket.png"
-      bind:click="showPopup"
-    />
-    <van-grid-item 
-      icon="/image/home/hotel.png" 
-      text="酒店" 
-      data-img="https://dlhqn.moenya.net/static/ticket.png"
-      bind:click="showPopup"
-    />
-    <van-grid-item 
-      icon="/image/home/bus.png" 
-      text="周边交通" 
-      data-img="https://dlhqn.moenya.net/static/bus.png"
-      bind:click="showPopup"
-    />
+    <van-grid-item icon="/image/home/surrounding.svg" text="周边门票" data-img="https://dlhqn.moenya.net/static/ticket.png" bind:click="showPopup" />
+    <van-grid-item icon="/image/home/daytour.svg" text="一日游" data-img="https://dlhqn.moenya.net/static/ticket.png" bind:click="showPopup" />
+    <van-grid-item icon="/image/home/hotel.svg" text="酒店" data-img="https://dlhqn.moenya.net/static/ticket.png" bind:click="showPopup" />
+    <van-grid-item icon="/image/home/bus.svg" text="周边交通" data-img="https://dlhqn.moenya.net/static/bus.png" bind:click="showPopup" />
   </van-grid>
 
   <!-- 弹出图片 -->
-  <van-popup
-    show="{{ show }}"
-    position="center"
-    custom-style="background: transparent;"
-    bind:close="onClose"
-  >
-    <van-image
-      src="{{ popupImg }}"
-      width="80vw"
-      fit="widthFix"
-      show-menu-by-longpress="{{ true }}"
-    />
+  <van-popup show="{{ show }}" position="center" custom-style="background: transparent;" bind:close="onClose">
+    <van-image src="{{ popupImg }}" width="80vw" fit="widthFix" show-menu-by-longpress="{{ true }}" />
   </van-popup>
 
 
   <!-- 通知栏 -->
-  <van-notice-bar
-    left-icon="volume-o"
-    text="来最北方的镇山，过最东北的年！"
-    custom-class="notice-bar"
-  />
+  <van-notice-bar left-icon="volume-o" text="来最北方的镇山，过最东北的年！" custom-class="notice-bar" />
 
   <!-- 标签列表 -->
   <van-tabs active="{{ active }}" bind:change="onChange" color="#d1f2eb">
     <van-tab title="景点信息">
-      <!-- 景点卡片 -->
       <view wx:if="{{ attractionList.length > 0 }}">
-        <van-cell-group
-          wx:for="{{ attractionList }}" 
-          wx:key="id"
-          custom-class="attraction-cell-group"
-        >
-          <van-cell
-            title="{{ item.name }}"
-            bind:click="onAttractionTap"
-            data-id="{{ item.id }}"
-          >
-          <van-tag 
-                wx:for="{{ item.types }}" 
-                wx:key="id"
-                wx:for-item="typeItem"
-                type="primary" 
-                size="medium"
-                plain
-              >
-                {{ typeItem.typeName }}
-              </van-tag>
-          </van-cell>
-          
-          <van-cell wx:if="{{ item.image }}">
-            <van-image
-              src="{{ item.image }}"
-              width="100%"
-              height="200px"
-              fit="cover"
-              bind:click="onAttractionTap"
-              data-id="{{ item.id }}"
-            />
-          </van-cell>
-          
-          <van-cell wx:else>
-            <van-empty 
-              image="error" 
-              description="暂无图片" 
-            />
+        <van-cell-group wx:for="{{ attractionList }}" wx:key="id">
+          <van-cell bind:click="onAttractionTap" data-id="{{ item.id }}">
+            <view slot="title">
+              <view class="item-attraction">
+                <view class="item-name">{{ item.name }}</view>
+                <view class="item-tags">
+                  <van-tag wx:for="{{ item.types }}" wx:key="id" wx:for-item="typeItem" type="primary" size="mini" plain>
+                    {{ typeItem.typeName }}
+                  </van-tag>
+                </view>
+              </view>
+              <view wx:if="{{ item.image }}">
+                <van-image src="{{ item.image }}" width="100%" height="300rpx" radius="8rpx" fit="cover" />
+              </view>
+            </view>
           </van-cell>
         </van-cell-group>
       </view>
-      
+
       <!-- 没有景点数据时的占位 -->
-      <van-empty 
-        wx:elif="{{ !loading && attractionList.length === 0 }}"
-        image="search" 
-        description="暂无景点数据" 
-        custom-class="data-empty"
-      />
+      <van-empty wx:elif="{{ !loading && attractionList.length === 0 }}" image="search" description="暂无景点数据" custom-class="data-empty" />
     </van-tab>
-    
+
     <van-tab title="宣传视频">
       <view wx:if="{{ videoList.length > 0 }}">
-        <van-cell-group
-          wx:for="{{ videoList }}" 
-          wx:key="id"
-          custom-class="video-cell-group"
-        >
-          <!-- 视频标题和描述 -->
-          <van-cell
-            title="{{ item.title }}"
-            label="{{ item.description }}"
-          />
-          
-          <!-- 视频播放器 -->
-          <van-cell>
-            <video
-              src="{{ item.videoUrl }}"
-              controls
-              style="width: 100%; height: 200px;"
-              show-center-play-btn
-              show-play-btn
-              poster="{{ item.poster || '' }}"
-            >
-            </video>
+        <van-cell-group wx:for="{{ videoList }}" wx:key="id">
+          <van-cell data-id="{{ item.id }}">
+            <view slot="title">
+              <view>{{ item.title }}</view>
+              <view>
+                <video src="{{ item.videoUrl }}" controls style="width: 100%; height: 200px;" show-center-play-btn show-play-btn poster="{{ item.poster || '' }}">
+                </video>
+              </view>
+            </view>
           </van-cell>
         </van-cell-group>
       </view>
-      
+
       <!-- 没有视频数据时的占位 -->
-      <van-empty 
-        wx:elif="{{ !loading && videoList.length === 0 }}"
-        image="default" 
-        description="暂无宣传视频" 
-        custom-class="data-empty"
-      />
+      <van-empty wx:elif="{{ !loading && videoList.length === 0 }}" image="default" description="暂无宣传视频" custom-class="data-empty" />
     </van-tab>
-    
+
     <van-tab title="新闻动态">
       <view wx:if="{{ newsList.length > 0 }}">
-        <van-cell-group
-          wx:for="{{ newsList }}" 
-          wx:key="id"
-          custom-class="news-cell-group"
-        >
-          <van-cell
-            title="{{ item.title }}"
-            title-width="70%"
-            value="{{ item.publishTime }}"
-            is-link
-            bind:click="viewNews"
-            data-id="{{ item.id }}"
-          >
+        <van-cell-group wx:for="{{ newsList }}" wx:key="id">
+          <van-cell title="{{ item.title }}" title-width="70%" value="{{ item.publishTime }}" is-link bind:click="viewNews" data-id="{{ item.id }}">
           </van-cell>
         </van-cell-group>
       </view>
-      
+
       <!-- 没有新闻数据时的占位 -->
-      <van-empty 
-        wx:elif="{{ !loading && newsList.length === 0 }}"
-        image="network" 
-        description="暂无新闻动态" 
-        custom-class="data-empty"
-      />
+      <van-empty wx:elif="{{ !loading && newsList.length === 0 }}" image="network" description="暂无新闻动态" custom-class="data-empty" />
     </van-tab>
-  <!-- 加载状态提示 -->
-  <view class="loading-view">
-    <van-loading wx:if="{{ loading }}" size="24px">加载中...</van-loading>
-    <!-- 没有更多数据提示 -->
-    <van-divider contentPosition="center" wx:elif="{{ (active === 0 && attractionList.length > 0 && !attractionPage.hasMore) && !loading || (active === 1 && videoList.length > 0 && !videoPage.hasMore) && !loading || (active === 2 && newsList.length > 0 && !newsPage.hasMore) && !loading }}">没有更多了</van-divider>
-  </view>
+    <!-- 加载状态提示 -->
+    <view class="loading-view">
+      <van-loading wx:if="{{ loading }}" size="24px">加载中...</van-loading>
+      <!-- 没有更多数据提示 -->
+      <van-divider contentPosition="center" wx:elif="{{ (active === 0 && attractionList.length > 0 && !attractionPage.hasMore) && !loading || (active === 1 && videoList.length > 0 && !videoPage.hasMore) && !loading || (active === 2 && newsList.length > 0 && !newsPage.hasMore) && !loading }}">没有更多了</van-divider>
+    </view>
   </van-tabs>
 </view>

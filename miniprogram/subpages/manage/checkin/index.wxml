@@ -1,0 +1,27 @@
+<view class="main">
+  <van-notify id="van-notify" />
+  
+  <!-- 地图铺满屏幕 -->
+  <map
+    id="map"
+    longitude="{{ lng }}"
+    latitude="{{ lat }}"
+    scale="17"
+    show-location
+    style="width: 100%; height: 100vh;"
+  ></map>
+
+  <!-- 签到按钮 -->
+  <view class="circle-signin {{ isSigningIn ? 'signing' : '' }}" bindtap="signIn">
+    <van-icon wx:if="{{ isSigningIn }}" name="loading" class="loading-icon" />
+    <block wx:else>
+      <text class="circle-text">签到</text>
+      <text class="circle-time">{{ hour }}:{{ minute }}</text>
+    </block>
+  </view>
+
+  <!-- 历史记录按钮 -->
+  <view class="history-btn" bindtap="history">
+    历史记录
+  </view>
+</view>
