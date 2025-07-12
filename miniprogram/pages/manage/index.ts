@@ -33,6 +33,7 @@ Page({
    */
   onShow() {
     this.getTabBar().init();
+    this.checkLoginStatus()
   },
 
   /**

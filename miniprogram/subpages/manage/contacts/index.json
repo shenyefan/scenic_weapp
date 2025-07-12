@@ -1,5 +1,6 @@
 {
   "navigationBarTitleText": "通讯录",
+  "onReachBottomDistance": 100,
   "usingComponents": {
     "van-cell": "@vant/weapp/cell/index",
     "van-cell-group": "@vant/weapp/cell-group/index",
@@ -7,6 +8,7 @@
     "van-loading": "@vant/weapp/loading/index",
     "van-empty": "@vant/weapp/empty/index",
     "van-notify": "@vant/weapp/notify/index",
-    "van-search": "@vant/weapp/search/index"
+    "van-search": "@vant/weapp/search/index",
+    "van-divider": "@vant/weapp/divider/index"
   }
 }

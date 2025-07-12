@@ -25,6 +25,15 @@
         url=""
       />
 
+      <!-- 巡查任务 -->
+      <van-grid-item 
+      wx:if="{{ loginUser.userRole == 'inspector' }}"
+        icon="/image/manage/task.svg" 
+        text="巡查任务" 
+        link-type="navigateTo"
+        url=""
+      />
+
       <!-- 问题处置 -->
       <van-grid-item 
         wx:if="{{ loginUser.userRole == 'disposer' }}"

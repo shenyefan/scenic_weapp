@@ -5,72 +5,107 @@ Page({
   data: {
     userList: [] as API.UserVO[],
     filteredUserList: [] as API.UserVO[],
-    searchValue: ''
+    searchValue: '',
+    loading: false,
+    pageInfo: {
+      current: 1,
+      pageSize: 10,
+      total: 0,
+      hasMore: true
+    }
   },
 
   onLoad() {
-    this.loadUserList()
+    this.loadUserList(true)
   },
 
   // 加载用户列表
-  async loadUserList() {
+  async loadUserList(refresh = false) {
+    if (this.data.loading) return
+    
+    // 如果没有更多数据且不是刷新操作，则直接返回
+    if (!refresh && !this.data.pageInfo.hasMore) return
+    
+    this.setData({ loading: true })
+    
+    if (refresh) {
+      this.setData({ userList: [], filteredUserList: [] })
+    }
+
     try {
-      const result = await listUserVoByPage({
-        current: 1,
-        pageSize: 999,
+      const pageInfo = this.data.pageInfo
+      const params: any = {
+        current: refresh ? 1 : pageInfo.current,
+        pageSize: pageInfo.pageSize,
         sortField: 'createTime',
         sortOrder: 'descend'
-      })
+      }
+      
+      // 添加搜索参数
+      if (this.data.searchValue) {
+        params.userName = this.data.searchValue
+      }
+      
+      const result = await listUserVoByPage(params)
       
       if (result.code === 200 && result.data) {
-        const { records } = result.data
+        const { records, total } = result.data
+        const newList = refresh ? records : [...this.data.userList, ...records]
+        const hasMore = records.length > 0 && newList.length < total
         
         this.setData({
-          userList: records,
-          filteredUserList: records // 初始化过滤列表
+          userList: newList,
+          filteredUserList: this.data.searchValue ? this.filterUsers(newList, this.data.searchValue) : newList,
+          'pageInfo.current': refresh ? 2 : pageInfo.current + 1,
+          'pageInfo.total': total,
+          'pageInfo.hasMore': hasMore,
+          loading: false
         })
       } else {
         Notify({ type: 'danger', message: result.message || '获取用户列表失败' })
+        this.setData({ loading: false })
       }
     } catch (error) {
       console.error('获取用户列表失败:', error)
       Notify({ type: 'danger', message: '获取用户列表失败，请重试' })
+      this.setData({ loading: false })
     }
   },
 
   // 搜索框输入变化
   onSearchChange(e: { detail: any }) {
     this.setData({
-      searchValue: e.detail
+      searchValue: e.detail,
+      userList: [],
+      filteredUserList: [],
+      'pageInfo.current': 1,
+      'pageInfo.hasMore': true
     })
-    this.filterUserList()
+    this.loadUserList(true)
   },
 
   // 搜索确认
   onSearch() {
-    this.filterUserList()
+    this.loadUserList(true)
   },
 
   // 过滤用户列表
-  filterUserList() {
-    const { searchValue, userList } = this.data
-    if (!searchValue) {
-      // 如果搜索值为空，显示所有用户
-      this.setData({
-        filteredUserList: userList
-      })
-      return
-    }
-
-    // 根据用户名或角色过滤
-    const filtered = userList.filter(user => {
-      const userName = (user as any).userName || '';
+  filterUsers(userList: API.UserVO[], searchValue: string) {
+    if (!searchValue) return userList
+    
+    return userList.filter(user => {
+      const userName = (user as any).userName || ''
       return userName.toLowerCase().includes(searchValue.toLowerCase())
     })
+  },
 
-    this.setData({
-      filteredUserList: filtered
-    })
+  // 上拉加载更多
+  onReachBottom() {
+    if (this.data.loading) return
+    
+    if (this.data.pageInfo.hasMore) {
+      this.loadUserList(false)
+    }
   },
 
   // 拨打电话
