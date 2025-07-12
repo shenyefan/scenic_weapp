@@ -15,7 +15,7 @@
     "coverView": false,
     "postcss": true,
     "minified": true,
-    "enhance": true,
+    "enhance": false,
     "showShadowRootInWxmlPanel": false,
     "packNpmRelationList": [
       {
@@ -26,7 +26,7 @@
     "ignoreUploadUnusedFiles": true,
     "compileHotReLoad": false,
     "skylineRenderEnable": true,
-    "es6": true,
+    "es6": false,
     "compileWorklet": false,
     "uglifyFileName": true,
     "uploadWithSourceMap": true,

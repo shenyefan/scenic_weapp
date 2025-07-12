@@ -430,4 +430,13 @@ Page({
         break
     }
   },
+
+  onMapTap() {
+    wx.navigateTo({
+      url: '/subpages/attraction/map/index',
+      fail: () => {
+        Notify({ type: 'danger', message: '页面跳转失败' })
+      }
+    })
+  }
 })

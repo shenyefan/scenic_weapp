@@ -10,7 +10,9 @@
       "root": "subpages/attraction",
       "name": "attraction",
       "pages": [
-        "detail/index"
+        "detail/index",
+        "map/index",
+        "routes/index"
       ]
     },
     {

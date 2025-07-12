@@ -1,0 +1,69 @@
+<view class="container">
+  <van-notify id="van-notify" />
+  <!-- 加载状态 -->
+  <view wx:if="{{ loading && routeList.length === 0 }}" class="loading-container">
+    <van-loading color="#1989fa" vertical>加载中...</van-loading>
+  </view>
+
+  <!-- 空状态 -->
+  <van-empty wx:elif="{{ !routeList.length }}" description="暂无游览路线信息" />
+
+  <!-- 地图视图 -->
+  <view wx:elif="{{ viewMode === 'map' }}" class="map-container">
+    <map id="map" 
+         class="map" 
+         longitude="{{ mapCenter.longitude }}" 
+         latitude="{{ mapCenter.latitude }}" 
+         markers="{{ mapMarkers }}" 
+         show-location="{{ true }}"
+         enable-poi="{{ true }}"
+         include-points="{{ includePoints }}"
+         show-compass="{{ true }}"
+         enable-rotate="{{ true }}"
+         enable-zoom="{{ true }}"
+         enable-3D="{{ false }}"
+         enable-satellite="{{ true }}"
+         bindmarkertap="onMarkerTap"
+         bindcallouttap="onCalloutTap"
+         bindupdated="onMapUpdated">
+    </map>
+  </view>
+
+  <!-- 路线列表 -->
+  <view wx:else class="route-list">
+    <van-cell-group wx:for="{{ routeList }}" wx:key="id">
+      <van-cell bind:click="onRouteTap" data-id="{{ item.id }}" custom-class="route-cell">
+        <view slot="title" class="route-item">
+          <view class="route-images">
+            <view class="route-image" wx:if="{{ item.startAttractionImg }}">
+              <van-image src="{{ item.startAttractionImg }}" width="120rpx" height="120rpx" radius="8rpx" fit="cover" />
+            </view>
+            <view class="route-arrow">
+              <van-icon name="arrow" size="24px" color="#1989fa" />
+            </view>
+            <view class="route-image" wx:if="{{ item.endAttractionImg }}">
+              <van-image src="{{ item.endAttractionImg }}" width="120rpx" height="120rpx" radius="8rpx" fit="cover" />
+            </view>
+          </view>
+          <view class="route-info">
+            <view class="route-name">{{ item.startAttractionName || '未命名起点' }} → {{ item.endAttractionName || '未命名终点' }}</view>
+            <view class="route-note" wx:if="{{ item.routeNote }}">{{ item.routeNote }}</view>
+          </view>
+        </view>
+      </van-cell>
+    </van-cell-group>
+
+    <!-- 加载状态提示 -->
+    <view class="loading-view">
+      <van-loading wx:if="{{ loading }}" size="24px">加载中...</van-loading>
+      <!-- 没有更多数据提示 -->
+      <van-divider contentPosition="center" wx:elif="{{ routeList.length > 0 && !pageInfo.hasMore }}">没有更多了</van-divider>
+    </view>
+  </view>
+
+  <!-- 悬浮切换视图按钮 -->
+  <view class="float-toggle-btn" bind:tap="toggleViewMode">
+    <van-icon name="{{ viewMode === 'list' ? 'location-o' : 'bars' }}" size="24px" />
+    <text>{{ viewMode === 'list' ? '地图' : '列表' }}</text>
+  </view>
+</view>
