@@ -71,6 +71,6 @@
 
   <!-- 底部背景 -->
   <view>
-    <image class="footer-bg" src="/image/login/bg.png" mode="widthFix"/>
+    <image class="footer-bg" src="/image/login/bg.svg" mode="widthFix"/>
   </view>
 </view>

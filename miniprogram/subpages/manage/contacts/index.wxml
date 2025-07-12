@@ -52,7 +52,7 @@ module.exports.getRoleName = getRoleName;
             round
             width="40px"
             height="40px"
-            src="{{ item.userAvatar || '/image/user/avatar.png' }}"
+            src="{{ item.userAvatar || '/image/user/avatar.svg' }}"
             fit="cover"
           />
           <view class="contact-info">

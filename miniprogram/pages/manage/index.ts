@@ -8,7 +8,7 @@ Page({
    */
   data: {
     loginUser: {
-      roleName: ''
+      userRole: ''
     },
     loading: false,
     patrolState: false
@@ -40,6 +40,7 @@ Page({
    */
   async checkLoginStatus() {
     try {
+      this.setData({ loading: true })
       const token = wx.getStorageSync('token')
       if (!token) {
         wx.redirectTo({
@@ -51,7 +52,8 @@ Page({
       const result = await getLoginUser()
       if (result.code === 200 && result.data) {
         this.setData({
-          loginUser: result.data
+          loginUser: result.data,
+          loading: false
         })
       } else {
         wx.redirectTo({
@@ -60,28 +62,11 @@ Page({
       }
     } catch (error) {
       console.error('获取用户信息失败:', error)
+      this.setData({ loading: false })
       wx.redirectTo({
         url: '/pages/login/index'
       })
     }
-  },
-
-  /**
-   * 开始巡查
-   */
-  startPatrol() {
-    // TODO: 实现开始巡查功能
-    this.setData({ patrolState: true })
-    Notify({ type: 'success', message: '巡查已开始' })
-  },
-
-  /**
-   * 结束巡查
-   */
-  endPatrol() {
-    // TODO: 实现结束巡查功能
-    this.setData({ patrolState: false })
-    Notify({ type: 'success', message: '巡查已结束' })
   },
 
   /**

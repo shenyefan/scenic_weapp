@@ -19,7 +19,7 @@ module.exports.getRoleName = getRoleName;
   <view class="user-header" bind:tap="onUserInfoClick">
     <view class="user-avatar">
       <van-image
-        src="{{userInfo.userAvatar || '/image/user/avatar.png'}}"
+        src="{{userInfo.userAvatar || '/image/user/avatar.svg'}}"
         width="120rpx"
         height="120rpx"
         round
