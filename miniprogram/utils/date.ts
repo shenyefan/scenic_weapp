@@ -28,7 +28,7 @@ export function formatISOTime(isoString: string): string {
 /**
  * 格式化ISO时间字符串为详细格式
  * @param isoString ISO格式的时间字符串
- * @returns 格式化后的时间字符串，如 "2025年07月11日 13:24:21"
+ * @returns 格式化后的时间字符串，如 "2025.07.11 13:24:21"
  */
 export function formatISOTimeDetailed(isoString: string): string {
   const date = new Date(isoString)
@@ -39,5 +39,5 @@ export function formatISOTimeDetailed(isoString: string): string {
   const minutes = String(date.getMinutes()).padStart(2, '0')
   const seconds = String(date.getSeconds()).padStart(2, '0')
   
-  return `${year}年${month}月${day}日 ${hours}:${minutes}:${seconds}`
+  return `${year}.${month}.${day} ${hours}:${minutes}:${seconds}`
 }

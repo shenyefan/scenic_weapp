@@ -19,7 +19,7 @@
       <!-- 巡查检查 -->
       <van-grid-item 
       wx:if="{{ loginUser.userRole == 'inspector' }}"
-        icon="/image/manage/inspection.png" 
+        icon="/image/manage/inspect.svg" 
         text="巡查检查" 
         link-type="navigateTo"
         url=""
@@ -28,18 +28,18 @@
       <!-- 问题处置 -->
       <van-grid-item 
         wx:if="{{ loginUser.userRole == 'disposer' }}"
-        icon="/image/manage/disposal.png" 
+        icon="/image/manage/disposal.svg" 
         text="问题处置" 
         link-type="navigateTo"
-        url=""
+        url="/subpages/manage/disposal/index"
       />
 
       <!-- 巡查记录 -->
       <van-grid-item 
-        icon="/image/manage/track.png" 
+        icon="/image/manage/track.svg" 
         text="巡查记录" 
         link-type="navigateTo"
-        url=""
+        url="/subpages/manage/track/index"
       />
     </van-grid>
   </view>

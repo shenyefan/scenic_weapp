@@ -1,0 +1,33 @@
+<view class="disposal-list-page">
+  <van-notify id="van-notify" />
+
+  <!-- 加载中 -->
+  <view wx:if="{{ loading && disposalList.length === 0 }}" class="loading-container">
+    <van-loading size="24px">加载中...</van-loading>
+  </view>
+
+  <!-- 问题处置记录列表 -->
+  <van-cell-group wx:if="{{ !loading || disposalList.length > 0 }}">
+    <van-cell 
+        wx:for="{{ disposalList }}" 
+        wx:key="id" 
+        title-width="70%" 
+        title="{{ item.attractionsName || '未知景点' }}"
+        label="{{ item.disposerName || '未知' }} {{ item.formattedCreateTime }}"
+        value="{{ item.statusText }}"
+        value-class="status-{{ item.disposalStatus }}"
+        is-link
+        bind:click="navigateToEdit"
+        data-id="{{ item.id }}"
+        data-index="{{ index }}"
+    />
+  </van-cell-group>
+  
+  <!-- 空状态 -->
+  <van-empty 
+        wx:if="{{ !loading && disposalList.length === 0 }}"
+        image="search" 
+        description="暂无问题处置记录"
+        custom-class="empty-state"
+      />
+</view>

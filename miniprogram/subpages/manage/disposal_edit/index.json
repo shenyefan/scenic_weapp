@@ -1,15 +1,15 @@
 {
-  "navigationBarTitleText": "路线管理",
+  "navigationBarTitleText": "问题处置",
   "usingComponents": {
-    "van-field": "@vant/weapp/field/index",
     "van-cell": "@vant/weapp/cell/index",
     "van-cell-group": "@vant/weapp/cell-group/index",
-    "van-button": "@vant/weapp/button/index",
-    "van-notify": "@vant/weapp/notify/index",
+    "van-field": "@vant/weapp/field/index",
     "van-uploader": "@vant/weapp/uploader/index",
+    "van-button": "@vant/weapp/button/index",
     "van-loading": "@vant/weapp/loading/index",
+    "van-notify": "@vant/weapp/notify/index",
     "van-popup": "@vant/weapp/popup/index",
-    "van-dialog": "@vant/weapp/dialog/index",
+    "van-image": "@vant/weapp/image/index",
     "van-icon": "@vant/weapp/icon/index"
   }
 }

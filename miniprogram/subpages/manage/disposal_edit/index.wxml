@@ -1,0 +1,111 @@
+<view class="disposal-edit-page">
+  <van-notify id="van-notify" />
+
+  <!-- 加载中 -->
+  <view wx:if="{{ loading }}" class="loading-container">
+    <van-loading size="24px">加载中...</van-loading>
+  </view>
+
+  <block wx:else>
+    <!-- 巡查信息 (只读) -->
+    <van-cell-group inset title="巡查信息" wx:if="{{ inspectionData }}">
+      <van-cell title="景点名称" value="{{ inspectionData.attractionsName || '未知景点' }}" />
+      <van-cell title="巡查员" value="{{ inspectionData.inspectorName || '未知巡查员' }}" />
+      <van-cell title="巡查日期" value="{{ inspectionData.taskDate || '未知日期' }}" />
+      <van-cell title="是否异常" value="{{ inspectionData.isAbnormal ? '是' : '否' }}" />
+      <van-cell title="任务状态" value="{{ inspectionData.statusText || '未知状态' }}" />
+      <!-- 巡查描述 -->
+      <van-cell title="巡查描述" border="{{ false }}">
+        <view class="inspection-description">
+          {{ inspectionData.inspectionDescription || '无描述' }}
+        </view>
+      </van-cell>
+      
+      <!-- 巡查图片 -->
+      <van-cell title-width="150rpx" title="巡查图片" border="{{ false }}" wx:if="{{ inspectionData.inspectionImages }}">
+        <view>
+          <van-image
+            src="{{ inspectionData.inspectionImages }}"
+            width="200"
+            height="120"
+            fit="aspectFill"
+            show-loading
+            show-error
+          />
+        </view>
+      </van-cell>
+    </van-cell-group>
+
+    <form bindsubmit="onFormSubmit">
+      <van-cell-group inset title="问题处置信息">
+        <!-- 处置状态 -->
+        <van-cell 
+          title="处置状态" 
+          value="{{ statusOptions[formData.disposalStatus] ? statusOptions[formData.disposalStatus].text : '未知状态' }}" 
+          is-link 
+          bind:click="showStatusPicker" 
+        />
+        
+        <!-- 处置描述 -->
+        <van-field
+          name="disposalDescription"
+          value="{{ formData.disposalDescription }}"
+          label="处置描述"
+          type="textarea"
+          input-align="right"
+          placeholder="请输入处置描述"
+          autosize
+          border
+        />
+        
+        <!-- 图片上传 -->
+        <van-cell title-width="150rpx" title="处置图片" border="{{ false }}">
+          <van-uploader
+            file-list="{{ fileList }}"
+            bind:after-read="afterRead"
+            bind:delete="deleteImage"
+            upload-text="上传图片"
+            image-fit="aspectFill"
+            accept="image"
+            max-count="1"
+            preview-size="{{[200,120]}}"
+          />
+        </van-cell>
+      </van-cell-group>
+
+      <!-- 提交按钮 -->
+      <view class="submit-button-container">
+        <button class="submit-button" form-type="submit" type="primary" loading="{{ submitting }}">保存</button>
+      </view>
+    </form>
+  </block>
+
+  
+  <!-- 状态选择弹窗 -->
+  <van-popup
+    show="{{ showStatusSelector }}"
+    position="bottom"
+    round
+    closeable
+    bind:close="closeStatusPicker"
+  >
+    <view class="popup-header">
+      <view class="popup-title">选择处置状态</view>
+    </view>
+    <view class="popup-content">
+      <van-cell-group>
+        <block wx:for="{{ statusOptions }}" wx:key="value">
+          <van-cell
+            title="{{ item.text }}"
+            clickable
+            data-value="{{ item.value }}"
+            data-text="{{ item.text }}"
+            bind:click="selectStatus"
+          >
+          <van-icon size="20px" name="success" wx:if="{{ formData.disposalStatus === item.value }}"/>
+          </van-cell>
+        </block>
+      </van-cell-group>
+    </view>
+  </van-popup>
+</view>

@@ -9,7 +9,7 @@
   <!-- 编辑表单 -->
   <block wx:elif="{{ route }}">
     <form bindsubmit="onFormSubmit">
-      <van-cell-group title="路线信息">
+      <van-cell-group inset title="路线信息">
         <!-- 起点景点 -->
         <van-field
           label="起点景点"
@@ -46,8 +46,8 @@
       </van-cell-group>
       
       <!-- 起点图片 -->
-      <van-cell-group title="起点图片">
-        <van-cell title="起点图片" border="{{ false }}">
+      <van-cell-group inset title="起点图片">
+        <van-cell title-width="150rpx" title="起点图片" border="{{ false }}">
           <van-uploader
             file-list="{{ startAttractionFileList }}"
             bind:after-read="afterStartImgRead"
@@ -61,8 +61,8 @@
       </van-cell-group>
       
       <!-- 终点图片 -->
-      <van-cell-group title="终点图片">
-        <van-cell title="终点图片" border="{{ false }}">
+      <van-cell-group inset title="终点图片">
+        <van-cell title-width="150rpx" title="终点图片" border="{{ false }}">
           <van-uploader
             file-list="{{ endAttractionFileList }}"
             bind:after-read="afterEndImgRead"
@@ -76,8 +76,8 @@
       </van-cell-group>
       
       <!-- 起点视频 -->
-      <van-cell-group title="起点视频">
-        <van-cell title="起点视频" border="{{ false }}">
+      <van-cell-group inset title="起点视频">
+        <van-cell title-width="150rpx" title="起点视频" border="{{ false }}">
           <van-uploader
             file-list="{{ startAttractionVideoList }}"
             bind:after-read="afterStartVideoRead"
@@ -91,8 +91,8 @@
       </van-cell-group>
       
       <!-- 终点视频 -->
-      <van-cell-group title="终点视频">
-        <van-cell title="终点视频" border="{{ false }}">
+      <van-cell-group inset title="终点视频">
+        <van-cell title-width="150rpx" title="终点视频" border="{{ false }}">
           <van-uploader
             file-list="{{ endAttractionVideoList }}"
             bind:after-read="afterEndVideoRead"
@@ -151,7 +151,7 @@
             data-name="{{ item.attractionsName }}"
             bind:click="selectStartAttraction"
           >
-            <van-tag type="primary" wx:if="{{ selectedStartAttraction === item.id }}">已选</van-tag>
+          <van-icon size="20px" name="success" wx:if="{{ selectedStartAttraction === item.id }}"/>
           </van-cell>
         </block>
       </van-cell-group>
@@ -179,7 +179,7 @@
             data-name="{{ item.attractionsName }}"
             bind:click="selectEndAttraction"
           >
-            <van-tag type="primary" wx:if="{{ selectedEndAttraction === item.id }}">已选</van-tag>
+          <van-icon size="20px" name="success" wx:if="{{ selectedEndAttraction === item.id }}"/>
           </van-cell>
         </block>
       </van-cell-group>

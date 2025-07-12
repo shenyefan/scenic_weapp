@@ -9,7 +9,7 @@
   <!-- 编辑表单 -->
   <block wx:elif="{{ attraction }}">
     <form bindsubmit="onFormSubmit">
-      <van-cell-group title="基本信息">
+      <van-cell-group inset title="基本信息">
         <!-- 景点名称 -->
         <van-field
           label="景点名称"
@@ -31,8 +31,8 @@
       </van-cell-group>
       
       <!-- 景点图片 -->
-      <van-cell-group title="景点图片">
-        <van-cell title="景点图片" border="{{ false }}">
+      <van-cell-group inset title="景点图片">
+        <van-cell title-width="150rpx" title="景点图片" border="{{ false }}">
           <van-uploader
             file-list="{{ fileList }}"
             bind:after-read="afterRead"
@@ -46,8 +46,8 @@
       </van-cell-group>
       
       <!-- 景点视频 -->
-      <van-cell-group title="景点视频">
-        <van-cell title="景点视频" border="{{ false }}">
+      <van-cell-group inset title="景点视频">
+        <van-cell title-width="150rpx" title="景点视频" border="{{ false }}">
           <van-uploader
             file-list="{{ videoList }}"
             bind:after-read="afterVideoRead"
@@ -61,7 +61,7 @@
       </van-cell-group>
       
       <!-- 位置信息 -->
-      <van-cell-group title="位置信息">
+      <van-cell-group inset title="位置信息">
         <van-field
           label="经度"
           name="attractionsLng"
@@ -80,12 +80,12 @@
       </van-cell-group>
       
       <!-- 景点类型 -->
-      <van-cell-group title="景点类型">
+      <van-cell-group inset title="景点类型">
         <van-cell title="选择类型" value="{{ selectedTypesText }}" bind:click="showTypePopup" is-link />
       </van-cell-group>
       
       <!-- 巡查员 -->
-      <van-cell-group title="巡查员">
+      <van-cell-group inset title="巡查员">
         <van-field
           label="巡查员"
           name="inspectorId"
@@ -180,7 +180,7 @@
             data-name="{{ item.userName }}"
             bind:click="selectInspector"
           >
-            <van-tag type="primary" wx:if="{{ selectedInspector === item.id }}">已选</van-tag>
+            <van-icon size="20px" name="success" wx:if="{{ selectedInspector === item.id }}"/>
           </van-cell>
         </block>
       </van-cell-group>

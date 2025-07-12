@@ -32,7 +32,10 @@
         "attractions/index",
         "attractions_edit/index",
         "routes/index",
-        "routes_edit/index"
+        "routes_edit/index",
+        "track/index",
+        "disposal/index",
+        "disposal_edit/index"
       ]
     }
   ],

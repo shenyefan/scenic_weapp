@@ -1,0 +1,30 @@
+<view class="track-history-page">
+  <van-notify id="van-notify" />
+
+  <!-- 加载中 -->
+  <view wx:if="{{ loading && trackList.length === 0 }}" class="loading-container">
+    <van-loading size="24px">加载中...</van-loading>
+  </view>
+
+  <!-- 轨迹记录列表 -->
+  <van-cell-group wx:if="{{ !loading || trackList.length > 0 }}">
+    <van-cell 
+        wx:for="{{ trackList }}" 
+        wx:key="id" 
+        title="{{ item.userName || '未知用户' }}"
+        title-width="80%" 
+        label="{{ item.formattedStartTime }}-{{ item.formattedEndTime }}"
+        value="{{ item.trackStatus === 1 ? '已完成' : '进行中' }}"
+        value-class="{{ item.trackStatus === 1 ? 'status-completed' : 'status-ongoing' }}"
+    >
+    </van-cell>
+  </van-cell-group>
+  
+  <!-- 空状态 -->
+  <van-empty 
+        wx:if="{{ !loading && trackList.length === 0 }}"
+        image="search" 
+        description="暂无轨迹记录"
+        custom-class="empty-state"
+      />
+</view>

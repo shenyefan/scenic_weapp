@@ -7,8 +7,8 @@ declare namespace API {
     attractionsImg?: string;
     attractionsVideo?: string;
     attractionsNote?: string;
-    inspectorId?: number;
-    userId?: number;
+    inspectorId?: string;
+    userId?: string;
     createTime?: string;
     updateTime?: string;
     isDelete?: number;
@@ -22,7 +22,7 @@ declare namespace API {
     attractionsVideo?: string;
     attractionsNote?: string;
     attractionsTypeIds?: number[];
-    inspectorId?: number;
+    inspectorId?: string;
   };
 
   type AttractionsQueryRequest = {
@@ -31,21 +31,21 @@ declare namespace API {
     sortField?: string;
     sortOrder?: string;
     id?: string
-    notId?: number;
+    notId?: string;
     searchText?: string;
     attractionsName?: string;
     attractionsLng?: number;
     attractionsLat?: number;
     attractionsNote?: string;
     attractionsTypeIds?: number[];
-    inspectorId?: number;
-    userId?: number;
+    inspectorId?: string;
+    userId?: string;
   };
 
   type AttractionsRoute = {
     id?: string
-    startAttractionId?: number;
-    endAttractionId?: number;
+    startAttractionId?: string;
+    endAttractionId?: string;
     startAttractionImg?: string;
     endAttractionImg?: string;
     startAttractionVideo?: string;
@@ -57,8 +57,8 @@ declare namespace API {
   };
 
   type AttractionsRouteAddRequest = {
-    startAttractionId?: number;
-    endAttractionId?: number;
+    startAttractionId?: string;
+    endAttractionId?: string;
     startAttractionImg?: string;
     endAttractionImg?: string;
     startAttractionVideo?: string;
@@ -72,17 +72,17 @@ declare namespace API {
     sortField?: string;
     sortOrder?: string;
     id?: string
-    notId?: number;
+    notId?: string;
     searchText?: string;
-    startAttractionId?: number;
-    endAttractionId?: number;
+    startAttractionId?: string;
+    endAttractionId?: string;
     routeNote?: string;
   };
 
   type AttractionsRouteUpdateRequest = {
     id?: string
-    startAttractionId?: number;
-    endAttractionId?: number;
+    startAttractionId?: string;
+    endAttractionId?: string;
     startAttractionImg?: string;
     endAttractionImg?: string;
     startAttractionVideo?: string;
@@ -92,8 +92,8 @@ declare namespace API {
 
   type AttractionsRouteVO = {
     id?: string
-    startAttractionId?: number;
-    endAttractionId?: number;
+    startAttractionId?: string;
+    endAttractionId?: string;
     startAttractionName?: string;
     startAttractionLng?: number;
     startAttractionLat?: number;
@@ -137,7 +137,7 @@ declare namespace API {
     attractionsVideo?: string;
     attractionsNote?: string;
     attractionsTypeIds?: number[];
-    inspectorId?: number;
+    inspectorId?: string;
   };
 
   type AttractionsVO = {
@@ -149,9 +149,9 @@ declare namespace API {
     attractionsVideo?: string;
     attractionsNote?: string;
     attractionsTypes?: AttractionsTypeVO[];
-    inspectorId?: number;
+    inspectorId?: string;
     inspectorName?: string;
-    userId?: number;
+    userId?: string;
     user?: UserVO;
     createTime?: string;
     updateTime?: string;
@@ -465,7 +465,7 @@ declare namespace API {
     sortField?: string;
     sortOrder?: string;
     id?: string
-    notId?: number;
+    notId?: string;
     disastersStartTime?: string;
     disastersEndTime?: string;
     disastersTitle?: string;
@@ -508,7 +508,7 @@ declare namespace API {
     sortOrder?: string;
     id?: string
     weatherTime?: string;
-    notId?: number;
+    notId?: string;
     tempMin?: number;
     tempMax?: number;
     humidityMin?: number;
@@ -779,7 +779,7 @@ declare namespace API {
     videoTitle?: string;
     videoUrl?: string;
     videoNote?: string;
-    userId?: number;
+    userId?: string;
     createTime?: string;
     updateTime?: string;
     isDelete?: number;
@@ -797,12 +797,12 @@ declare namespace API {
     sortField?: string;
     sortOrder?: string;
     id?: string
-    notId?: number;
+    notId?: string;
     searchText?: string;
     videoTitle?: string;
     videoUrl?: string;
     videoNote?: string;
-    userId?: number;
+    userId?: string;
   };
 
   type PublicizeVideoUpdateRequest = {
@@ -817,7 +817,7 @@ declare namespace API {
     videoTitle?: string;
     videoUrl?: string;
     videoNote?: string;
-    userId?: number;
+    userId?: string;
     createTime?: string;
     updateTime?: string;
     user?: UserVO;
@@ -828,7 +828,7 @@ declare namespace API {
     wxTitle?: string;
     wxUrl?: string;
     wxNote?: string;
-    userId?: number;
+    userId?: string;
     createTime?: string;
     updateTime?: string;
     isDelete?: number;
@@ -846,12 +846,12 @@ declare namespace API {
     sortField?: string;
     sortOrder?: string;
     id?: string
-    notId?: number;
+    notId?: string;
     searchText?: string;
     wxTitle?: string;
     wxUrl?: string;
     wxNote?: string;
-    userId?: number;
+    userId?: string;
   };
 
   type PublicizeWxPlatformUpdateRequest = {
@@ -866,7 +866,7 @@ declare namespace API {
     wxTitle?: string;
     wxUrl?: string;
     wxNote?: string;
-    userId?: number;
+    userId?: string;
     createTime?: string;
     updateTime?: string;
     user?: UserVO;
@@ -877,7 +877,7 @@ declare namespace API {
     checkinLng?: number;
     checkinLat?: number;
     checkinAddress?: string;
-    userId?: number;
+    userId?: string;
     createTime?: string;
     updateTime?: string;
     isDelete?: number;
@@ -895,7 +895,7 @@ declare namespace API {
     sortField?: string;
     sortOrder?: string;
     id?: string
-    userId?: number;
+    userId?: string;
     checkinAddress?: string;
     startTime?: string;
     endTime?: string;
@@ -913,7 +913,7 @@ declare namespace API {
     checkinLng?: number;
     checkinLat?: number;
     checkinAddress?: string;
-    userId?: number;
+    userId?: string;
     userName?: string;
     createTime?: string;
     updateTime?: string;
@@ -921,8 +921,8 @@ declare namespace API {
 
   type TaskDisposal = {
     id?: string
-    inspectionTaskId?: number;
-    disposerId?: number;
+    inspectionTaskId?: string;
+    disposerId?: string;
     disposalImages?: string;
     disposalDescription?: string;
     disposalStatus?: number;
@@ -932,8 +932,8 @@ declare namespace API {
   };
 
   type TaskDisposalAddRequest = {
-    inspectionTaskId?: number;
-    disposerId?: number;
+    inspectionTaskId?: string;
+    disposerId?: string;
     disposalImages?: string;
     disposalDescription?: string;
     disposalStatus?: number;
@@ -945,8 +945,8 @@ declare namespace API {
     sortField?: string;
     sortOrder?: string;
     id?: string
-    inspectionTaskId?: number;
-    disposerId?: number;
+    inspectionTaskId?: string;
+    disposerId?: string;
     taskDate?: string;
     attractionsName?: string;
     disposalStatus?: number;
@@ -961,8 +961,8 @@ declare namespace API {
 
   type TaskDisposalVO = {
     id?: string
-    inspectionTaskId?: number;
-    disposerId?: number;
+    inspectionTaskId?: string;
+    disposerId?: string;
     disposerName?: string;
     attractionsName?: string;
     taskDate?: string;
@@ -975,8 +975,8 @@ declare namespace API {
 
   type TaskInspection = {
     id?: string
-    attractionsId?: number;
-    inspectorId?: number;
+    attractionsId?: string;
+    inspectorId?: string;
     taskDate?: string;
     inspectionImages?: string;
     inspectionDescription?: string;
@@ -988,8 +988,8 @@ declare namespace API {
   };
 
   type TaskInspectionAddRequest = {
-    attractionsId?: number;
-    inspectorId?: number;
+    attractionsId?: string;
+    inspectorId?: string;
     taskDate?: string;
     inspectionImages?: string;
     inspectionDescription?: string;
@@ -1002,8 +1002,8 @@ declare namespace API {
     sortField?: string;
     sortOrder?: string;
     id?: string
-    attractionsId?: number;
-    inspectorId?: number;
+    attractionsId?: string;
+    inspectorId?: string;
     taskDate?: string;
     isAbnormal?: number;
     taskStatus?: number;
@@ -1019,11 +1019,11 @@ declare namespace API {
 
   type TaskInspectionVO = {
     id?: string
-    attractionsId?: number;
+    attractionsId?: string;
     attractionsName?: string;
     attractionsLng?: number;
     attractionsLat?: number;
-    inspectorId?: number;
+    inspectorId?: string;
     inspectorName?: string;
     taskDate?: string;
     inspectionImages?: string;
@@ -1035,12 +1035,12 @@ declare namespace API {
   };
 
   type TaskTrackEndRequest = {
-    trackId?: number;
+    trackId?: string;
   };
 
   type TaskTrackPoint = {
     id?: string
-    trackId?: number;
+    trackId?: string;
     trackLat?: number;
     trackLng?: number;
     trackTimestamp?: number;
@@ -1048,7 +1048,7 @@ declare namespace API {
   };
 
   type TaskTrackPointAddRequest = {
-    trackId?: number;
+    trackId?: string;
     trackLat?: number;
     trackLng?: number;
     trackTimestamp?: number;
@@ -1059,7 +1059,7 @@ declare namespace API {
     pageSize?: number;
     sortField?: string;
     sortOrder?: string;
-    userId?: number;
+    userId?: string;
     trackStatus?: number;
     startTimeBegin?: string;
     startTimeEnd?: string;
@@ -1072,7 +1072,7 @@ declare namespace API {
     trackStartTime?: string;
     trackEndTime?: string;
     trackStatus?: number;
-    userId?: number;
+    userId?: string;
     userName?: string;
     userAccount?: string;
     createTime?: string;

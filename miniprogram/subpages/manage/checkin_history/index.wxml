@@ -5,9 +5,9 @@
   <view wx:if="{{ loading && checkinList.length === 0 }}" class="loading-container">
     <van-loading size="24px">加载中...</van-loading>
   </view>
-
+  
   <!-- 签到记录列表 -->
-  <van-cell-group wx:if="{{ !loading || checkinList.length > 0 }}" inset>
+  <van-cell-group wx:if="{{ !loading || checkinList.length > 0 }}">
     <van-cell 
         wx:for="{{ checkinList }}" 
         wx:key="id" 
