@@ -1,3 +1,6 @@
+<!-- 全局悬浮定位按钮 -->
+<floating-location-btn></floating-location-btn>
+
 <view class="inspection-list-page">
   <van-notify id="van-notify" />
 

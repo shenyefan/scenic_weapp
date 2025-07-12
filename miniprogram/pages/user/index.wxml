@@ -13,6 +13,9 @@ var getRoleName = function(role) {
 module.exports.getRoleName = getRoleName;
 </wxs>
 
+<!-- 全局悬浮定位按钮 -->
+<floating-location-btn></floating-location-btn>
+
 <view class="user-page">
   <van-notify id="van-notify" />
   <!-- 用户信息区域 -->

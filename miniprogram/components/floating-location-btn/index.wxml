@@ -1,0 +1,16 @@
+<view 
+  class="floating-btn {{isPatrolling ? 'active' : ''}}" 
+  style="left: {{position.x}}px; top: {{position.y}}px;"
+  bind:touchstart="onTouchStart"
+  bind:touchmove="onTouchMove"
+  bind:touchend="onTouchEnd"
+  bind:tap="onTap"
+  wx:if="{{isPatrolling}}"
+>
+  <view class="btn-content">
+    <view class="text">巡查中</view>
+  </view>
+  
+  <!-- 脉冲动画效果 -->
+  <view class="pulse" wx:if="{{isPatrolling}}"></view>
+</view>

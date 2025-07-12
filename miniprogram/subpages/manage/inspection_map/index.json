@@ -1,0 +1,12 @@
+{
+  "navigationBarTitleText": "巡查检查",
+  "navigationBarBackgroundColor": "#1989fa",
+  "navigationBarTextStyle": "white",
+  "usingComponents": {
+    "van-button": "@vant/weapp/button/index",
+    "van-notify": "@vant/weapp/notify/index",
+    "van-dialog": "@vant/weapp/dialog/index",
+    "van-loading": "@vant/weapp/loading/index",
+    "van-toast": "@vant/weapp/toast/index"
+  }
+}

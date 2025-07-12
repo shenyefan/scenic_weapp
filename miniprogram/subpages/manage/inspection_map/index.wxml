@@ -1,0 +1,59 @@
+<view class="inspect-container">
+  <van-notify id="van-notify" />
+  <van-toast id="van-toast" />
+  <van-dialog id="van-dialog" />
+  
+  <!-- 全屏地图 -->
+  <map 
+    id="inspectMap"
+    class="inspect-map"
+    longitude="{{ longitude }}"
+    latitude="{{ latitude }}"
+    scale="{{ scale }}"
+    show-location="{{ true }}"
+    enable-overlooking="{{ true }}"
+    enable-zoom="{{ true }}"
+    enable-scroll="{{ true }}"
+    enable-rotate="{{ true }}"
+    show-compass="{{ true }}"
+    polyline="{{ polyline }}"
+  >
+  </map>
+  
+  <!-- 悬浮的巡查控制按钮 -->
+  <view class="patrol-control">
+    <view 
+      class="patrol-btn {{ isPatrolling ? 'patrolling' : '' }}"
+      bindtap="togglePatrol"
+    >
+      <view class="patrol-btn-inner">
+        <view wx:if="{{ !isPatrolling }}" class="start-icon">开始</view>
+        <view wx:else class="stop-icon">结束</view>
+      </view>
+      <view class="patrol-status-text">
+        {{ isPatrolling ? '巡查中' : '开始巡查' }}
+      </view>
+    </view>
+  </view>
+  
+  <!-- 巡查信息面板 -->
+  <view class="patrol-info {{ isPatrolling ? 'show' : '' }}">
+    <view class="info-item">
+      <text class="info-label">巡查时长：</text>
+      <text class="info-value">{{ patrolDuration }}</text>
+    </view>
+    <view class="info-item">
+      <text class="info-label">行走距离：</text>
+      <text class="info-value">{{ totalDistance }}m</text>
+    </view>
+    <view class="info-item">
+      <text class="info-label">轨迹点数：</text>
+      <text class="info-value">{{ trackPoints.length }}</text>
+    </view>
+  </view>
+  
+  <!-- 加载状态 -->
+  <view wx:if="{{ loading }}" class="loading-overlay">
+    <van-loading size="24px" color="#1989fa">定位中...</van-loading>
+  </view>
+</view>

@@ -37,10 +37,14 @@
         "disposal/index",
         "disposal_edit/index",
         "inspection/index",
-        "inspection_edit/index"
+        "inspection_edit/index",
+        "inspection_map/index"
       ]
     }
   ],
+  "usingComponents": {
+    "floating-location-btn": "/components/floating-location-btn/index"
+  },
   "tabBar": {
     "custom": true,
     "color": "#000000",

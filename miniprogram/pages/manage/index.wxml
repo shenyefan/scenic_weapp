@@ -1,3 +1,6 @@
+<!-- 全局悬浮定位按钮 -->
+<floating-location-btn></floating-location-btn>
+
 <view class="container">
   <van-notify id="van-notify"/>
   
@@ -22,7 +25,7 @@
         icon="/image/manage/inspect.svg" 
         text="巡查检查" 
         link-type="navigateTo"
-        url=""
+        url="/subpages/manage/inspection_map/index"
       />
 
       <!-- 巡查任务 -->
