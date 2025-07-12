@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "问题处置记录",
+  "navigationBarTitleText": "巡查任务",
   "onReachBottomDistance": 100,
   "usingComponents": {
     "van-cell": "@vant/weapp/cell/index",
@@ -10,7 +10,8 @@
     "van-notify": "@vant/weapp/notify/index",
     "van-button": "@vant/weapp/button/index",
     "van-divider": "@vant/weapp/divider/index",
-    "van-popup": "@vant/weapp/popup/index",
-    "van-datetime-picker": "@vant/weapp/datetime-picker/index"
+    "van-tag": "@vant/weapp/tag/index",
+    "van-datetime-picker": "@vant/weapp/datetime-picker/index",
+    "van-popup": "@vant/weapp/popup/index"
   }
 }

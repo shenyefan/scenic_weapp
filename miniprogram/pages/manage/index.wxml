@@ -31,7 +31,7 @@
         icon="/image/manage/task.svg" 
         text="巡查任务" 
         link-type="navigateTo"
-        url=""
+        url="/subpages/manage/inspection/index"
       />
 
       <!-- 问题处置 -->
@@ -104,9 +104,4 @@
       />
     </van-grid>
   </view>
-
-  <!-- 加载状态 -->
-  <van-loading wx:if="{{ loading }}" type="spinner" color="#1989fa" vertical>
-    加载中...
-  </van-loading>
 </view>

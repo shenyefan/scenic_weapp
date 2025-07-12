@@ -35,7 +35,9 @@
         "routes_edit/index",
         "track/index",
         "disposal/index",
-        "disposal_edit/index"
+        "disposal_edit/index",
+        "inspection/index",
+        "inspection_edit/index"
       ]
     }
   ],

@@ -1,15 +1,15 @@
-import { listTaskDisposalVoByPage } from '../../../api/taskDisposalController'
+import { listMyTaskInspectionVoByPage } from '../../../api/taskInspectionController'
 import { formatISOTimeDetailed } from '../../../utils/date'
 import Notify from '@vant/weapp/notify/notify'
 
-interface TaskDisposalWithFormattedTime extends API.TaskDisposalVO {
+interface TaskInspectionWithFormattedTime extends API.TaskInspectionVO {
   formattedCreateTime: string;
   statusText: string;
 }
 
 Page({
   data: {
-    disposalList: [] as TaskDisposalWithFormattedTime[],
+    inspectionList: [] as TaskInspectionWithFormattedTime[],
     loading: false,
     refreshing: false,
     pageInfo: {
@@ -28,10 +28,10 @@ Page({
   },
 
   onLoad() {
-    this.loadDisposalList(true)
+    this.loadInspectionList(true)
   },
 
-  async loadDisposalList(refresh = false): Promise<void> {
+  async loadInspectionList(refresh = false): Promise<void> {
     if (this.data.loading) return
     
     // 如果没有更多数据且不是刷新操作，则直接返回
@@ -40,7 +40,7 @@ Page({
     this.setData({ loading: true })
     
     if (refresh) {
-      this.setData({ disposalList: [] })
+      this.setData({ inspectionList: [] })
     }
 
     try {
@@ -57,21 +57,21 @@ Page({
         requestData.taskDate = this.data.selectedDate
       }
       
-      const result = await listTaskDisposalVoByPage(requestData)
+      const result = await listMyTaskInspectionVoByPage(requestData)
 
       if (result.code === 200 && result.data) {
         const { records, total } = result.data
         const formattedList = (records || []).map(item => ({
           ...item,
           formattedCreateTime: formatISOTimeDetailed(item.createTime || ''),
-          statusText: this.getStatusText(item.disposalStatus || 0)
+          statusText: this.getStatusText(item.taskStatus || 0)
         }))
         
-        const newList = refresh ? formattedList : [...this.data.disposalList, ...formattedList]
+        const newList = refresh ? formattedList : [...this.data.inspectionList, ...formattedList]
         const hasMore = records.length > 0 && newList.length < total
 
         this.setData({
-          disposalList: newList,
+          inspectionList: newList,
           'pageInfo.current': refresh ? 2 : pageInfo.current + 1,
           'pageInfo.total': total,
           'pageInfo.hasMore': hasMore,
@@ -82,19 +82,10 @@ Page({
         this.setData({ loading: false })
       }
     } catch (error) {
-      console.error('加载问题处置记录失败:', error)
+      console.error('加载巡查任务失败:', error)
       Notify({ type: 'danger', message: '加载失败，请重试' })
       this.setData({ loading: false })
     }
-  },
-
-  getStatusText(status: number): string {
-    const statusMap: Record<number, string> = {
-      0: '待处理',
-      1: '处理中',
-      2: '已完成'
-    }
-    return statusMap[status] || '未知状态'
   },
 
   // 显示日期选择器
@@ -121,7 +112,7 @@ Page({
     })
     
     // 重新加载数据
-    this.loadDisposalList(true)
+    this.loadInspectionList(true)
   },
 
   // 清除日期筛选
@@ -133,7 +124,7 @@ Page({
     })
     
     // 重新加载数据
-    this.loadDisposalList(true)
+    this.loadInspectionList(true)
   },
 
   // 格式化日期为YYYY-MM-DD格式
@@ -144,22 +135,31 @@ Page({
     return `${year}-${month}-${day}`
   },
 
+  getStatusText(status: number): string {
+    const statusMap: Record<number, string> = {
+      0: '待开始',
+      1: '进行中',
+      2: '已完成'
+    }
+    return statusMap[status] || '未知状态'
+  },
+
   // 上拉加载更多
   onReachBottom() {
     if (this.data.loading) return
     
     if (this.data.pageInfo.hasMore) {
-      this.loadDisposalList(false)
+      this.loadInspectionList(false)
     }
   },
 
   navigateToEdit(e: any) {
     const id = e.currentTarget.dataset.id
     const index = e.currentTarget.dataset.index
-    const item = this.data.disposalList[index]
+    const item = this.data.inspectionList[index]
     
     wx.navigateTo({
-      url: `/subpages/manage/disposal_edit/index?id=${id}&inspectionTaskId=${item.inspectionTaskId}`
+      url: `/subpages/manage/inspection_edit/index?id=${id}`
     })
   },
 
