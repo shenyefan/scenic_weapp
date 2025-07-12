@@ -1,0 +1,188 @@
+<view class="container">
+  <van-notify id="van-notify" />
+  
+  <!-- 加载状态 -->
+  <view wx:if="{{ loading && !route }}" class="loading-container">
+    <van-loading color="#1989fa" vertical>加载中...</van-loading>
+  </view>
+  
+  <!-- 编辑表单 -->
+  <block wx:elif="{{ route }}">
+    <form bindsubmit="onFormSubmit">
+      <van-cell-group title="路线信息">
+        <!-- 起点景点 -->
+        <van-field
+          label="起点景点"
+          name="startAttractionId"
+          value="{{ route.startAttractionName }}"
+          placeholder="请选择起点景点"
+          readonly
+          required
+          is-link
+          bind:tap="showStartAttractionPopup"
+        />
+        
+        <!-- 终点景点 -->
+        <van-field
+          label="终点景点"
+          name="endAttractionId"
+          value="{{ route.endAttractionName }}"
+          placeholder="请选择终点景点"
+          readonly
+          required
+          is-link
+          bind:tap="showEndAttractionPopup"
+        />
+        
+        <!-- 路线描述 -->
+        <van-field
+          label="路线描述"
+          name="routeNote"
+          value="{{ route.routeNote }}"
+          placeholder="请输入路线描述"
+          type="textarea"
+          autosize
+        />
+      </van-cell-group>
+      
+      <!-- 起点图片 -->
+      <van-cell-group title="起点图片">
+        <van-cell title="起点图片" border="{{ false }}">
+          <van-uploader
+            file-list="{{ startAttractionFileList }}"
+            bind:after-read="afterStartImgRead"
+            bind:delete="onDeleteStartImg"
+            preview-size="{{[200,120]}}"
+            max-count="1"
+            upload-text="上传图片"
+            image-fit="aspectFill"
+          />
+        </van-cell>
+      </van-cell-group>
+      
+      <!-- 终点图片 -->
+      <van-cell-group title="终点图片">
+        <van-cell title="终点图片" border="{{ false }}">
+          <van-uploader
+            file-list="{{ endAttractionFileList }}"
+            bind:after-read="afterEndImgRead"
+            bind:delete="onDeleteEndImg"
+            preview-size="{{[200,120]}}"
+            max-count="1"
+            upload-text="上传图片"
+            image-fit="aspectFill"
+          />
+        </van-cell>
+      </van-cell-group>
+      
+      <!-- 起点视频 -->
+      <van-cell-group title="起点视频">
+        <van-cell title="起点视频" border="{{ false }}">
+          <van-uploader
+            file-list="{{ startAttractionVideoList }}"
+            bind:after-read="afterStartVideoRead"
+            bind:delete="onDeleteStartVideo"
+            preview-size="{{[200,120]}}"
+            max-count="1"
+            upload-text="上传视频"
+            accept="video"
+          />
+        </van-cell>
+      </van-cell-group>
+      
+      <!-- 终点视频 -->
+      <van-cell-group title="终点视频">
+        <van-cell title="终点视频" border="{{ false }}">
+          <van-uploader
+            file-list="{{ endAttractionVideoList }}"
+            bind:after-read="afterEndVideoRead"
+            bind:delete="onDeleteEndVideo"
+            preview-size="{{[200,120]}}"
+            max-count="1"
+            upload-text="上传视频"
+            accept="video"
+          />
+        </van-cell>
+      </van-cell-group>
+      
+      <!-- 提交按钮 -->
+      <!-- 在提交按钮部分添加删除按钮 -->
+      <view class="button-container">
+        <button class="submit-button" form-type="submit" type="primary" loading="{{ submitting }}">保存</button>
+        <button wx:if="{{ id }}" class="delete-button" type="danger" bind:tap="showDeleteConfirm" loading="{{ submitting }}">删除</button>
+      </view>
+      
+      <!-- 添加删除确认弹窗 -->
+      <van-dialog
+        use-slot
+        title="确认删除"
+        show="{{ showDeleteConfirm }}"
+        show-cancel-button
+        confirm-button-text="删除"
+        cancel-button-text="取消"
+        bind:close="closeDeleteConfirm"
+        bind:confirm="confirmDelete"
+      >
+        <view class="dialog-content">
+          确定要删除该路线吗？此操作不可恢复。
+        </view>
+      </van-dialog>
+    </form>
+  </block>
+  
+  <!-- 起点景点选择弹窗 -->
+  <van-popup
+    show="{{ showStartAttractionSelector }}"
+    position="bottom"
+    round
+    closeable
+    bind:close="onStartAttractionPopupClose"
+  >
+    <view class="popup-header">
+      <view class="popup-title">选择起点景点</view>
+    </view>
+    <view class="popup-content">
+      <van-cell-group>
+        <block wx:for="{{ attractionList }}" wx:key="id">
+          <van-cell
+            title="{{ item.attractionsName }}"
+            clickable
+            data-id="{{ item.id }}"
+            data-name="{{ item.attractionsName }}"
+            bind:click="selectStartAttraction"
+          >
+            <van-tag type="primary" wx:if="{{ selectedStartAttraction === item.id }}">已选</van-tag>
+          </van-cell>
+        </block>
+      </van-cell-group>
+    </view>
+  </van-popup>
+  
+  <!-- 终点景点选择弹窗 -->
+  <van-popup
+    show="{{ showEndAttractionSelector }}"
+    position="bottom"
+    round
+    closeable
+    bind:close="onEndAttractionPopupClose"
+  >
+    <view class="popup-header">
+      <view class="popup-title">选择终点景点</view>
+    </view>
+    <view class="popup-content">
+      <van-cell-group>
+        <block wx:for="{{ attractionList }}" wx:key="id">
+          <van-cell
+            title="{{ item.attractionsName }}"
+            clickable
+            data-id="{{ item.id }}"
+            data-name="{{ item.attractionsName }}"
+            bind:click="selectEndAttraction"
+          >
+            <van-tag type="primary" wx:if="{{ selectedEndAttraction === item.id }}">已选</van-tag>
+          </van-cell>
+        </block>
+      </van-cell-group>
+    </view>
+  </van-popup>
+</view>

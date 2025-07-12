@@ -26,7 +26,11 @@
       "pages": [
         "checkin/index",
         "checkin_history/index",
-        "contacts/index"
+        "contacts/index",
+        "attractions/index",
+        "attractions_edit/index",
+        "routes/index",
+        "routes_edit/index"
       ]
     }
   ],

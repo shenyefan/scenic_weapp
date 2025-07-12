@@ -27,7 +27,7 @@ module.exports.getRoleName = getRoleName;
     </view>
     <view class="user-info">
       <view class="username">
-        {{userInfo.userName || '登录/注册'}}
+        {{userInfo.userName + "  " || '登录/注册'}}
         <van-icon name="edit" wx:if="{{isLoggedIn}}" />
       </view>
       <view class="user-role">{{isLoggedIn ? roleUtils.getRoleName(userInfo.userRole) : '点击登录'}}</view>

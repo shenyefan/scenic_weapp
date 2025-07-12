@@ -1,5 +1,6 @@
 {
   "navigationStyle": "custom",
+  "onReachBottomDistance": 100,
   "usingComponents": {
     "van-image": "@vant/weapp/image/index",
     "van-grid": "@vant/weapp/grid/index",
@@ -19,6 +20,5 @@
     "van-tabbar": "@vant/weapp/tabbar/index",
     "van-tabbar-item": "@vant/weapp/tabbar-item/index",
     "van-notify": "@vant/weapp/notify/index"
-  },
-  "onReachBottomDistance": 100
+  }
 }

@@ -178,6 +178,14 @@ Page({
   },
 
   // 显示弹窗
+  onTicketTap(e) {
+    this.setData({
+      show: true,
+      popupImg: "https://dlhqn.moenya.net/static/ticket.png"
+    })
+  },
+
+  // 显示弹窗
   showPopup(e) {
     const { img } = e.currentTarget.dataset
     this.setData({

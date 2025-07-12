@@ -99,7 +99,7 @@
         icon="/image/manage/attraction.svg" 
         text="景点信息" 
         link-type="navigateTo"
-        url=""
+        url="/subpages/manage/attractions/index"
       />
       
       <!-- 游览路线 -->
@@ -107,7 +107,7 @@
         icon="/image/manage/route.svg" 
         text="游览路线" 
         link-type="navigateTo"
-        url=""
+        url="/subpages/manage/routes/index"
       />
       
       <!-- 视频监控 -->

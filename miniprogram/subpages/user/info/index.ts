@@ -212,5 +212,10 @@ Page({
     this.setData({
       'userInfo.userEmail': event.detail
     })
-  }
+  },
+
+  // 返回上一页
+  onBack() {
+    wx.navigateBack()
+  },
 })

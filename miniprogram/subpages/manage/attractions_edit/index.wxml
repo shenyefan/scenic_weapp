@@ -1,0 +1,190 @@
+<view class="container">
+  <van-notify id="van-notify" />
+  
+  <!-- 加载状态 -->
+  <view wx:if="{{ loading && !attraction }}" class="loading-container">
+    <van-loading color="#1989fa" vertical>加载中...</van-loading>
+  </view>
+  
+  <!-- 编辑表单 -->
+  <block wx:elif="{{ attraction }}">
+    <form bindsubmit="onFormSubmit">
+      <van-cell-group title="基本信息">
+        <!-- 景点名称 -->
+        <van-field
+          label="景点名称"
+          name="attractionsName"
+          value="{{ attraction.attractionsName }}"
+          placeholder="请输入景点名称"
+          required
+        />
+        
+        <!-- 景点描述 -->
+        <van-field
+          label="景点描述"
+          name="attractionsNote"
+          value="{{ attraction.attractionsNote }}"
+          placeholder="请输入景点描述"
+          type="textarea"
+          autosize
+        />
+      </van-cell-group>
+      
+      <!-- 景点图片 -->
+      <van-cell-group title="景点图片">
+        <van-cell title="景点图片" border="{{ false }}">
+          <van-uploader
+            file-list="{{ fileList }}"
+            bind:after-read="afterRead"
+            bind:delete="onDeleteImage"
+            preview-size="{{[200,120]}}"
+            max-count="1"
+            upload-text="上传图片"
+            image-fit="aspectFill"
+          />
+        </van-cell>
+      </van-cell-group>
+      
+      <!-- 景点视频 -->
+      <van-cell-group title="景点视频">
+        <van-cell title="景点视频" border="{{ false }}">
+          <van-uploader
+            file-list="{{ videoList }}"
+            bind:after-read="afterVideoRead"
+            bind:delete="onDeleteVideo"
+            preview-size="{{[200,120]}}"
+            max-count="1"
+            upload-text="上传视频"
+            accept="video"
+          />
+        </van-cell>
+      </van-cell-group>
+      
+      <!-- 位置信息 -->
+      <van-cell-group title="位置信息">
+        <van-field
+          label="经度"
+          name="attractionsLng"
+          value="{{ attraction.attractionsLng }}"
+          placeholder="请输入经度"
+          type="digit"
+        />
+        <van-field
+          label="纬度"
+          name="attractionsLat"
+          value="{{ attraction.attractionsLat }}"
+          placeholder="请输入纬度"
+          type="digit"
+        />
+        <van-cell title="获取当前位置" bind:click="getLocation" is-link />
+      </van-cell-group>
+      
+      <!-- 景点类型 -->
+      <van-cell-group title="景点类型">
+        <van-cell title="选择类型" value="{{ selectedTypesText }}" bind:click="showTypePopup" is-link />
+      </van-cell-group>
+      
+      <!-- 巡查员 -->
+      <van-cell-group title="巡查员">
+        <van-field
+          label="巡查员"
+          name="inspectorId"
+          value="{{ attraction.inspectorName }}"
+          placeholder="请选择巡查员"
+          readonly
+          is-link
+          bind:tap="showInspectorPopup"
+        />
+      </van-cell-group>
+      
+      <!-- 提交按钮 -->
+      <!-- 在提交按钮部分添加删除按钮 -->
+      <view class="button-container">
+        <button class="submit-button" form-type="submit" type="primary" loading="{{ submitting }}">保存</button>
+        <button wx:if="{{ id }}" class="delete-button" type="danger" bind:tap="showDeleteConfirm" loading="{{ submitting }}">删除</button>
+      </view>
+      
+      <!-- 添加删除确认弹窗 -->
+      <van-dialog
+        use-slot
+        title="确认删除"
+        show="{{ showDeleteConfirm }}"
+        show-cancel-button
+        confirm-button-text="删除"
+        cancel-button-text="取消"
+        bind:close="closeDeleteConfirm"
+        bind:confirm="confirmDelete"
+      >
+        <view class="dialog-content">
+          确定要删除该景点吗？此操作不可恢复。
+        </view>
+      </van-dialog>
+    </form>
+  </block>
+  
+  <!-- 景点类型选择弹窗 -->
+  <van-popup
+    show="{{ showTypeSelector }}"
+    position="bottom"
+    round
+    bind:close="onTypePopupClose"
+  >
+    <view class="popup-header">
+      <view class="popup-title">选择景点类型</view>
+      <view class="popup-buttons">
+        <van-button size="small" type="default" bind:click="onTypePopupClose">取消</van-button>
+        <van-button size="small" type="primary" bind:click="onTypePopupConfirm">确定</van-button>
+      </view>
+    </view>
+    <view class="popup-content">
+      <van-checkbox-group value="{{ tempSelectedTypes }}" bind:change="onTypeChange">
+        <van-cell-group>
+          <block wx:for="{{ typeList }}" wx:key="id">
+            <van-cell
+              title="{{ item.typeName }}"
+              value-class="value-class"
+              clickable
+              data-index="{{ index }}"
+              bind:click="toggleType"
+            >
+              <van-checkbox
+                catch:tap="noop"
+                class="checkboxes-{{ index }}"
+                name="{{ item.id }}"
+              />
+            </van-cell>
+          </block>
+        </van-cell-group>
+      </van-checkbox-group>
+    </view>
+  </van-popup>
+  
+  <!-- 巡查员选择弹窗 -->
+  <van-popup
+    show="{{ showInspectorSelector }}"
+    position="bottom"
+    round
+    closeable
+    bind:close="onInspectorPopupClose"
+  >
+    <view class="popup-header">
+      <view class="popup-title">选择巡查员</view>
+    </view>
+    <view class="popup-content">
+      <van-cell-group>
+        <block wx:for="{{ inspectorList }}" wx:key="id">
+          <van-cell
+            title="{{ item.userName }}"
+            clickable
+            data-id="{{ item.id }}"
+            data-name="{{ item.userName }}"
+            bind:click="selectInspector"
+          >
+            <van-tag type="primary" wx:if="{{ selectedInspector === item.id }}">已选</van-tag>
+          </van-cell>
+        </block>
+      </van-cell-group>
+    </view>
+  </van-popup>
+</view>
+  
