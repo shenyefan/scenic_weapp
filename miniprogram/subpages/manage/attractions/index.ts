@@ -1,4 +1,5 @@
 import { listAttractionsVoByPage } from '../../../api/attractionsController'
+import { getLoginUser } from '../../../api/userController'
 import Notify from '@vant/weapp/notify/notify'
 
 Page({
@@ -21,10 +22,45 @@ Page({
     mapMarkers: [] as any[],
     includePoints: [] as any[],
     needRefresh: false, // 添加刷新标记
+    // 添加登录用户信息
+    loginUser: {
+      userRole: ''
+    }
   },
 
   onLoad() {
+    this.checkLoginStatus()
     this.loadAttractionList(true)
+  },
+
+  // 添加检查登录状态的方法
+  async checkLoginStatus() {
+    try {
+      const token = wx.getStorageSync('token')
+      if (!token) {
+        // 如果没有token，设置默认值
+        this.setData({
+          loginUser: {
+            userRole: ''
+          }
+        })
+        return
+      }
+
+      const result = await getLoginUser()
+      if (result.code === 200 && result.data) {
+        this.setData({
+          loginUser: result.data
+        })
+      }
+    } catch (error) {
+      console.error('获取用户信息失败:', error)
+      this.setData({
+        loginUser: {
+          userRole: ''
+        }
+      })
+    }
   },
 
   // 加载景点列表
@@ -113,13 +149,21 @@ Page({
   onAttractionTap(e) {
     const { id } = e.currentTarget.dataset
     if (!id) return
-    
-    wx.navigateTo({
-      url: `/subpages/manage/attractions_edit/index?id=${id}`,
-      fail: () => {
-        Notify({ type: 'danger', message: '页面跳转失败' })
-      }
-    })
+    if (id && this.data.loginUser.userRole == 'admin') {
+      wx.navigateTo({
+        url: `/subpages/manage/attractions_edit/index?id=${id}`,
+        fail: () => {
+          Notify({ type: 'danger', message: '页面跳转失败' })
+        }
+      })
+    } else if (id) {
+      wx.navigateTo({
+        url: `/subpages/attraction/detail/index?id=${id}`,
+        fail: () => {
+          Notify({ type: 'danger', message: '页面跳转失败' })
+        }
+      })
+    }
   },
 
   // 切换到列表视图
@@ -211,9 +255,16 @@ Page({
     const marker = this.data.mapMarkers[markerId]
     if (marker && marker.customCalloutData) {
       const attractionId = marker.customCalloutData.originalId
-      if (attractionId) {
+      if (attractionId && this.data.loginUser.userRole == 'admin') {
         wx.navigateTo({
           url: `/subpages/manage/attractions_edit/index?id=${attractionId}`,
+          fail: () => {
+            Notify({ type: 'danger', message: '页面跳转失败' })
+          }
+        })
+      } else if (attractionId) {
+        wx.navigateTo({
+          url: `/subpages/attraction/detail/index?id=${attractionId}`,
           fail: () => {
             Notify({ type: 'danger', message: '页面跳转失败' })
           }

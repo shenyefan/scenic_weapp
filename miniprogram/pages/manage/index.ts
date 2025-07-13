@@ -1,6 +1,5 @@
 // pages/manage/index.ts
 import { getLoginUser } from '../../api/userController'
-import Notify from '@vant/weapp/notify/notify'
 
 Page({
   /**

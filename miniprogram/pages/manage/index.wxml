@@ -7,7 +7,7 @@
   <!-- banner 区域 -->
   <view class="banner">
     <van-image 
-      src="https://dlhqn.moenya.net/static/fj.jpeg" 
+      src="https://files.syf.sh/scenic_img/fj.jpeg" 
       width="100%" 
       height="200" 
       fit="cover"
@@ -21,7 +21,7 @@
     <van-grid clickable column-num="4" border="{{ false }}" custom-class="function-grid">
       <!-- 巡查检查 -->
       <van-grid-item 
-      wx:if="{{ loginUser.userRole == 'inspector' }}"
+        wx:if="{{ loginUser.userRole == 'inspector' }}"
         icon="/image/manage/inspect.svg" 
         text="巡查检查" 
         link-type="navigateTo"
@@ -30,7 +30,7 @@
 
       <!-- 巡查任务 -->
       <van-grid-item 
-      wx:if="{{ loginUser.userRole == 'inspector' }}"
+        wx:if="{{ loginUser.userRole == 'inspector' }}"
         icon="/image/manage/task.svg" 
         text="巡查任务" 
         link-type="navigateTo"
@@ -57,7 +57,7 @@
   </view>
 
   <!-- 日常模块 -->
-  <view class="module-card">
+  <view class="module-card" wx:if="{{ loginUser.userRole == 'inspector' || loginUser.userRole == 'disposer' || loginUser.userRole == 'admin' }}" >
     <view class="module-header">日常模块</view>
     <van-grid clickable column-num="4" border="{{ false }}" custom-class="function-grid">
       <!-- 签到 -->
@@ -79,7 +79,7 @@
   </view>
 
   <!-- 景区管理 -->
-  <view class="module-card">
+  <view class="module-card" wx:if="{{ loginUser.userRole == 'inspector' || loginUser.userRole == 'disposer' || loginUser.userRole == 'admin' }}">
     <view class="module-header">景区管理</view>
     <van-grid clickable column-num="4" border="{{ false }}" custom-class="function-grid">
       <!-- 景点信息 -->
@@ -104,6 +104,27 @@
         text="视频监控" 
         link-type="navigateTo"
         url=""
+      />
+    </van-grid>
+  </view>
+
+  <!-- 游客服务 -->
+  <view class="module-card" wx:if="{{ loginUser.userRole == 'user' || !loginUser.userRole }}">
+    <view class="module-header">游客服务</view>
+    <van-grid clickable column-num="4" border="{{ false }}" custom-class="function-grid">
+      <!-- 景点信息 -->
+      <van-grid-item 
+        icon="/image/manage/attraction.svg" 
+        text="景点信息" 
+        link-type="navigateTo"
+        url="/subpages/manage/attractions/index"
+      />
+      <!-- 游览路线 -->
+      <van-grid-item 
+        icon="/image/manage/route.svg" 
+        text="游览路线" 
+        link-type="navigateTo"
+        url="/subpages/attraction/routes/index"
       />
     </van-grid>
   </view>

@@ -92,7 +92,7 @@ Page({
     }
   },
 
-    /**
+  /**
    * 点击用户信息区域
    */
   onUserInfoClick() {
