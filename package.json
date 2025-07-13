@@ -9,7 +9,8 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "@vant/weapp": "^1.11.7"
+    "@vant/weapp": "^1.11.7",
+    "text-encoding-shim": "^1.0.5"
   },
   "devDependencies": {
     "@umijs/openapi": "^1.13.15",

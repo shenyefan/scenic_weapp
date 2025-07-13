@@ -1,0 +1,41 @@
+<!-- 全局悬浮定位按钮 -->
+<floating-location-btn></floating-location-btn>
+
+<view class="chat-container">
+  <!-- 聊天消息列表 -->
+  <scroll-view class="chat-messages" scroll-y="true" scroll-top="{{scrollTop}}">
+    <view wx:for="{{messages}}" wx:key="index" class="message-item">
+      <!-- Bot消息 -->
+      <view wx:if="{{item.type === 'bot'}}" class="message-wrapper bot-message">
+        <view class="message-bubble bot-bubble {{streamingMessageIndex === index ? 'streaming' : ''}}">
+          <text class="message-text">{{item.content}}</text>
+          <!-- 流式输出时显示光标 -->
+          <text wx:if="{{streamingMessageIndex === index}}" class="streaming-cursor">|</text>
+        </view>
+        <!-- Bot回复的额外问题按钮 -->
+        <view wx:if="{{item.suggestions && item.suggestions.length > 0}}" class="suggestions-container">
+          <view wx:for="{{item.suggestions}}" wx:key="index" wx:for-item="suggestion" class="suggestion-btn" bindtap="onSuggestionTap" data-suggestion="{{suggestion}}">
+            <text class="suggestion-text">{{suggestion}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 用户消息 -->
+      <view wx:else class="message-wrapper user-message">
+        <view class="message-bubble user-bubble">
+          <text class="message-text">{{item.content}}</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+  
+  <!-- 输入框区域 -->
+  <view class="input-container">
+    <view class="input-wrapper">
+      <input class="message-input" placeholder="输入消息..." value="{{inputValue}}" bindinput="onInputChange" confirm-type="send" bindconfirm="sendMessage" disabled="{{isLoading}}" />
+      <view class="send-btn {{inputValue.length > 0 && !isLoading ? 'send-btn-active' : 'send-btn-disabled'}}" bindtap="sendMessage">
+        <text class="send-icon">{{isLoading ? '...' : '➤'}}</text>
+      </view>
+    </view>
+  </view>
+</view>

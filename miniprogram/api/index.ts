@@ -11,10 +11,11 @@ import * as publicizeWxPlatformController from "./publicizeWxPlatformController"
 import * as publicizeVideoController from "./publicizeVideoController";
 import * as naturalWeatherController from "./naturalWeatherController";
 import * as naturalDisastersController from "./naturalDisastersController";
-import * as fileController from "./fileController";
 import * as attractionsController from "./attractionsController";
 import * as attractionsTypeController from "./attractionsTypeController";
 import * as attractionsRouteController from "./attractionsRouteController";
+import * as cozeController  from "./cozeController";
+
 export default {
   userController,
   taskTrackController,
@@ -25,8 +26,8 @@ export default {
   publicizeVideoController,
   naturalWeatherController,
   naturalDisastersController,
-  fileController,
   attractionsController,
   attractionsTypeController,
   attractionsRouteController,
+  cozeController
 };

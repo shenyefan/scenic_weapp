@@ -1,0 +1,178 @@
+.chat-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, #e6f2ff 0%, #ffffff 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+/* 聊天消息区域 */
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  /* 为底部输入框留出空间 */
+  padding-bottom: calc(env(safe-area-inset-bottom) + 250rpx);
+  /* 确保滚动区域不会覆盖背景 */
+  background: transparent;
+}
+
+.message-item {
+  margin-bottom: 20rpx;
+}
+
+.message-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.bot-message {
+  align-items: flex-start;
+  margin-left: 40rpx;
+}
+
+.user-message {
+  align-items: flex-end;
+  margin-right: 40rpx;
+}
+
+.message-bubble {
+  max-width: 70%;
+  padding: 24rpx 32rpx;
+  border-radius: 36rpx;
+  word-wrap: break-word;
+}
+
+.bot-bubble {
+  background-color: #f3f3f3;
+  color: #000;
+  text-align: left;
+}
+
+.user-bubble {
+  background-color: #007aff;
+  color: #fff;
+}
+
+.message-text {
+  font-size: 32rpx;
+  line-height: 1.4;
+}
+
+.suggestions-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 16rpx;
+  margin-left: 0;
+}
+
+.suggestion-btn {
+  background-color: #fff;
+  border: 2rpx solid #e5e5ea;
+  border-radius: 100rpx;
+  padding: 16rpx 32rpx;
+  margin-bottom: 12rpx;
+  align-self: flex-start;
+  box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.05);
+}
+
+.suggestion-btn:active {
+  background-color: #f0f0f0;
+}
+
+.suggestion-text {
+  font-size: 28rpx;
+  color: #333;
+}
+
+/* 输入框容器 - 固定在底部 */
+.input-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10rpx);
+  padding: 20rpx;
+  border-top: 1rpx solid #e5e5ea;
+  /* 为tabBar留出空间 */
+  padding-bottom: calc(env(safe-area-inset-bottom) + 120rpx);
+  z-index: 100;
+}
+
+.input-wrapper {
+  position: relative;
+  background-color: #f1f1f1;
+  border-radius: 100rpx;
+  padding: 16rpx 120rpx 16rpx 32rpx;
+  margin: 0 20rpx;
+}
+
+.message-input {
+  width: 100%;
+  font-size: 32rpx;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+/* 发送按钮默认状态（灰色禁用） */
+.send-btn {
+  position: absolute;
+  right: 8rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+/* 禁用状态（灰色） */
+.send-btn-disabled {
+  background-color: #cccccc;
+  pointer-events: none;
+}
+
+/* 启用状态（蓝色） */
+.send-btn-active {
+  background-color: #007aff;
+  pointer-events: auto;
+}
+
+.send-btn-active:active {
+  background-color: #0056cc;
+}
+
+.send-icon {
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+/* 流式输出效果 */
+.streaming {
+  position: relative;
+}
+
+.streaming-cursor {
+  display: inline-block;
+  animation: blink 1s infinite;
+  color: #007aff;
+  font-weight: bold;
+  margin-left: 2rpx;
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}

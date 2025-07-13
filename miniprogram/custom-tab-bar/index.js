@@ -3,17 +3,22 @@ Component({
 		active: 0,
 		list: [
 			{
-				icon: 'home-o',
+				icon: 'wap-home',
 				text: '主页',
 				url: '/pages/home/index'
-    		},
-      		{
-				icon: 'apps-o',
+      },
+      {
+				icon: 'map-marked',
+				text: '智慧导览',
+				url: '/pages/guide/index'
+			},
+      {
+				icon: 'todo-list',
 				text: '工作台',
 				url: '/pages/manage/index'
 			},
 			{
-				icon: 'user-o',
+				icon: 'user',
 				text: '我的',
 				url: '/pages/user/index'
 			}

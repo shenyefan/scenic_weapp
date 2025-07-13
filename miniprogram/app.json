@@ -3,7 +3,8 @@
     "pages/home/index",
     "pages/user/index",
     "pages/manage/index",
-    "pages/login/index"
+    "pages/login/index",
+    "pages/guide/index"
   ],
   "subPackages": [
     {
@@ -54,6 +55,10 @@
       {
         "pagePath": "pages/home/index",
         "text": "首页"
+      },
+      {
+        "pagePath": "pages/guide/index",
+        "text": "智慧导览"
       },
       {
         "pagePath": "pages/manage/index",
