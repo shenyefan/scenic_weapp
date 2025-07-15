@@ -1,14 +1,14 @@
 <!-- 全局悬浮定位按钮 -->
 <floating-location-btn></floating-location-btn>
 
-<view class="inspection-list-page">
+<view class="abnormal-inspection-page">
   <van-notify id="van-notify" />
 
   <!-- 日期筛选器 -->
   <view class="date-filter-container">
     <van-cell-group>
       <van-cell 
-        title="筛选日期" 
+        title="巡查任务日期筛选" 
         value="{{ selectedDateText }}" 
         is-link 
         bind:click="showDatePicker"
@@ -46,39 +46,45 @@
   </van-popup>
 
   <!-- 加载中 -->
-  <view wx:if="{{ loading && inspectionList.length === 0 }}" class="loading-container">
+  <view wx:if="{{ loading && disposalList.length === 0 }}" class="loading-container">
     <van-loading size="24px">加载中...</van-loading>
   </view>
 
-  <!-- 巡查任务列表 -->
-  <van-cell-group wx:if="{{ !loading || inspectionList.length > 0 }}">
+  <!-- 处置任务列表 -->
+  <van-cell-group wx:if="{{ !loading || disposalList.length > 0 }}">
     <van-cell 
-        wx:for="{{ inspectionList }}" 
+        wx:for="{{ disposalList }}" 
         wx:key="id" 
         title-width="70%" 
+        is-link
         title="{{ item.attractionsName || '未知景点' }}"
         label="{{ item.taskDate }} {{ item.formattedCreateTime }}"
         value="{{ item.statusText }}"
-        value-class="status-{{ item.taskStatus }}"
-        is-link
-        bind:click="navigateToEdit"
+        value-class="status-{{ item.disposalStatus }}"
         data-id="{{ item.id }}"
         data-index="{{ index }}"
+        bind:click="onTaskTap"
     >
     </van-cell>
   </van-cell-group>
   
   <!-- 加载状态提示 -->
-  <view wx:if="{{ inspectionList.length > 0 }}" class="loading-view">
+  <view wx:if="{{ disposalList.length > 0 }}" class="loading-view">
     <van-loading wx:if="{{ loading }}" size="24px">加载中...</van-loading>
     <van-divider contentPosition="center" wx:elif="{{ !pageInfo.hasMore }}">没有更多了</van-divider>
   </view>
   
   <!-- 空状态 -->
   <van-empty 
-        wx:if="{{ !loading && inspectionList.length === 0 }}"
+        wx:if="{{ !loading && disposalList.length === 0 }}"
         image="search" 
-        description="暂无巡查任务"
+        description="暂无处置任务"
         custom-class="empty-state"
       />
+      
+  <!-- 悬浮新增按钮 -->
+  <view class="float-add-btn" bind:tap="onAddTaskTap">
+    <van-icon name="plus" size="24px" />
+    <text>分配</text>
+  </view>
 </view>

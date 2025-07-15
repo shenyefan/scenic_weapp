@@ -1,4 +1,4 @@
-.container {
+.disposal-add-page {
   padding-bottom: 30rpx;
   min-height: 100vh;
   background-color: #f7f8fa;
@@ -11,23 +11,17 @@
   height: 100vh;
 }
 
-.button-container {
-  display: flex;
+.submit-button-container {
   padding: 20px;
-  gap: 10px;
 }
 
 .submit-button {
-  flex: 1;
+  width: 100%;
 }
 
-.delete-button {
-  flex: 1;
-  background-color: #ee0a24;
-  color: #fff;
-}
-
-.dialog-content {
-  padding: 20px;
-  text-align: center;
+/* 弹窗样式 */
+.popup-content {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-bottom: env(safe-area-inset-bottom);
 }

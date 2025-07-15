@@ -13,7 +13,8 @@
       "pages": [
         "detail/index",
         "map/index",
-        "routes/index"
+        "routes/index",
+        "routes_show/index"
       ]
     },
     {
@@ -39,7 +40,10 @@
         "disposal_edit/index",
         "inspection/index",
         "inspection_edit/index",
-        "inspection_map/index"
+        "inspection_map/index",
+        "admin_disposal/index",
+        "admin_disposal_add/index",
+        "admin_disposal_show/index"
       ]
     }
   ],

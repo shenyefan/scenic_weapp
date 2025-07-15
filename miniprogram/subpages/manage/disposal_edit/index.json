@@ -9,6 +9,7 @@
     "van-loading": "@vant/weapp/loading/index",
     "van-notify": "@vant/weapp/notify/index",
     "van-popup": "@vant/weapp/popup/index",
+    "van-picker": "@vant/weapp/picker/index",
     "van-image": "@vant/weapp/image/index",
     "van-icon": "@vant/weapp/icon/index"
   }

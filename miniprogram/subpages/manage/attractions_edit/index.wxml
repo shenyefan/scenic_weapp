@@ -81,7 +81,14 @@
       
       <!-- 景点类型 -->
       <van-cell-group inset title="景点类型">
-        <van-cell title="选择类型" value="{{ selectedTypesText }}" bind:click="showTypePopup" is-link />
+        <van-field
+          label="选择类型"
+          value="{{ selectedTypesText }}"
+          placeholder="请选择巡查员"
+          readonly
+          is-link
+          bind:tap="showTypePopup"
+        />
       </van-cell-group>
       
       <!-- 巡查员 -->
@@ -89,7 +96,7 @@
         <van-field
           label="巡查员"
           name="inspectorId"
-          value="{{ attraction.inspectorName }}"
+          value="{{ selectedInspectorName || attraction.inspectorName }}"
           placeholder="请选择巡查员"
           readonly
           is-link
@@ -164,26 +171,15 @@
     show="{{ showInspectorSelector }}"
     position="bottom"
     round
-    closeable
     bind:close="onInspectorPopupClose"
   >
-    <view class="popup-header">
-      <view class="popup-title">选择巡查员</view>
-    </view>
     <view class="popup-content">
-      <van-cell-group>
-        <block wx:for="{{ inspectorList }}" wx:key="id">
-          <van-cell
-            title="{{ item.userName }}"
-            clickable
-            data-id="{{ item.id }}"
-            data-name="{{ item.userName }}"
-            bind:click="selectInspector"
-          >
-            <van-icon size="20px" name="success" wx:if="{{ selectedInspector === item.id }}"/>
-          </van-cell>
-        </block>
-      </van-cell-group>
+      <van-picker
+        columns="{{ inspectorPickerList }}"
+        bind:confirm="selectInspector"
+        bind:cancel="onInspectorPopupClose"
+        show-toolbar
+      />
     </view>
   </van-popup>
 </view>

@@ -1,4 +1,3 @@
-
 import Notify from '@vant/weapp/notify/notify'
 import { addAttractions, getAttractionsVoById, updateAttractions, deleteAttractions } from '../../../api/attractionsController'
 import { getAllTypes } from '../../../api/attractionsTypeController'
@@ -15,6 +14,7 @@ Page({
     videoList: [] as any[],
     typeList: [] as API.AttractionsTypeVO[],
     inspectorList: [] as API.UserVO[],
+    inspectorPickerList: [] as string[],
     selectedTypes: [] as number[],
     selectedTypesText: '',
     tempSelectedTypes: [] as number[],
@@ -22,39 +22,35 @@ Page({
     showInspectorSelector: false,
     selectedInspector: null as number | null,
     selectedInspectorName: '',
-    showDeleteConfirm: false, // 添加删除确认弹窗状态
+    showDeleteConfirm: false,
   },
 
   onLoad(options: { id?: string }) {
     const id = options.id || ''
     this.setData({ id })
     
-    // 根据是否有ID判断是新增还是编辑
     if (id) {
-      // 编辑模式
       wx.setNavigationBarTitle({ title: '编辑景点' })
       this.loadAttractionDetail()
     } else {
-      // 新增模式
       wx.setNavigationBarTitle({ title: '新增景点' })
-      // 初始化一个空的景点对象
       this.setData({
         attraction: {
           attractionsName: '',
           attractionsNote: '',
           attractionsLng: '',
-          attractionsLat: ''
+          attractionsLat: '',
+          inspectorName: ''
         },
-        loading: false
+        loading: false,
+        selectedInspectorName: ''
       })
     }
     
-    // 无论新增还是编辑都需要加载这些数据
     this.loadTypeList()
     this.loadInspectorList()
   },
 
-  // 加载景点详情
   async loadAttractionDetail() {
     try {
       this.setData({ loading: true })
@@ -62,12 +58,10 @@ Page({
       const res = await getAttractionsVoById({ id: this.data.id })
       
       if (res.code === 200 && res.data) {
-        // 设置景点信息
         this.setData({
           attraction: res.data
         })
         
-        // 设置图片列表
         if (res.data.attractionsImg) {
           this.setData({
             fileList: [{
@@ -78,7 +72,6 @@ Page({
           })
         }
         
-        // 设置视频列表
         if (res.data.attractionsVideo) {
           this.setData({
             videoList: [{
@@ -89,7 +82,6 @@ Page({
           })
         }
         
-        // 设置已选类型
         if (res.data.attractionsTypes && res.data.attractionsTypes.length > 0) {
           const typeIds = res.data.attractionsTypes.map(item => item.id)
           const typeNames = res.data.attractionsTypes.map(item => item.typeName).join(', ')
@@ -101,11 +93,16 @@ Page({
           })
         }
         
-        // 设置已选巡查员
-        if (res.data.inspectorId) {
+        // 修复：正确设置巡查员信息
+        if (res.data.inspectorId && res.data.inspectorName) {
           this.setData({
             selectedInspector: res.data.inspectorId,
-            selectedInspectorName: res.data.inspectorName || ''
+            selectedInspectorName: res.data.inspectorName
+          })
+        } else {
+          this.setData({
+            selectedInspector: null,
+            selectedInspectorName: ''
           })
         }
       } else {
@@ -119,7 +116,6 @@ Page({
     }
   },
 
-  // 加载景点类型列表
   async loadTypeList() {
     try {
       const res = await getAllTypes()
@@ -134,7 +130,6 @@ Page({
     }
   },
 
-  // 加载巡查员列表
   async loadInspectorList() {
     try {
       const res = await listUserVoByPage({
@@ -144,8 +139,11 @@ Page({
       })
       
       if (res.code === 200 && res.data && res.data.records) {
+        const inspectorPickerList = res.data.records.map(item => item.userName)
+        
         this.setData({
-          inspectorList: res.data.records
+          inspectorList: res.data.records,
+          inspectorPickerList
         })
       }
     } catch (error) {
@@ -153,20 +151,16 @@ Page({
     }
   },
 
-  // 上传图片后的回调
   afterRead(event) {
     const { file } = event.detail
     
-    // 显示上传中
     Notify({ type: 'primary', message: '上传中...', duration: 0 })
     
-    // 上传图片
     uploadFile({
       filePath: file.url,
       biz: 'attractions_img'
     }).then(res => {
       if (res.code === 200 && res.data) {
-        // 更新文件列表
         this.setData({
           fileList: [{
             url: res.data,
@@ -184,27 +178,22 @@ Page({
     })
   },
 
-  // 删除图片
   onDeleteImage() {
     this.setData({
       fileList: []
     })
   },
 
-  // 上传视频后的回调
   afterVideoRead(event) {
     const { file } = event.detail
     
-    // 显示上传中
     Notify({ type: 'primary', message: '上传中...', duration: 0 })
     
-    // 上传视频
     uploadFile({
       filePath: file.url,
       biz: 'attractions_video'
     }).then(res => {
       if (res.code === 200 && res.data) {
-        // 更新文件列表
         this.setData({
           videoList: [{
             url: res.data,
@@ -222,14 +211,12 @@ Page({
     })
   },
 
-  // 删除视频
   onDeleteVideo() {
     this.setData({
       videoList: []
     })
   },
 
-  // 获取当前位置
   getLocation() {
     wx.getLocation({
       type: 'gcj02',
@@ -246,12 +233,9 @@ Page({
     })
   },
 
-  
-  // 表单提交
   async onFormSubmit(event) {
     const formData = event.detail.value
     
-    // 表单验证
     if (!formData.attractionsName) {
       Notify({ type: 'warning', message: '请输入景点名称' })
       return
@@ -260,7 +244,6 @@ Page({
     this.setData({ submitting: true })
     
     try {
-      // 构建请求参数
       const params: any = {
         attractionsName: formData.attractionsName,
         attractionsNote: formData.attractionsNote,
@@ -274,24 +257,19 @@ Page({
       
       let res
       if (this.data.id) {
-        // 编辑模式 - 更新
         params.id = this.data.id
         res = await updateAttractions(params)
       } else {
-        // 新增模式 - 添加
         res = await addAttractions(params)
       }
       
       if (res.code === 200) {
         Notify({ type: 'success', message: this.data.id ? '保存成功' : '新增成功' })
         
-        // 延迟返回上一页，并设置需要刷新标记
         setTimeout(() => {
-          // 设置上一页需要刷新
           const pages = getCurrentPages()
           if (pages.length > 1) {
             const prevPage = pages[pages.length - 2]
-            // 设置上一个页面的刷新标记
             prevPage.setData({
               needRefresh: true
             })
@@ -309,7 +287,6 @@ Page({
     }
   },
 
-  // 显示类型选择弹窗
   showTypePopup() {
     this.setData({
       showTypeSelector: true,
@@ -317,21 +294,18 @@ Page({
     })
   },
   
-  // 关闭类型选择弹窗
   onTypePopupClose() {
     this.setData({
       showTypeSelector: false
     })
   },
   
-  // 类型选择变化
   onTypeChange(event) {
     this.setData({
       tempSelectedTypes: event.detail
     })
   },
   
-  // 点击单元格切换选中状态
   toggleType(event) {
     const { index } = event.currentTarget.dataset
     const typeId = this.data.typeList[index].id
@@ -349,9 +323,7 @@ Page({
     })
   },
   
-  // 确认类型选择
   onTypePopupConfirm() {
-    // 获取选中类型的名称
     const selectedTypeNames = this.data.typeList
       .filter(item => this.data.tempSelectedTypes.includes(item.id))
       .map(item => item.typeName)
@@ -363,54 +335,54 @@ Page({
     })
   },
   
-  // 显示巡查员选择弹窗
   showInspectorPopup() {
     this.setData({
       showInspectorSelector: true
     })
   },
   
-  // 关闭巡查员选择弹窗
   onInspectorPopupClose() {
     this.setData({
       showInspectorSelector: false
     })
   },
   
-  // 选择巡查员
+  // 修复：selectInspector方法
   selectInspector(event) {
-    const { id, name } = event.currentTarget.dataset
+    const { detail } = event
+    const selectedInspector = this.data.inspectorList[detail.index]
     
+    // 确保选中的巡查员信息正确更新
     this.setData({
-      selectedInspector: id,
-      selectedInspectorName: name,
-      'attraction.inspectorName': name,
+      selectedInspector: selectedInspector.id,
+      selectedInspectorName: selectedInspector.userName,
       showInspectorSelector: false
     })
+    
+    // 同时更新attraction对象中的inspectorName（如果存在）
+    if (this.data.attraction) {
+      this.setData({
+        'attraction.inspectorName': selectedInspector.userName
+      })
+    }
   },
   
-  // 空函数，用于阻止事件冒泡
   noop() {},
   
-  // 添加onShow方法，用于页面显示时的处理
   onShow() {
-    // 页面显示时加载数据
     this.loadTypeList()
     this.loadInspectorList()
   },
   
-  // 显示删除确认弹窗
   showDeleteConfirm() {
     if (!this.data.id) return
     this.setData({ showDeleteConfirm: true })
   },
   
-  // 关闭删除确认弹窗
   closeDeleteConfirm() {
     this.setData({ showDeleteConfirm: false })
   },
   
-  // 确认删除景点
   async confirmDelete() {
     if (!this.data.id) return
     
@@ -422,13 +394,10 @@ Page({
       if (res.code === 200 && res.data) {
         Notify({ type: 'success', message: '删除成功' })
         
-        // 延迟返回上一页，并设置需要刷新标记
         setTimeout(() => {
-          // 设置上一页需要刷新
           const pages = getCurrentPages()
           if (pages.length > 1) {
             const prevPage = pages[pages.length - 2]
-            // 设置上一个页面的刷新标记
             prevPage.setData({
               needRefresh: true
             })
@@ -449,7 +418,6 @@ Page({
     }
   },
 
-  // 返回上一页
   onBack() {
     wx.navigateBack()
   },

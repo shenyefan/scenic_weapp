@@ -16,7 +16,7 @@
   </view>
 
   <!-- 巡查模块 -->
-  <view wx:if="{{ loginUser.userRole == 'inspector' || loginUser.userRole == 'disposer' }}" class="module-card">
+  <view wx:if="{{ loginUser.userRole == 'inspector' || loginUser.userRole == 'disposer' || loginUser.userRole == 'admin' }}" class="module-card">
     <view class="module-header">巡查处置模块</view>
     <van-grid clickable column-num="4" border="{{ false }}" custom-class="function-grid">
       <!-- 巡查检查 -->
@@ -44,6 +44,15 @@
         text="问题处置" 
         link-type="navigateTo"
         url="/subpages/manage/disposal/index"
+      />
+
+      <!-- 异常景点 -->
+      <van-grid-item 
+        wx:if="{{ loginUser.userRole == 'admin' }}"
+        icon="/image/manage/disposal.svg" 
+        text="异常景点" 
+        link-type="navigateTo"
+        url="/subpages/manage/admin_disposal/index"
       />
 
       <!-- 巡查记录 -->

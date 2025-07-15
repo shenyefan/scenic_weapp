@@ -1,0 +1,100 @@
+<!-- 全局悬浮定位按钮 -->
+<floating-location-btn></floating-location-btn>
+
+<view class="disposal-add-page">
+  <van-notify id="van-notify" />
+
+  <!-- 加载中 -->
+  <view wx:if="{{ loading }}" class="loading-container">
+    <van-loading size="24px">加载中...</van-loading>
+  </view>
+
+  <block wx:else>
+    <form bindsubmit="onFormSubmit">
+      <van-cell-group inset title="分配信息">
+        <!-- 关联巡查任务选择 -->
+        <van-cell 
+          title="关联巡查任务" 
+          value="{{ selectedInspectionText || '请选择需要处置的景点' }}" 
+          is-link 
+          bind:click="showInspectionPicker"
+          required
+        />
+        
+        <!-- 分配处置员选择 -->
+        <van-cell 
+          title="分配处置员" 
+          value="{{ selectedDisposerText || '请选择处置员' }}" 
+          is-link 
+          bind:click="showDisposerPicker"
+          required
+        />
+        
+        <!-- 处置状态选择 -->
+        <van-cell 
+          title="处置状态" 
+          value="{{ selectedStatusText || '请选择处置状态' }}" 
+          is-link 
+          bind:click="showStatusPicker"
+          required
+        />
+      </van-cell-group>
+
+      <!-- 提交按钮 -->
+      <view class="submit-button-container">
+        <button class="submit-button" form-type="submit" type="primary" loading="{{ submitting }}">分配处置任务</button>
+      </view>
+    </form>
+  </block>
+
+  <!-- 巡查任务选择弹窗 -->
+  <van-popup 
+    show="{{ showInspectionPopup }}" 
+    position="bottom" 
+    bind:close="hideInspectionPicker"
+    round
+  >
+    <view class="popup-content">
+      <van-picker
+        columns="{{ inspectionOptions }}"
+        bind:confirm="onInspectionConfirm"
+        bind:cancel="hideInspectionPicker"
+        show-toolbar
+      />
+    </view>
+  </van-popup>
+
+  <!-- 处置员选择弹窗 -->
+  <van-popup 
+    show="{{ showDisposerPopup }}" 
+    position="bottom" 
+    bind:close="hideDisposerPicker"
+    round
+  >
+    <view class="popup-content">
+      <van-picker
+        columns="{{ disposerOptions }}"
+        bind:confirm="onDisposerConfirm"
+        bind:cancel="hideDisposerPicker"
+        show-toolbar
+      />
+    </view>
+  </van-popup>
+
+  <!-- 处置状态选择弹窗 -->
+  <van-popup 
+    show="{{ showStatusPopup }}" 
+    position="bottom" 
+    bind:close="hideStatusPicker"
+    round
+  >
+    <view class="popup-content">
+      <van-picker
+        columns="{{ statusOptions }}"
+        bind:confirm="onStatusConfirm"
+        bind:cancel="hideStatusPicker"
+        show-toolbar
+      />
+    </view>
+  </van-popup>
+</view>

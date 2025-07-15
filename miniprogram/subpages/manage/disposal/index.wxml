@@ -5,7 +5,7 @@
   <view class="date-filter-container">
     <van-cell-group>
       <van-cell 
-        title="筛选日期" 
+        title="巡查任务日期筛选" 
         value="{{ selectedDateText }}" 
         is-link 
         bind:click="showDatePicker"
@@ -30,6 +30,7 @@
     show="{{ showDatePickerPopup }}" 
     position="bottom" 
     bind:close="hideDatePicker"
+    round
   >
     <van-datetime-picker
       type="date"

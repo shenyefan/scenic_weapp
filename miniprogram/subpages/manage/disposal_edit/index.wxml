@@ -41,7 +41,7 @@
         <!-- 处置状态 -->
         <van-cell 
           title="处置状态" 
-          value="{{ statusOptions[formData.disposalStatus] ? statusOptions[formData.disposalStatus].text : '未知状态' }}" 
+          value="{{ statusOptions[formData.disposalStatus] || '未知状态' }}" 
           is-link 
           bind:click="showStatusPicker" 
         />
@@ -80,32 +80,20 @@
     </form>
   </block>
 
-  
   <!-- 状态选择弹窗 -->
   <van-popup
     show="{{ showStatusSelector }}"
     position="bottom"
     round
-    closeable
     bind:close="closeStatusPicker"
   >
-    <view class="popup-header">
-      <view class="popup-title">选择处置状态</view>
-    </view>
     <view class="popup-content">
-      <van-cell-group>
-        <block wx:for="{{ statusOptions }}" wx:key="value">
-          <van-cell
-            title="{{ item.text }}"
-            clickable
-            data-value="{{ item.value }}"
-            data-text="{{ item.text }}"
-            bind:click="selectStatus"
-          >
-          <van-icon size="20px" name="success" wx:if="{{ formData.disposalStatus === item.value }}"/>
-          </van-cell>
-        </block>
-      </van-cell-group>
+      <van-picker
+        columns="{{ statusOptions }}"
+        bind:confirm="selectStatus"
+        bind:cancel="closeStatusPicker"
+        show-toolbar
+      />
     </view>
   </van-popup>
 </view>

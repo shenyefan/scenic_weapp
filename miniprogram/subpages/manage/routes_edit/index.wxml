@@ -14,7 +14,7 @@
         <van-field
           label="起点景点"
           name="startAttractionId"
-          value="{{ route.startAttractionName }}"
+          value="{{ selectedStartAttractionName || route.startAttractionName }}"
           placeholder="请选择起点景点"
           readonly
           required
@@ -26,7 +26,7 @@
         <van-field
           label="终点景点"
           name="endAttractionId"
-          value="{{ route.endAttractionName }}"
+          value="{{ selectedEndAttractionName || route.endAttractionName }}"
           placeholder="请选择终点景点"
           readonly
           required
@@ -106,13 +106,12 @@
       </van-cell-group>
       
       <!-- 提交按钮 -->
-      <!-- 在提交按钮部分添加删除按钮 -->
       <view class="button-container">
         <button class="submit-button" form-type="submit" type="primary" loading="{{ submitting }}">保存</button>
         <button wx:if="{{ id }}" class="delete-button" type="danger" bind:tap="showDeleteConfirm" loading="{{ submitting }}">删除</button>
       </view>
       
-      <!-- 添加删除确认弹窗 -->
+      <!-- 删除确认弹窗 -->
       <van-dialog
         use-slot
         title="确认删除"
@@ -135,26 +134,15 @@
     show="{{ showStartAttractionSelector }}"
     position="bottom"
     round
-    closeable
     bind:close="onStartAttractionPopupClose"
   >
-    <view class="popup-header">
-      <view class="popup-title">选择起点景点</view>
-    </view>
     <view class="popup-content">
-      <van-cell-group>
-        <block wx:for="{{ attractionList }}" wx:key="id">
-          <van-cell
-            title="{{ item.attractionsName }}"
-            clickable
-            data-id="{{ item.id }}"
-            data-name="{{ item.attractionsName }}"
-            bind:click="selectStartAttraction"
-          >
-          <van-icon size="20px" name="success" wx:if="{{ selectedStartAttraction === item.id }}"/>
-          </van-cell>
-        </block>
-      </van-cell-group>
+      <van-picker
+        columns="{{ attractionPickerList }}"
+        bind:confirm="selectStartAttraction"
+        bind:cancel="onStartAttractionPopupClose"
+        show-toolbar
+      />
     </view>
   </van-popup>
   
@@ -163,26 +151,15 @@
     show="{{ showEndAttractionSelector }}"
     position="bottom"
     round
-    closeable
     bind:close="onEndAttractionPopupClose"
   >
-    <view class="popup-header">
-      <view class="popup-title">选择终点景点</view>
-    </view>
     <view class="popup-content">
-      <van-cell-group>
-        <block wx:for="{{ attractionList }}" wx:key="id">
-          <van-cell
-            title="{{ item.attractionsName }}"
-            clickable
-            data-id="{{ item.id }}"
-            data-name="{{ item.attractionsName }}"
-            bind:click="selectEndAttraction"
-          >
-          <van-icon size="20px" name="success" wx:if="{{ selectedEndAttraction === item.id }}"/>
-          </van-cell>
-        </block>
-      </van-cell-group>
+      <van-picker
+        columns="{{ attractionPickerList }}"
+        bind:confirm="selectEndAttraction"
+        bind:cancel="onEndAttractionPopupClose"
+        show-toolbar
+      />
     </view>
   </van-popup>
 </view>

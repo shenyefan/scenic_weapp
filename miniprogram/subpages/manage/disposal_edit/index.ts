@@ -15,12 +15,9 @@ Page({
       disposalDescription: '',
       disposalStatus: 0
     },
-    inspectionData: null, // 巡查信息
-    statusOptions: [
-      { text: '待处理', value: 0 },
-      { text: '处理中', value: 1 },
-      { text: '已完成', value: 2 }
-    ],
+    inspectionData: null,
+    statusOptions: ['待处理', '处理中', '已完成'],
+    statusValues: [0, 1, 2],
     fileList: [],
     showStatusSelector: false
   },
@@ -32,7 +29,6 @@ Page({
       })
       this.loadDisposalDetail(options.id)
       
-      // 如果有inspectionTaskId，加载巡查信息
       if (options.inspectionTaskId) {
         this.loadInspectionDetail(options.inspectionTaskId)
       }
@@ -79,13 +75,11 @@ Page({
     }
   },
 
-  // 加载巡查信息
   async loadInspectionDetail(inspectionTaskId: string) {
     try {
       const result = await getTaskInspectionVoById({ id: inspectionTaskId })
       
       if (result.code === 200 && result.data) {
-        // 处理状态文本
         const statusMap = {
           0: '待开始',
           1: '进行中', 
@@ -105,17 +99,6 @@ Page({
     }
   },
 
-  // 获取巡查状态文本
-  getInspectionStatusText(status: number) {
-    const statusMap = {
-      0: '待开始',
-      1: '进行中', 
-      2: '已完成'
-    }
-    return statusMap[status] || '未知状态'
-  },
-
-  // 状态选择相关方法
   showStatusPicker() {
     this.setData({
       showStatusSelector: true
@@ -129,25 +112,18 @@ Page({
   },
 
   selectStatus(event) {
-    const { value, text } = event.currentTarget.dataset
+    const { detail } = event
+    const selectedValue = this.data.statusValues[detail.index]
+    
     this.setData({
-      'formData.disposalStatus': value,
+      'formData.disposalStatus': selectedValue,
       showStatusSelector: false
-    })
-  },
-
-  onStatusChange(e: any) {
-    const selectedItem = e.detail
-    this.setData({
-      'formData.disposalStatus': selectedItem.value,
-      showStatusSheet: false
     })
   },
 
   afterRead(e: any) {
     const { file } = e.detail
     
-    // 显示上传中的提示
     Notify({ type: 'primary', message: '上传中...', duration: 0 })
     
     uploadFile({
@@ -183,11 +159,9 @@ Page({
     })
   },
 
-  // 表单提交方法
   async onFormSubmit(event) {
     const formData = event.detail.value
     
-    // 表单验证
     if (!formData.disposalDescription) {
       return Notify({ type: 'warning', message: '请填写处置描述' })
     }
@@ -205,7 +179,6 @@ Page({
       if (result.code === 200) {
         Notify({ type: 'success', message: '更新成功' })
         
-        // 返回上一页并刷新列表
         setTimeout(() => {
           const pages = getCurrentPages()
           const prevPage = pages[pages.length - 2]

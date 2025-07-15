@@ -1,0 +1,99 @@
+<view class="admin-disposal-show-page">
+  <van-notify id="van-notify" />
+
+  <!-- 加载中 -->
+  <view wx:if="{{ loading }}" class="loading-container">
+    <van-loading size="24px">加载中...</van-loading>
+  </view>
+
+  <block wx:else>
+    <!-- 景点基本信息 -->
+    <van-cell-group inset title="景点信息" wx:if="{{ inspectionData }}">
+      <van-cell title="景点名称" value="{{ inspectionData.attractionsName || '未知景点' }}" />
+    </van-cell-group>
+
+    <!-- 巡查详情信息 -->
+    <van-cell-group inset title="巡查详情" wx:if="{{ inspectionData }}">
+      <!-- 巡查描述 -->
+      <van-cell title="巡查员" value="{{ inspectionData.inspectorName || '未知巡查员' }}" />
+      <van-cell title="巡查日期" value="{{ inspectionData.taskDate || '未知日期' }}" />
+      <van-cell title="任务状态" value="{{ inspectionData.statusText || '未知状态' }}" />
+      <van-cell title="是否异常" border="{{ false }}">
+        <van-tag type="{{ inspectionData.isAbnormal ? 'danger' : 'success' }}">
+          {{ inspectionData.isAbnormal ? '异常' : '正常' }}
+        </van-tag>
+      </van-cell>
+      <van-cell title="巡查描述" border="{{ false }}">
+        <view class="description-text">
+          {{ inspectionData.inspectionDescription || '无描述' }}
+        </view>
+      </van-cell>
+      
+      <!-- 巡查图片 -->
+      <van-cell title-width="150rpx" title="巡查图片" border="{{ false }}" wx:if="{{ inspectionData.inspectionImages }}">
+        <view>
+          <van-image
+            src="{{ inspectionData.inspectionImages }}"
+            width="200"
+            height="120"
+            fit="aspectFill"
+            show-loading
+            show-error
+          />
+        </view>
+      </van-cell>
+      
+      <!-- 无巡查图片提示 -->
+      <van-cell title-width="150rpx" title="巡查图片" border="{{ false }}" wx:else>
+        <view class="no-image-text">暂无图片</view>
+      </van-cell>
+    </van-cell-group>
+
+    <!-- 处置信息部分 -->
+    <van-cell-group inset title="处置信息" wx:if="{{ disposalData }}">
+      <van-cell title="处置人员" value="{{ disposalData.disposerName || '未知处置人员' }}" />
+      <van-cell title="处置状态" border="{{ false }}">
+        <van-tag type="{{ disposalData.statusType }}">
+          {{ disposalData.statusText }}
+        </van-tag>
+      </van-cell>
+      
+      <!-- 其他处置信息 -->
+      <van-cell title="处置描述" border="{{ false }}">
+        <view class="description-text">
+          {{ disposalData.disposalDescription || '无描述' }}
+        </view>
+      </van-cell>
+      
+      <!-- 处置图片 -->
+      <van-cell title-width="150rpx" title="处置图片" border="{{ false }}" wx:if="{{ disposalData.disposalImages }}">
+        <view>
+          <van-image
+            src="{{ disposalData.disposalImages }}"
+            width="200"
+            height="120"
+            fit="aspectFill"
+            show-loading
+            show-error
+          />
+        </view>
+      </van-cell>
+      
+      <!-- 无处置图片提示 -->
+      <van-cell title-width="150rpx" title="处置图片" border="{{ false }}" wx:else>
+        <view class="no-image-text">暂无图片</view>
+      </van-cell>
+      
+      <!-- 处置时间 -->
+      <van-cell title="处置时间" value="{{ disposalData.formattedCreateTime }}" border="{{ false }}" />
+    </van-cell-group>
+
+    <!-- 无处置信息提示 -->
+    <van-cell-group inset title="处置信息" wx:else>
+      <van-cell title="处置状态" border="{{ false }}">
+        <van-tag type="warning">待处置</van-tag>
+      </van-cell>
+      <van-cell title="处置描述" value="暂无处置信息" border="{{ false }}" />
+    </van-cell-group>
+  </block>
+</view>

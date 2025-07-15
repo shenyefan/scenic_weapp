@@ -9,18 +9,10 @@ Page({
     submitting: false,
     formData: {
       inspectionImages: '',
-      inspectionDescription: '',
-      isAbnormal: 0,
-      taskStatus: 0
+      inspectionDescription: ''
     },
-    inspectionData: null, // 巡查任务信息
-    statusOptions: [
-      { text: '待开始', value: 0 },
-      { text: '进行中', value: 1 },
-      { text: '已完成', value: 2 }
-    ],
-    fileList: [],
-    showStatusSelector: false
+    inspectionData: null,
+    fileList: []
   },
 
   onLoad(options) {
@@ -57,13 +49,10 @@ Page({
           2: '已完成'
         }
         const statusText = statusMap[data.taskStatus] || '未知状态'
-
         this.setData({
           formData: {
             inspectionImages: data.inspectionImages,
-            inspectionDescription: data.inspectionDescription,
-            isAbnormal: data.isAbnormal,
-            taskStatus: data.taskStatus
+            inspectionDescription: data.inspectionDescription
           },
           inspectionData: {
             ...data,
@@ -81,34 +70,6 @@ Page({
       Notify({ type: 'danger', message: '加载失败，请重试' })
       this.setData({ loading: false })
     }
-  },
-
-  // 状态选择相关方法
-  showStatusPicker() {
-    this.setData({
-      showStatusSelector: true
-    })
-  },
-
-  closeStatusPicker() {
-    this.setData({
-      showStatusSelector: false
-    })
-  },
-
-  selectStatus(event) {
-    const { value, text } = event.currentTarget.dataset
-    this.setData({
-      'formData.taskStatus': value,
-      showStatusSelector: false
-    })
-  },
-
-  // 异常状态切换
-  onAbnormalChange(event) {
-    this.setData({
-      'formData.isAbnormal': event.detail ? 1 : 0
-    })
   },
 
   afterRead(e: any) {
@@ -165,9 +126,7 @@ Page({
       const result = await updateTaskInspection({
         id: this.data.id,
         inspectionImages: this.data.fileList.length > 0 ? this.data.fileList[0].url : '',
-        inspectionDescription: formData.inspectionDescription,
-        isAbnormal: this.data.formData.isAbnormal,
-        taskStatus: this.data.formData.taskStatus
+        inspectionDescription: formData.inspectionDescription
       })
 
       if (result.code === 200) {

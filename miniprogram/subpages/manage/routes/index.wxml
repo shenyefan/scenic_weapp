@@ -68,7 +68,7 @@
   </view>
   
   <!-- 新增悬浮按钮 -->
-  <view class="float-add-btn" bind:tap="onAddRouteTap">
+  <view class="float-add-btn" bind:tap="onAddRouteTap" wx:if="{{ loginUser.userRole == 'admin' }}" >
     <van-icon name="plus" size="24px" />
     <text>新增</text>
   </view>

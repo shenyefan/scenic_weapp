@@ -1,15 +1,15 @@
-import { listMyTaskInspectionVoByPage } from '../../../api/taskInspectionController'
+import { listTaskDisposalVoByPage } from '../../../api/taskDisposalController'
 import { formatISOTimeDetailed, formatDate } from '../../../utils/date'
 import Notify from '@vant/weapp/notify/notify'
 
-interface TaskInspectionWithFormattedTime extends API.TaskInspectionVO {
+interface TaskDisposalWithFormattedTime extends API.TaskDisposalVO {
   formattedCreateTime: string;
   statusText: string;
 }
 
 Page({
   data: {
-    inspectionList: [] as TaskInspectionWithFormattedTime[],
+    disposalList: [] as TaskDisposalWithFormattedTime[],
     loading: false,
     refreshing: false,
     pageInfo: {
@@ -28,10 +28,20 @@ Page({
   },
 
   onLoad() {
-    this.loadInspectionList(true)
+    this.loadDisposalList(true)
   },
 
-  async loadInspectionList(refresh = false): Promise<void> {
+  // 获取状态文本
+  getStatusText(status: number): string {
+    const statusMap: Record<number, string> = {
+      0: '待处理',
+      1: '处理中',
+      2: '已完成'
+    }
+    return statusMap[status] || '未知状态'
+  },
+
+  async loadDisposalList(refresh = false): Promise<void> {
     if (this.data.loading) return
     
     // 如果没有更多数据且不是刷新操作，则直接返回
@@ -40,7 +50,7 @@ Page({
     this.setData({ loading: true })
     
     if (refresh) {
-      this.setData({ inspectionList: [] })
+      this.setData({ disposalList: [] })
     }
 
     try {
@@ -57,21 +67,21 @@ Page({
         requestData.taskDate = this.data.selectedDate
       }
       
-      const result = await listMyTaskInspectionVoByPage(requestData)
+      const result = await listTaskDisposalVoByPage(requestData)
 
       if (result.code === 200 && result.data) {
         const { records, total } = result.data
         const formattedList = (records || []).map(item => ({
           ...item,
           formattedCreateTime: formatISOTimeDetailed(item.createTime || ''),
-          statusText: this.getStatusText(item.taskStatus || 0)
+          statusText: this.getStatusText(item.disposalStatus || 0)
         }))
         
-        const newList = refresh ? formattedList : [...this.data.inspectionList, ...formattedList]
+        const newList = refresh ? formattedList : [...this.data.disposalList, ...formattedList]
         const hasMore = records.length > 0 && newList.length < total
 
         this.setData({
-          inspectionList: newList,
+          disposalList: newList,
           'pageInfo.current': refresh ? 2 : pageInfo.current + 1,
           'pageInfo.total': total,
           'pageInfo.hasMore': hasMore,
@@ -82,7 +92,7 @@ Page({
         this.setData({ loading: false })
       }
     } catch (error) {
-      console.error('加载巡查任务失败:', error)
+      console.error('加载处置任务失败:', error)
       Notify({ type: 'danger', message: '加载失败，请重试' })
       this.setData({ loading: false })
     }
@@ -112,7 +122,7 @@ Page({
     })
     
     // 重新加载数据
-    this.loadInspectionList(true)
+    this.loadDisposalList(true)
   },
 
   // 清除日期筛选
@@ -124,16 +134,7 @@ Page({
     })
     
     // 重新加载数据
-    this.loadInspectionList(true)
-  },
-
-  getStatusText(status: number): string {
-    const statusMap: Record<number, string> = {
-      0: '待开始',
-      1: '进行中',
-      2: '已完成'
-    }
-    return statusMap[status] || '未知状态'
+    this.loadDisposalList(true)
   },
 
   // 上拉加载更多
@@ -141,21 +142,34 @@ Page({
     if (this.data.loading) return
     
     if (this.data.pageInfo.hasMore) {
-      this.loadInspectionList(false)
+      this.loadDisposalList(false)
     }
   },
 
-  navigateToEdit(e: any) {
-    const id = e.currentTarget.dataset.id
-    const index = e.currentTarget.dataset.index
-    const item = this.data.inspectionList[index]
+  // 点击任务项 - 修改为使用处置任务ID
+  onTaskTap(e: any) {
+    const { id } = e.currentTarget.dataset
+    if (!id) return
     
     wx.navigateTo({
-      url: `/subpages/manage/inspection_edit/index?id=${id}`
+      url: `/subpages/manage/admin_disposal_show/index?disposalId=${id}`,
+      fail: () => {
+        Notify({ type: 'danger', message: '页面跳转失败' })
+      }
+    })
+  },
+
+  // 新增任务
+  onAddTaskTap() {
+    wx.navigateTo({
+      url: '/subpages/manage/admin_disposal_add/index',
+      fail: () => {
+        Notify({ type: 'danger', message: '页面跳转失败' })
+      }
     })
   },
 
   onBack() {
     wx.navigateBack()
-  },
+  }
 })

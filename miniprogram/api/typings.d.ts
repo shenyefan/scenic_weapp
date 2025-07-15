@@ -1014,7 +1014,6 @@ declare namespace API {
     inspectionImages?: string;
     inspectionDescription?: string;
     isAbnormal?: number;
-    taskStatus?: number;
   };
 
   type TaskInspectionVO = {

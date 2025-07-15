@@ -1,0 +1,76 @@
+<view class="container">
+  <!-- 加载状态 -->
+  <view wx:if="{{ loading && !route }}" class="loading-container">
+    <van-loading color="#1989fa" vertical>加载中...</van-loading>
+  </view>
+  
+  <!-- 路线详情 -->
+  <block wx:elif="{{ route }}">
+    <!-- 路线基本信息 -->
+    <van-cell-group inset title="路线信息">
+      <van-cell title="起点景点" value="{{ route.startAttractionName }}" />
+      <van-cell title="终点景点" value="{{ route.endAttractionName }}" />
+      <van-cell 
+        wx:if="{{ route.routeNote }}"
+        title="路线描述" 
+        value="{{ route.routeNote }}"
+        label="{{ route.routeNote }}"
+      />
+    </van-cell-group>
+    
+    <!-- 起点图片 -->
+    <van-cell-group wx:if="{{ route.startAttractionImg }}" inset title="起点图片">
+      <view class="image-container">
+        <van-image
+          src="{{ route.startAttractionImg }}"
+          width="100%"
+          height="400rpx"
+          fit="cover"
+          show-loading
+          show-error
+        />
+      </view>
+    </van-cell-group>
+        
+    <!-- 起点视频 -->
+    <van-cell-group wx:if="{{ route.startAttractionVideo }}" inset title="起点视频">
+      <view class="video-container">
+        <video
+          src="{{ route.startAttractionVideo }}"
+          controls
+          class="video-player"
+        ></video>
+      </view>
+    </van-cell-group>
+    
+    <!-- 终点图片 -->
+    <van-cell-group wx:if="{{ route.endAttractionImg }}" inset title="终点图片">
+      <view class="image-container">
+        <van-image
+          src="{{ route.endAttractionImg }}"
+          width="100%"
+          height="400rpx"
+          fit="cover"
+          show-loading
+          show-error
+        />
+      </view>
+    </van-cell-group>
+    
+    <!-- 终点视频 -->
+    <van-cell-group wx:if="{{ route.endAttractionVideo }}" inset title="终点视频">
+      <view class="video-container">
+        <video
+          src="{{ route.endAttractionVideo }}"
+          controls
+          class="video-player"
+        ></video>
+      </view>
+    </van-cell-group>
+  </block>
+  
+  <!-- 数据为空时的提示 -->
+  <view wx:else class="empty-container">
+    <text class="empty-text">暂无路线信息</text>
+  </view>
+</view>

@@ -23,8 +23,8 @@ Page({
     selectedDate: '',
     selectedDateText: '全部日期',
     currentDate: new Date().getTime(),
-    minDate: new Date(2020, 0, 1).getTime(),
-    maxDate: new Date(2030, 11, 31).getTime()
+    minDate: new Date(2025, 0, 1).getTime(),
+    maxDate: new Date().getTime()
   },
 
   onLoad() {

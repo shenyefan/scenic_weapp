@@ -15,28 +15,11 @@
       <van-cell title="景点名称" value="{{ inspectionData.attractionsName || '未知景点' }}" />
       <van-cell title="巡查员" value="{{ inspectionData.inspectorName || '未知巡查员' }}" />
       <van-cell title="巡查日期" value="{{ inspectionData.taskDate || '未知日期' }}" />
+      <van-cell title="任务状态" value="{{ inspectionData.statusText || '未知状态' }}" />
     </van-cell-group>
 
     <form bindsubmit="onFormSubmit">
       <van-cell-group inset title="巡查信息">
-        <!-- 任务状态 -->
-        <van-cell 
-          title="任务状态" 
-          value="{{ statusOptions[formData.taskStatus] ? statusOptions[formData.taskStatus].text : '未知状态' }}" 
-          is-link 
-          bind:click="showStatusPicker" 
-        />
-        
-        <!-- 是否异常 -->
-        <van-cell title="是否异常" border="{{ false }}">
-          <van-switch 
-            checked="{{ formData.isAbnormal === 1 }}"
-            bind:change="onAbnormalChange"
-            active-color="#ee0a24"
-            inactive-color="#c8c9cc"
-          />
-        </van-cell>
-        
         <!-- 巡查描述 -->
         <van-field
           name="inspectionDescription"
@@ -70,32 +53,4 @@
       </view>
     </form>
   </block>
-
-  <!-- 状态选择弹窗 -->
-  <van-popup
-    show="{{ showStatusSelector }}"
-    position="bottom"
-    round
-    closeable
-    bind:close="closeStatusPicker"
-  >
-    <view class="popup-header">
-      <view class="popup-title">选择任务状态</view>
-    </view>
-    <view class="popup-content">
-      <van-cell-group>
-        <block wx:for="{{ statusOptions }}" wx:key="value">
-          <van-cell
-            title="{{ item.text }}"
-            clickable
-            data-value="{{ item.value }}"
-            data-text="{{ item.text }}"
-            bind:click="selectStatus"
-          >
-          <van-icon size="20px" name="success" wx:if="{{ formData.taskStatus === item.value }}"/>
-          </van-cell>
-        </block>
-      </van-cell-group>
-    </view>
-  </van-popup>
 </view>

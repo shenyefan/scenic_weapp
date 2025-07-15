@@ -97,7 +97,12 @@ Page({
     const { id } = e.currentTarget.dataset
     if (!id) return
     
-    Notify({ type: 'primary', message: '喵喵喵' })
+    wx.navigateTo({
+      url: `/subpages/attraction/routes_show/index?id=${id}`,
+      fail: () => {
+        Notify({ type: 'danger', message: '页面跳转失败' })
+      }
+    })
   },
 
   // 切换视图模式
