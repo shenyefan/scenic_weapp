@@ -46,11 +46,11 @@
         url="/subpages/manage/disposal/index"
       />
 
-      <!-- 异常景点 -->
+      <!-- 任务分配 -->
       <van-grid-item 
         wx:if="{{ loginUser.userRole == 'admin' }}"
         icon="/image/manage/disposal.svg" 
-        text="异常景点" 
+        text="任务分配" 
         link-type="navigateTo"
         url="/subpages/manage/admin_disposal/index"
       />
