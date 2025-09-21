@@ -84,7 +84,7 @@
         <van-field
           label="选择类型"
           value="{{ selectedTypesText }}"
-          placeholder="请选择巡查员"
+          placeholder="请选择景点类型"
           readonly
           is-link
           bind:tap="showTypePopup"

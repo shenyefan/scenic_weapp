@@ -83,24 +83,6 @@ export async function listAttractionsVoByPage(
   );
 }
 
-/** 此处后端没有提供注释 POST /api/attractions/my/list/page/vo */
-export async function listMyAttractionsVoByPage(
-  body: API.AttractionsQueryRequest,
-  options?: { [key: string]: any }
-) {
-  return request<API.BaseResponsePageAttractionsVO>(
-    "/api/attractions/my/list/page/vo",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: body,
-      ...(options || {}),
-    }
-  );
-}
-
 /** 此处后端没有提供注释 POST /api/attractions/update */
 export async function updateAttractions(
   body: API.AttractionsUpdateRequest,

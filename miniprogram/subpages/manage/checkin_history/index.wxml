@@ -34,6 +34,5 @@
         wx:if="{{ !loading && checkinList.length === 0 }}"
         image="search" 
         description="暂无签到记录"
-        custom-class="empty-state"
       />
 </view>

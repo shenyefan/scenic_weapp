@@ -68,6 +68,14 @@ export async function listWeatherVoByPage(
   );
 }
 
+/** 此处后端没有提供注释 GET /api/natural/weather/now */
+export async function getCurrentWeather(options?: { [key: string]: any }) {
+  return request<API.BaseResponseNaturalWeatherVO>("/api/natural/weather/now", {
+    method: "GET",
+    ...(options || {}),
+  });
+}
+
 /** 此处后端没有提供注释 POST /api/natural/weather/update */
 export async function updateWeather(
   body: API.NaturalWeatherUpdateRequest,

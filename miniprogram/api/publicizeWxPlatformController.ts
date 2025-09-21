@@ -86,24 +86,6 @@ export async function listPublicizeWxPlatformVoByPage(
   );
 }
 
-/** 此处后端没有提供注释 POST /api/publicize/wx/my/list/page/vo */
-export async function listMyPublicizeWxPlatformVoByPage(
-  body: API.PublicizeWxPlatformQueryRequest,
-  options?: { [key: string]: any }
-) {
-  return request<API.BaseResponsePagePublicizeWxPlatformVO>(
-    "/api/publicize/wx/my/list/page/vo",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: body,
-      ...(options || {}),
-    }
-  );
-}
-
 /** 此处后端没有提供注释 POST /api/publicize/wx/update */
 export async function updatePublicizeWxPlatform(
   body: API.PublicizeWxPlatformUpdateRequest,

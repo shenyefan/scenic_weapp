@@ -34,9 +34,6 @@
     <van-loading color="#1989fa" vertical>加载中...</van-loading>
   </view>
 
-  <!-- 空状态 -->
-  <van-empty wx:elif="{{ !attractionList.length }}" description="暂无景点信息" />
-
   <!-- 地图视图 -->
   <view class="map-container">
     <map id="map" 

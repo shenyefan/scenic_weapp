@@ -4,26 +4,22 @@
 <view>
   <van-notify id="van-notify" />
   <!-- 顶部 banner -->
-  <van-image src="https://files.syf.sh/scenic_img/banner.png" width="100%" height="300" fit="cover" custom-class="banner" />
+  <van-image src="https://files.syf.sh/scenic/weapp/banner.png" width="100%" height="300" fit="cover" custom-class="banner" />
 
   <view class="banner-content">
     <van-row gutter="10">
-      <!-- 标题 -->
       <van-col span="15" class="title">
-        <view class="title-zh">世界文化遗产·国家级景区</view>
-        <view class="title-en">World Cultural Heritage · National Scenery Sites</view>
+        <view class="title-zh">锦州北普陀山景区</view>
+        <view class="title-en">Jinzhou northof Mount Putuo Scenic Area</view>
       </van-col>
-
-      <!-- 日期信息 -->
       <van-col span="14" class="info">
         <view class="date">{{ currentDate }}</view>
       </van-col>
     </van-row>
     <van-row gutter="10">
-      <!-- 欢迎语 -->
       <van-col span="15" class="title">
-        <view class="title-zh">大芦花风景区欢迎您</view>
-        <view class="title-en">Welcome to Daluhua</view>
+        <view class="title-zh">国家AAAA级景区</view>
+        <view class="title-en">National AAAA Scenic Spot</view>
       </van-col>
 
       <!-- 天气信息 -->
@@ -53,10 +49,10 @@
 
   <!-- 功能图标区 -->
   <van-grid column-num="4" border="{{ false }}" custom-class="icon-grid">
-    <van-grid-item icon="/image/home/surrounding.svg" text="周边门票" data-img="https://files.syf.sh/scenic_img/ticket.png" bind:click="showPopup" />
-    <van-grid-item icon="/image/home/daytour.svg" text="一日游" data-img="https://files.syf.sh/scenic_img/ticket.png" bind:click="showPopup" />
-    <van-grid-item icon="/image/home/hotel.svg" text="酒店" data-img="https://files.syf.sh/scenic_img/ticket.png" bind:click="showPopup" />
-    <van-grid-item icon="/image/home/bus.svg" text="周边交通" data-img="https://files.syf.sh/scenic_img/bus.png" bind:click="showPopup" />
+    <van-grid-item icon="/image/home/surrounding.svg" text="周边门票" data-img="https://files.syf.sh/scenic/weapp/ticket.png" bind:click="showPopup" />
+    <van-grid-item icon="/image/home/daytour.svg" text="一日游" data-img="https://files.syf.sh/scenic/weapp/ticket.png" bind:click="showPopup" />
+    <van-grid-item icon="/image/home/hotel.svg" text="酒店" data-img="https://files.syf.sh/scenic/weapp/ticket.png" bind:click="showPopup" />
+    <van-grid-item icon="/image/home/bus.svg" text="周边交通" data-img="https://files.syf.sh/scenic/weapp/bus.png" bind:click="showPopup" />
   </van-grid>
 
   <!-- 弹出图片 -->
@@ -66,7 +62,7 @@
 
 
   <!-- 通知栏 -->
-  <van-notice-bar left-icon="volume-o" text="来最北方的镇山，过最东北的年！" custom-class="notice-bar" />
+  <van-notice-bar left-icon="volume-o" text="锦州北普陀山景区欢迎您！" custom-class="notice-bar" />
 
   <!-- 标签列表 -->
   <van-tabs active="{{ active }}" bind:change="onChange" color="#d1f2eb">

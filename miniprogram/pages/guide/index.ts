@@ -1,27 +1,54 @@
 // pages/guide/index.ts
-import { sendCozeMessage } from '../../api/cozeController'
+import { chat } from '../../utils/ai'
+import { MessageHandler, Message } from '../../utils/ai'
+
+// 常量定义
+const INITIAL_MESSAGE: Message = {
+  type: 'bot',
+  content: '您好，欢迎来到北普陀山景区，我是您的AI导览小助手，有什么疑问都可以问我哦。',
+  suggestions: [
+    '门票多少钱',
+    '有什么景点推荐',
+    '为我规划一天的行程'
+  ]
+};
+
+const ERROR_MESSAGES = {
+  NETWORK_ERROR: '抱歉，网络连接异常，请稍后重试。',
+  SEND_FAILED: '发送消息失败:'
+} as const;
 
 Page({
   /**
    * 页面的初始数据
    */
   data: {
-    messages: [
-      {
-        type: 'bot',
-        content: '您好，欢迎来到大芦花风景区，我是您的AI导览小助手，有什么疑问都可以问我哦。',
-        suggestions: [
-          '门票多少钱',
-          '有什么景点推荐',
-          '为我规划一天的行程'
-        ]
-      }
-    ],
+    messages: [INITIAL_MESSAGE] as Message[],
     inputValue: '',
     scrollTop: 0,
     isLoading: false,
-    streamingMessageIndex: -1,
-    currentRequestTask: null
+    streamingMessageIndex: -1
+  },
+
+  // 消息处理器实例
+  messageHandler: null as MessageHandler | null,
+
+  /**
+   * 检查是否可以发送消息
+   */
+  canSendMessage(): boolean {
+    return !this.data.isLoading && !!this.messageHandler;
+  },
+
+  /**
+   * 安全地执行消息处理器操作
+   */
+  safeExecuteHandler<T>(operation: (handler: MessageHandler) => T): T | null {
+    if (!this.messageHandler) {
+      console.warn('MessageHandler not initialized');
+      return null;
+    }
+    return operation(this.messageHandler);
   },
 
   /**
@@ -37,8 +64,8 @@ Page({
    * 发送消息
    */
   async sendMessage() {
-    const { inputValue, messages, isLoading } = this.data;
-    if (!inputValue.trim() || isLoading) return;
+    const { inputValue } = this.data;
+    if (!inputValue.trim() || !this.canSendMessage()) return;
 
     this.addMessageAndSend(inputValue);
   },
@@ -48,13 +75,12 @@ Page({
    */
   async onSuggestionTap(e: any) {
     const suggestion = e.currentTarget.dataset.suggestion;
-    const { messages, isLoading } = this.data;
     
-    if (isLoading) return;
+    if (!this.canSendMessage()) return;
     
     // 特殊处理重新发送
     if (suggestion === '重新发送') {
-      const lastUserMessage = messages.slice().reverse().find(msg => msg.type === 'user');
+      const lastUserMessage = this.safeExecuteHandler(handler => handler.getLastUserMessage());
       if (lastUserMessage) {
         this.setData({ inputValue: lastUserMessage.content });
         this.sendMessage();
@@ -69,130 +95,36 @@ Page({
    * 添加消息并发送（统一处理逻辑）
    */
   async addMessageAndSend(content: string) {
-    const { messages } = this.data;
+    const streamingIndex = this.safeExecuteHandler(handler => handler.addUserMessage(content));
+    if (streamingIndex === null) return;
     
-    // 添加用户消息和Bot消息占位符
-    const userMessage = { type: 'user', content };
-    const botMessage = { type: 'bot', content: '', suggestions: [] };
-    
-    const newMessages = [...messages, userMessage, botMessage];
-    const streamingIndex = newMessages.length - 1;
-
-    this.setData({
-      messages: newMessages,
-      inputValue: '',
-      isLoading: true,
-      streamingMessageIndex: streamingIndex
-    });
-
-    this.scrollToBottom();
+    // 清空输入框
+    this.setData({ inputValue: '' });
 
     try {
-      const requestTask = sendCozeMessage(
-        "7526481233669472292",
+      const requestTask = chat(
         content,
-        "12345678",
-        (message) => this.handleStreamMessage(message, streamingIndex)
+        (message) => {
+          if (message.type === 'delta') {
+            // 追加消息内容
+            this.safeExecuteHandler(handler => handler.appendMessageContent(message.content || '', streamingIndex));
+          } else if (message.type === 'done') {
+            // 完成流式传输
+            this.safeExecuteHandler(handler => handler.finishStreaming());
+          } else if (message.type === 'error') {
+            // 处理错误
+            this.safeExecuteHandler(handler => handler.handleError(message.content || ERROR_MESSAGES.NETWORK_ERROR, streamingIndex));
+          }
+        }
       );
       
-      this.setData({ currentRequestTask: requestTask });
+      // 保存请求任务
+      this.safeExecuteHandler(handler => handler.setCurrentRequestTask(requestTask));
       
     } catch (error) {
-      console.error('发送消息失败:', error);
-      this.handleError(streamingIndex, '抱歉，网络连接异常，请稍后重试。');
-      // 确保重置isLoading状态
-      this.setData({
-        isLoading: false,
-        streamingMessageIndex: -1,
-        currentRequestTask: null
-      });
+      console.error(ERROR_MESSAGES.SEND_FAILED, error);
+      this.safeExecuteHandler(handler => handler.handleError(ERROR_MESSAGES.NETWORK_ERROR, streamingIndex));
     }
-  },
-
-  /**
-   * 处理流式消息
-   */
-  handleStreamMessage(message: any, streamingIndex?: number) {
-    const index = streamingIndex !== undefined ? streamingIndex : this.data.streamingMessageIndex;
-    if (index === -1) return;
-
-    try {
-      const messages = [...this.data.messages];
-      
-      // 处理不同的事件类型
-      if (message.event === 'conversation.message.delta' || message.event_type === 'conversation.message.delta') {
-        // 增量消息内容
-        const content = (message.data && message.data.content) || message.content || '';
-        messages[index].content += content;
-        this.setData({ messages });
-        this.scrollToBottom();
-        
-      } else if (message.event === 'conversation.message.completed' || message.event_type === 'conversation.message.completed') {
-        // 消息完成
-        if (message.type === 'follow_up' && message.content) {
-          // 处理建议消息
-          if (!messages[index].suggestions) {
-            messages[index].suggestions = [];
-          }
-          messages[index].suggestions.push(message.content);
-        } else {
-          // 普通消息完成
-          const finalContent = (message.data && message.data.content) || messages[index].content;
-          messages[index].content = finalContent;
-        }
-        
-        this.setData({ messages });
-        
-      } else if (message.event_type === 'conversation.chat.completed' || message.type === 'done' || message.event_type === 'done') {
-        this.finishStreaming();
-        
-      } else if (message.event === 'error' || message.type === 'error') {
-        this.handleError(index, '抱歉，处理您的请求时出现了错误，请稍后重试。');
-        
-      } else if (message.content && message.role === 'assistant') {
-        // 其他类型的助手消息
-        if (message.type === 'answer') {
-          messages[index].content = message.content;
-        } else {
-          messages[index].content += message.content;
-        }
-        this.setData({ messages });
-        this.scrollToBottom();
-      }
-    } catch (error) {
-      console.error('处理流式消息失败:', error);
-      this.handleError(index, '处理消息时出现错误');
-    }
-  },
-
-  /**
-   * 处理错误
-   */
-  handleError(streamingIndex: number, errorMessage: string) {
-    const messages = [...this.data.messages];
-    messages[streamingIndex].content = errorMessage;
-    messages[streamingIndex].suggestions = ['重新发送'];
-    
-    this.setData({
-      messages,
-      isLoading: false,
-      streamingMessageIndex: -1,
-      currentRequestTask: null
-    });
-    
-    this.scrollToBottom();
-  },
-
-  /**
-   * 完成流式传输
-   */
-  finishStreaming() {
-    this.setData({
-      isLoading: false,
-      streamingMessageIndex: -1,
-      currentRequestTask: null
-    });
-    this.scrollToBottom();
   },
 
   /**
@@ -204,18 +136,44 @@ Page({
     }, 100);
   },
 
+  /**
+   * 初始化消息处理器
+   */
+  initMessageHandler() {
+    this.messageHandler = new MessageHandler([INITIAL_MESSAGE], {
+      onMessagesUpdate: (messages) => {
+        this.setData({ messages });
+      },
+      onLoadingChange: (isLoading) => {
+        this.setData({ isLoading });
+      },
+      onScrollToBottom: () => {
+        this.scrollToBottom();
+      },
+      onStreamingIndexChange: (index) => {
+        this.setData({ streamingMessageIndex: index });
+      }
+    });
+
+    // 初始化页面数据
+    this.setData({
+      messages: this.messageHandler.getMessages(),
+      isLoading: this.messageHandler.getIsLoading(),
+      streamingMessageIndex: -1
+    });
+  },
+
   onShow() {
     this.getTabBar().init();
   },
 
   onLoad() {
-    // 页面加载时的初始化
+    this.initMessageHandler();
   },
 
   onUnload() {
-    // 页面卸载时取消正在进行的请求
-    if (this.data.currentRequestTask) {
-      this.data.currentRequestTask.abort();
-    }
+    // 清理资源
+    this.safeExecuteHandler(handler => handler.reset());
+    this.messageHandler = null;
   }
 });

@@ -86,24 +86,6 @@ export async function listPublicizeVideoVoByPage(
   );
 }
 
-/** 此处后端没有提供注释 POST /api/publicize/video/my/list/page/vo */
-export async function listMyPublicizeVideoVoByPage(
-  body: API.PublicizeVideoQueryRequest,
-  options?: { [key: string]: any }
-) {
-  return request<API.BaseResponsePagePublicizeVideoVO>(
-    "/api/publicize/video/my/list/page/vo",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: body,
-      ...(options || {}),
-    }
-  );
-}
-
 /** 此处后端没有提供注释 POST /api/publicize/video/update */
 export async function updatePublicizeVideo(
   body: API.PublicizeVideoUpdateRequest,

@@ -1,8 +1,8 @@
 {
-  "libVersion": "3.8.10",
+  "libVersion": "3.10.0",
   "projectname": "scenic",
   "setting": {
-    "urlCheck": false,
+    "urlCheck": true,
     "coverView": false,
     "lazyloadPlaceholderEnable": false,
     "skylineRenderEnable": true,

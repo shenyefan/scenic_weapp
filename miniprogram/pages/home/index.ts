@@ -181,7 +181,7 @@ Page({
   onTicketTap(e) {
     this.setData({
       show: true,
-      popupImg: "https://files.syf.sh/scenic_img/ticket.png"
+      popupImg: "https://files.syf.sh/scenic/weapp/ticket.png"
     })
   },
 

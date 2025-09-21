@@ -8,7 +8,7 @@
       <!-- Bot消息 -->
       <view wx:if="{{item.type === 'bot'}}" class="message-wrapper bot-message">
         <view class="message-bubble bot-bubble {{streamingMessageIndex === index ? 'streaming' : ''}}">
-          <text class="message-text">{{item.content}}</text>
+          <text class="message-text" user-select="true" decode="{{true}}" space="nbsp">{{item.content}}</text>
           <!-- 流式输出时显示光标 -->
           <text wx:if="{{streamingMessageIndex === index}}" class="streaming-cursor">|</text>
         </view>
@@ -23,7 +23,7 @@
       <!-- 用户消息 -->
       <view wx:else class="message-wrapper user-message">
         <view class="message-bubble user-bubble">
-          <text class="message-text">{{item.content}}</text>
+          <text class="message-text" decode="{{true}}" space="nbsp">{{item.content}}</text>
         </view>
       </view>
     </view>

@@ -31,6 +31,5 @@
         wx:if="{{ !loading && trackList.length === 0 }}"
         image="search" 
         description="暂无轨迹记录"
-        custom-class="empty-state"
       />
 </view>

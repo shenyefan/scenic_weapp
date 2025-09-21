@@ -1,14 +1,21 @@
 declare namespace API {
+  type AiChatRequest = {
+    /** 用户消息 */
+    message: string;
+    /** 是否使用流式输出 */
+    stream?: boolean;
+  };
+
   type Attractions = {
-    id?: string
+    id?: number;
     attractionsName?: string;
     attractionsLng?: number;
     attractionsLat?: number;
     attractionsImg?: string;
     attractionsVideo?: string;
     attractionsNote?: string;
-    inspectorId?: string;
-    userId?: string;
+    inspectorId?: number;
+    userId?: number;
     createTime?: string;
     updateTime?: string;
     isDelete?: number;
@@ -22,7 +29,7 @@ declare namespace API {
     attractionsVideo?: string;
     attractionsNote?: string;
     attractionsTypeIds?: number[];
-    inspectorId?: string;
+    inspectorId?: number;
   };
 
   type AttractionsQueryRequest = {
@@ -30,22 +37,22 @@ declare namespace API {
     pageSize?: number;
     sortField?: string;
     sortOrder?: string;
-    id?: string
-    notId?: string;
+    id?: number;
+    notId?: number;
     searchText?: string;
     attractionsName?: string;
     attractionsLng?: number;
     attractionsLat?: number;
     attractionsNote?: string;
     attractionsTypeIds?: number[];
-    inspectorId?: string;
-    userId?: string;
+    inspectorId?: number;
+    userId?: number;
   };
 
   type AttractionsRoute = {
-    id?: string
-    startAttractionId?: string;
-    endAttractionId?: string;
+    id?: number;
+    startAttractionId?: number;
+    endAttractionId?: number;
     startAttractionImg?: string;
     endAttractionImg?: string;
     startAttractionVideo?: string;
@@ -57,8 +64,8 @@ declare namespace API {
   };
 
   type AttractionsRouteAddRequest = {
-    startAttractionId?: string;
-    endAttractionId?: string;
+    startAttractionId?: number;
+    endAttractionId?: number;
     startAttractionImg?: string;
     endAttractionImg?: string;
     startAttractionVideo?: string;
@@ -71,18 +78,18 @@ declare namespace API {
     pageSize?: number;
     sortField?: string;
     sortOrder?: string;
-    id?: string
-    notId?: string;
+    id?: number;
+    notId?: number;
     searchText?: string;
-    startAttractionId?: string;
-    endAttractionId?: string;
+    startAttractionId?: number;
+    endAttractionId?: number;
     routeNote?: string;
   };
 
   type AttractionsRouteUpdateRequest = {
-    id?: string
-    startAttractionId?: string;
-    endAttractionId?: string;
+    id?: number;
+    startAttractionId?: number;
+    endAttractionId?: number;
     startAttractionImg?: string;
     endAttractionImg?: string;
     startAttractionVideo?: string;
@@ -91,9 +98,9 @@ declare namespace API {
   };
 
   type AttractionsRouteVO = {
-    id?: string
-    startAttractionId?: string;
-    endAttractionId?: string;
+    id?: number;
+    startAttractionId?: number;
+    endAttractionId?: number;
     startAttractionName?: string;
     startAttractionLng?: number;
     startAttractionLat?: number;
@@ -115,13 +122,13 @@ declare namespace API {
   };
 
   type AttractionsTypeUpdateRequest = {
-    id?: string
+    id?: number;
     typeName?: string;
     typeDescription?: string;
   };
 
   type AttractionsTypeVO = {
-    id?: string
+    id?: number;
     typeName?: string;
     typeDescription?: string;
     createTime?: string;
@@ -129,7 +136,7 @@ declare namespace API {
   };
 
   type AttractionsUpdateRequest = {
-    id?: string
+    id?: number;
     attractionsName?: string;
     attractionsLng?: number;
     attractionsLat?: number;
@@ -137,11 +144,11 @@ declare namespace API {
     attractionsVideo?: string;
     attractionsNote?: string;
     attractionsTypeIds?: number[];
-    inspectorId?: string;
+    inspectorId?: number;
   };
 
   type AttractionsVO = {
-    id?: string
+    id?: number;
     attractionsName?: string;
     attractionsLng?: number;
     attractionsLat?: number;
@@ -149,9 +156,9 @@ declare namespace API {
     attractionsVideo?: string;
     attractionsNote?: string;
     attractionsTypes?: AttractionsTypeVO[];
-    inspectorId?: string;
+    inspectorId?: number;
     inspectorName?: string;
-    userId?: string;
+    userId?: number;
     user?: UserVO;
     createTime?: string;
     updateTime?: string;
@@ -205,6 +212,18 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseOrder = {
+    code?: number;
+    data?: Order;
+    message?: string;
+  };
+
+  type BaseResponseOrderVO = {
+    code?: number;
+    data?: OrderVO;
+    message?: string;
+  };
+
   type BaseResponsePageAttractions = {
     code?: number;
     data?: PageAttractions;
@@ -238,6 +257,18 @@ declare namespace API {
   type BaseResponsePageNaturalWeatherVO = {
     code?: number;
     data?: PageNaturalWeatherVO;
+    message?: string;
+  };
+
+  type BaseResponsePageOrder = {
+    code?: number;
+    data?: PageOrder;
+    message?: string;
+  };
+
+  type BaseResponsePageOrderVO = {
+    code?: number;
+    data?: PageOrderVO;
     message?: string;
   };
 
@@ -286,6 +317,18 @@ declare namespace API {
   type BaseResponsePageTaskTrackVO = {
     code?: number;
     data?: PageTaskTrackVO;
+    message?: string;
+  };
+
+  type BaseResponsePageTicket = {
+    code?: number;
+    data?: PageTicket;
+    message?: string;
+  };
+
+  type BaseResponsePageTicketVO = {
+    code?: number;
+    data?: PageTicketVO;
     message?: string;
   };
 
@@ -361,6 +404,18 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseTicket = {
+    code?: number;
+    data?: Ticket;
+    message?: string;
+  };
+
+  type BaseResponseTicketVO = {
+    code?: number;
+    data?: TicketVO;
+    message?: string;
+  };
+
   type BaseResponseUser = {
     code?: number;
     data?: User;
@@ -374,7 +429,7 @@ declare namespace API {
   };
 
   type DeleteRequest = {
-    id?: string
+    id?: number;
   };
 
   type getAttractionsRouteVOByIdParams = {
@@ -386,6 +441,14 @@ declare namespace API {
   };
 
   type getDisastersVOByIdParams = {
+    id: number;
+  };
+
+  type getOrderByIdParams = {
+    id: number;
+  };
+
+  type getOrderVOByIdParams = {
     id: number;
   };
 
@@ -425,6 +488,14 @@ declare namespace API {
     trackId: number;
   };
 
+  type getTicketByIdParams = {
+    id: number;
+  };
+
+  type getTicketVOByIdParams = {
+    id: number;
+  };
+
   type getUserByIdParams = {
     id: number;
   };
@@ -438,7 +509,7 @@ declare namespace API {
   };
 
   type LoginUserVO = {
-    id?: string
+    id?: number;
     userAccount?: string;
     userName?: string;
     userAvatar?: string;
@@ -464,8 +535,8 @@ declare namespace API {
     pageSize?: number;
     sortField?: string;
     sortOrder?: string;
-    id?: string
-    notId?: string;
+    id?: number;
+    notId?: number;
     disastersStartTime?: string;
     disastersEndTime?: string;
     disastersTitle?: string;
@@ -474,7 +545,7 @@ declare namespace API {
   };
 
   type NaturalDisastersUpdateRequest = {
-    id?: string
+    id?: number;
     disastersStartTime?: string;
     disastersEndTime?: string;
     disastersTitle?: string;
@@ -483,7 +554,7 @@ declare namespace API {
   };
 
   type NaturalDisastersVO = {
-    id?: string
+    id?: number;
     disastersStartTime?: string;
     disastersEndTime?: string;
     disastersTitle?: string;
@@ -506,9 +577,9 @@ declare namespace API {
     pageSize?: number;
     sortField?: string;
     sortOrder?: string;
-    id?: string
+    id?: number;
     weatherTime?: string;
-    notId?: string;
+    notId?: number;
     tempMin?: number;
     tempMax?: number;
     humidityMin?: number;
@@ -524,7 +595,7 @@ declare namespace API {
   };
 
   type NaturalWeatherUpdateRequest = {
-    id?: string
+    id?: number;
     weatherTime?: string;
     temp?: number;
     humidity?: number;
@@ -535,7 +606,7 @@ declare namespace API {
   };
 
   type NaturalWeatherVO = {
-    id?: string
+    id?: number;
     weatherTime?: string;
     temp?: number;
     humidity?: number;
@@ -545,9 +616,66 @@ declare namespace API {
     rain?: number;
   };
 
+  type Order = {
+    id?: number;
+    userId?: number;
+    ticketId?: number;
+    quantity?: number;
+    totalPrice?: number;
+    paymentStatus?: number;
+    visitDate?: string;
+    contactName?: string;
+    contactPhone?: string;
+    createTime?: string;
+    updateTime?: string;
+    isDelete?: number;
+  };
+
+  type OrderCreateRequest = {
+    ticketId?: number;
+    quantity?: number;
+    contactName?: string;
+    contactPhone?: string;
+    visitDate?: string;
+  };
+
   type OrderItem = {
     column?: string;
     asc?: boolean;
+  };
+
+  type OrderQueryRequest = {
+    current?: number;
+    pageSize?: number;
+    sortField?: string;
+    sortOrder?: string;
+    id?: number;
+    userId?: number;
+    ticketId?: number;
+    paymentStatus?: number;
+  };
+
+  type OrderUpdateStatusRequest = {
+    id?: number;
+    quantity?: number;
+    contactName?: string;
+    contactPhone?: string;
+    visitDate?: string;
+    status?: number;
+  };
+
+  type OrderVO = {
+    id?: number;
+    user?: UserVO;
+    ticket?: TicketVO;
+    quantity?: number;
+    totalPrice?: number;
+    paymentStatus?: number;
+    contactName?: string;
+    contactPhone?: string;
+    visitDate?: string;
+    createTime?: string;
+    updateTime?: string;
   };
 
   type PageAttractions = {
@@ -628,6 +756,34 @@ declare namespace API {
     orders?: OrderItem[];
     optimizeCountSql?: PageNaturalWeatherVO;
     searchCount?: PageNaturalWeatherVO;
+    optimizeJoinOfCountSql?: boolean;
+    maxLimit?: number;
+    countId?: string;
+    pages?: number;
+  };
+
+  type PageOrder = {
+    records?: Order[];
+    total?: number;
+    size?: number;
+    current?: number;
+    orders?: OrderItem[];
+    optimizeCountSql?: PageOrder;
+    searchCount?: PageOrder;
+    optimizeJoinOfCountSql?: boolean;
+    maxLimit?: number;
+    countId?: string;
+    pages?: number;
+  };
+
+  type PageOrderVO = {
+    records?: OrderVO[];
+    total?: number;
+    size?: number;
+    current?: number;
+    orders?: OrderItem[];
+    optimizeCountSql?: PageOrderVO;
+    searchCount?: PageOrderVO;
     optimizeJoinOfCountSql?: boolean;
     maxLimit?: number;
     countId?: string;
@@ -746,6 +902,34 @@ declare namespace API {
     pages?: number;
   };
 
+  type PageTicket = {
+    records?: Ticket[];
+    total?: number;
+    size?: number;
+    current?: number;
+    orders?: OrderItem[];
+    optimizeCountSql?: PageTicket;
+    searchCount?: PageTicket;
+    optimizeJoinOfCountSql?: boolean;
+    maxLimit?: number;
+    countId?: string;
+    pages?: number;
+  };
+
+  type PageTicketVO = {
+    records?: TicketVO[];
+    total?: number;
+    size?: number;
+    current?: number;
+    orders?: OrderItem[];
+    optimizeCountSql?: PageTicketVO;
+    searchCount?: PageTicketVO;
+    optimizeJoinOfCountSql?: boolean;
+    maxLimit?: number;
+    countId?: string;
+    pages?: number;
+  };
+
   type PageUser = {
     records?: User[];
     total?: number;
@@ -775,11 +959,11 @@ declare namespace API {
   };
 
   type PublicizeVideo = {
-    id?: string
+    id?: number;
     videoTitle?: string;
     videoUrl?: string;
     videoNote?: string;
-    userId?: string;
+    userId?: number;
     createTime?: string;
     updateTime?: string;
     isDelete?: number;
@@ -796,39 +980,39 @@ declare namespace API {
     pageSize?: number;
     sortField?: string;
     sortOrder?: string;
-    id?: string
-    notId?: string;
+    id?: number;
+    notId?: number;
     searchText?: string;
     videoTitle?: string;
     videoUrl?: string;
     videoNote?: string;
-    userId?: string;
+    userId?: number;
   };
 
   type PublicizeVideoUpdateRequest = {
-    id?: string
+    id?: number;
     videoTitle?: string;
     videoUrl?: string;
     videoNote?: string;
   };
 
   type PublicizeVideoVO = {
-    id?: string
+    id?: number;
     videoTitle?: string;
     videoUrl?: string;
     videoNote?: string;
-    userId?: string;
+    userId?: number;
     createTime?: string;
     updateTime?: string;
     user?: UserVO;
   };
 
   type PublicizeWxPlatform = {
-    id?: string
+    id?: number;
     wxTitle?: string;
     wxUrl?: string;
     wxNote?: string;
-    userId?: string;
+    userId?: number;
     createTime?: string;
     updateTime?: string;
     isDelete?: number;
@@ -845,39 +1029,39 @@ declare namespace API {
     pageSize?: number;
     sortField?: string;
     sortOrder?: string;
-    id?: string
-    notId?: string;
+    id?: number;
+    notId?: number;
     searchText?: string;
     wxTitle?: string;
     wxUrl?: string;
     wxNote?: string;
-    userId?: string;
+    userId?: number;
   };
 
   type PublicizeWxPlatformUpdateRequest = {
-    id?: string
+    id?: number;
     wxTitle?: string;
     wxUrl?: string;
     wxNote?: string;
   };
 
   type PublicizeWxPlatformVO = {
-    id?: string
+    id?: number;
     wxTitle?: string;
     wxUrl?: string;
     wxNote?: string;
-    userId?: string;
+    userId?: number;
     createTime?: string;
     updateTime?: string;
     user?: UserVO;
   };
 
   type TaskCheckin = {
-    id?: string
+    id?: number;
     checkinLng?: number;
     checkinLat?: number;
     checkinAddress?: string;
-    userId?: string;
+    userId?: number;
     createTime?: string;
     updateTime?: string;
     isDelete?: number;
@@ -894,35 +1078,35 @@ declare namespace API {
     pageSize?: number;
     sortField?: string;
     sortOrder?: string;
-    id?: string
-    userId?: string;
+    id?: number;
+    userId?: number;
     checkinAddress?: string;
     startTime?: string;
     endTime?: string;
   };
 
   type TaskCheckinUpdateRequest = {
-    id?: string
+    id?: number;
     checkinLng?: number;
     checkinLat?: number;
     checkinAddress?: string;
   };
 
   type TaskCheckinVO = {
-    id?: string
+    id?: number;
     checkinLng?: number;
     checkinLat?: number;
     checkinAddress?: string;
-    userId?: string;
+    userId?: number;
     userName?: string;
     createTime?: string;
     updateTime?: string;
   };
 
   type TaskDisposal = {
-    id?: string
-    inspectionTaskId?: string;
-    disposerId?: string;
+    id?: number;
+    inspectionTaskId?: number;
+    disposerId?: number;
     disposalImages?: string;
     disposalDescription?: string;
     disposalStatus?: number;
@@ -932,8 +1116,8 @@ declare namespace API {
   };
 
   type TaskDisposalAddRequest = {
-    inspectionTaskId?: string;
-    disposerId?: string;
+    inspectionTaskId?: number;
+    disposerId?: number;
     disposalImages?: string;
     disposalDescription?: string;
     disposalStatus?: number;
@@ -944,25 +1128,25 @@ declare namespace API {
     pageSize?: number;
     sortField?: string;
     sortOrder?: string;
-    id?: string
-    inspectionTaskId?: string;
-    disposerId?: string;
+    id?: number;
+    inspectionTaskId?: number;
+    disposerId?: number;
     taskDate?: string;
     attractionsName?: string;
     disposalStatus?: number;
   };
 
   type TaskDisposalUpdateRequest = {
-    id?: string
+    id?: number;
     disposalImages?: string;
     disposalDescription?: string;
     disposalStatus?: number;
   };
 
   type TaskDisposalVO = {
-    id?: string
-    inspectionTaskId?: string;
-    disposerId?: string;
+    id?: number;
+    inspectionTaskId?: number;
+    disposerId?: number;
     disposerName?: string;
     attractionsName?: string;
     taskDate?: string;
@@ -974,9 +1158,9 @@ declare namespace API {
   };
 
   type TaskInspection = {
-    id?: string
-    attractionsId?: string;
-    inspectorId?: string;
+    id?: number;
+    attractionsId?: number;
+    inspectorId?: number;
     taskDate?: string;
     inspectionImages?: string;
     inspectionDescription?: string;
@@ -988,8 +1172,8 @@ declare namespace API {
   };
 
   type TaskInspectionAddRequest = {
-    attractionsId?: string;
-    inspectorId?: string;
+    attractionsId?: number;
+    inspectorId?: number;
     taskDate?: string;
     inspectionImages?: string;
     inspectionDescription?: string;
@@ -1001,28 +1185,28 @@ declare namespace API {
     pageSize?: number;
     sortField?: string;
     sortOrder?: string;
-    id?: string
-    attractionsId?: string;
-    inspectorId?: string;
+    id?: number;
+    attractionsId?: number;
+    inspectorId?: number;
     taskDate?: string;
     isAbnormal?: number;
     taskStatus?: number;
   };
 
   type TaskInspectionUpdateRequest = {
-    id?: string
+    id?: number;
     inspectionImages?: string;
     inspectionDescription?: string;
     isAbnormal?: number;
   };
 
   type TaskInspectionVO = {
-    id?: string
-    attractionsId?: string;
+    id?: number;
+    attractionsId?: number;
     attractionsName?: string;
     attractionsLng?: number;
     attractionsLat?: number;
-    inspectorId?: string;
+    inspectorId?: number;
     inspectorName?: string;
     taskDate?: string;
     inspectionImages?: string;
@@ -1034,12 +1218,12 @@ declare namespace API {
   };
 
   type TaskTrackEndRequest = {
-    trackId?: string;
+    trackId?: number;
   };
 
   type TaskTrackPoint = {
-    id?: string
-    trackId?: string;
+    id?: number;
+    trackId?: number;
     trackLat?: number;
     trackLng?: number;
     trackTimestamp?: number;
@@ -1047,7 +1231,7 @@ declare namespace API {
   };
 
   type TaskTrackPointAddRequest = {
-    trackId?: string;
+    trackId?: number;
     trackLat?: number;
     trackLng?: number;
     trackTimestamp?: number;
@@ -1058,7 +1242,7 @@ declare namespace API {
     pageSize?: number;
     sortField?: string;
     sortOrder?: string;
-    userId?: string;
+    userId?: number;
     trackStatus?: number;
     startTimeBegin?: string;
     startTimeEnd?: string;
@@ -1067,11 +1251,11 @@ declare namespace API {
   type TaskTrackStartRequest = true;
 
   type TaskTrackVO = {
-    id?: string
+    id?: number;
     trackStartTime?: string;
     trackEndTime?: string;
     trackStatus?: number;
-    userId?: string;
+    userId?: number;
     userName?: string;
     userAccount?: string;
     createTime?: string;
@@ -1079,8 +1263,70 @@ declare namespace API {
     trackPoints?: TaskTrackPoint[];
   };
 
+  type Ticket = {
+    id?: number;
+    ticketName?: string;
+    ticketPrice?: number;
+    ticketDescription?: string;
+    ticketType?: string;
+    ticketImage?: string;
+    validDays?: number;
+    stockQuantity?: number;
+    status?: number;
+    createTime?: string;
+    updateTime?: string;
+    isDelete?: number;
+  };
+
+  type TicketAddRequest = {
+    ticketName?: string;
+    ticketPrice?: number;
+    ticketDescription?: string;
+    ticketType?: string;
+    ticketImage?: string;
+    validDays?: number;
+    stockQuantity?: number;
+    status?: number;
+  };
+
+  type TicketQueryRequest = {
+    current?: number;
+    pageSize?: number;
+    sortField?: string;
+    sortOrder?: string;
+    id?: number;
+    ticketName?: string;
+    ticketType?: string;
+    status?: number;
+  };
+
+  type TicketUpdateRequest = {
+    id?: number;
+    ticketName?: string;
+    ticketPrice?: number;
+    ticketDescription?: string;
+    ticketType?: string;
+    ticketImage?: string;
+    validDays?: number;
+    stockQuantity?: number;
+    status?: number;
+  };
+
+  type TicketVO = {
+    id?: number;
+    ticketName?: string;
+    ticketPrice?: number;
+    ticketDescription?: string;
+    ticketType?: string;
+    ticketImage?: string;
+    validDays?: number;
+    stockQuantity?: number;
+    status?: number;
+    createTime?: string;
+  };
+
   type User = {
-    id?: string
+    id?: number;
     userAccount?: string;
     userPassword?: string;
     userName?: string;
@@ -1115,7 +1361,7 @@ declare namespace API {
     pageSize?: number;
     sortField?: string;
     sortOrder?: string;
-    id?: string
+    id?: number;
     userName?: string;
     userAccount?: string;
     userAvatar?: string;
@@ -1142,7 +1388,7 @@ declare namespace API {
   };
 
   type UserUpdateRequest = {
-    id?: string
+    id?: number;
     userName?: string;
     userAccount?: string;
     userPassword?: string;
@@ -1154,7 +1400,7 @@ declare namespace API {
   };
 
   type UserVO = {
-    id?: string
+    id?: number;
     userName?: string;
     userAvatar?: string;
     userProfile?: string;

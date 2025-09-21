@@ -7,7 +7,7 @@
   <!-- banner 区域 -->
   <view class="banner">
     <van-image 
-      src="https://files.syf.sh/scenic_img/fj.jpeg" 
+      src="https://files.syf.sh/scenic/weapp/fj.jpeg" 
       width="100%" 
       height="200" 
       fit="cover"
