@@ -1,5 +1,6 @@
 import { listAttractionsRouteVoByPage } from '../../../api/attractionsRouteController'
 import { getLoginUser } from '../../../api/userController'
+// @ts-ignore
 import Notify from '@vant/weapp/notify/notify'
 
 Page({
@@ -50,7 +51,9 @@ Page({
       const result = await getLoginUser()
       if (result.code === 200 && result.data) {
         this.setData({
-          loginUser: result.data
+          loginUser: {
+            userRole: result.data.userRole || ''
+          }
         })
       }
     } catch (error) {
@@ -82,17 +85,17 @@ Page({
 
       const res = await listAttractionsRouteVoByPage(params)
       
-      if (res.code === 200 && res.data) {
+      if (res.code === 200 && res.data && res.data.records) {
         const { records, total, current, size } = res.data
         const newList = refresh ? records : [...this.data.routeList, ...records]
         
         // 判断是否还有更多数据
-        const hasMore = records.length > 0 && newList.length < total
+        const hasMore = records.length > 0 && newList.length < (total || 0)
         
         this.setData({
           routeList: newList,
           'pageInfo.current': refresh ? 2 : pageInfo.current + 1,
-          'pageInfo.total': total,
+          'pageInfo.total': total || 0,
           'pageInfo.hasMore': hasMore
         })
 
@@ -129,18 +132,23 @@ Page({
     }
   },
   
-  // 点击路线项
-  onRouteTap(e) {
+  // 点击路线项 - 查看详情
+  onRouteTap(e: any) {
     const { id } = e.currentTarget.dataset
     if (!id) return
-    if (id && this.data.loginUser.userRole == 'admin') {
+    
+    // 根据用户角色决定跳转页面
+    const userRole = this.data.loginUser.userRole
+    if (userRole === 'admin' || userRole === 'inspector') {
+      // 管理员和巡查员可以编辑
       wx.navigateTo({
         url: `/subpages/manage/routes_edit/index?id=${id}`,
         fail: () => {
           Notify({ type: 'danger', message: '页面跳转失败' })
         }
       })
-    } else if (id) {
+    } else {
+      // 其他用户只能查看
       wx.navigateTo({
         url: `/subpages/attraction/routes_show/index?id=${id}`,
         fail: () => {
@@ -152,129 +160,110 @@ Page({
 
   // 切换视图模式
   toggleViewMode() {
-    const newMode = this.data.viewMode === 'list' ? 'map' : 'list';
-    
-    this.setData({ 
-      viewMode: newMode,
-      'pageInfo.pageSize': newMode === 'map' ? 999 : 10 // 地图模式下加载更多数据
-    });
+    const newMode = this.data.viewMode === 'list' ? 'map' : 'list'
+    this.setData({ viewMode: newMode })
     
     if (newMode === 'map') {
-      this.loadRouteList(true);
+      // 切换到地图模式时，重新加载数据以获取更多路线用于地图显示
+      this.loadRouteList(true)
     }
   },
 
   // 更新地图标记和路线
   updateMapMarkers() {
-    const routes = this.data.routeList
-      .filter(item => 
-        item.startAttractionLat && item.startAttractionLng && 
-        item.endAttractionLat && item.endAttractionLng
-      )
+    const routes = this.data.routeList.filter(item => 
+      item.attractions && item.attractions.length >= 2
+    )
     
     if (routes.length === 0) return
     
     // 准备包含点数组用于自适应缩放
-    const points = []
-    const markers = []
+    const points: any[] = []
+    const markers: any[] = []
     let markerId = 0
     
-    // 为每条路线创建起点和终点标记
-    routes.forEach((route, index) => {
-      // 起点标记
-      markers.push({
-        id: markerId,
-        latitude: route.startAttractionLat,
-        longitude: route.startAttractionLng,
-        title: route.startAttractionName || '起点',
-        callout: {
-          content: `${route.startAttractionName || '起点'}`,
-          color: '#000000',
-          fontSize: 12,
-          borderRadius: 4,
-          bgColor: '#ffffff',
-          padding: 5,
-          display: 'ALWAYS'
-        },
-        customCalloutData: {
-          routeId: route.id,
-          isStart: true
-        }
-      })
-      points.push({
-        latitude: route.startAttractionLat,
-        longitude: route.startAttractionLng
-      })
-      markerId++
+    // 为每条路线创建景点标记
+    routes.forEach((route, routeIndex) => {
+      if (!route.attractions) return
       
-      // 终点标记
-      markers.push({
-        id: markerId,
-        latitude: route.endAttractionLat,
-        longitude: route.endAttractionLng,
-        title: route.endAttractionName || '终点',
-        callout: {
-          content: `${route.endAttractionName || '终点'}`,
-          color: '#000000',
-          fontSize: 12,
-          borderRadius: 4,
-          bgColor: '#ffffff',
-          padding: 5,
-          display: 'ALWAYS'
-        },
-        customCalloutData: {
-          routeId: route.id,
-          isEnd: true
-        }
+      route.attractions.forEach((attraction, attractionIndex) => {
+        if (!attraction.attractionsLat || !attraction.attractionsLng) return
+        
+        markers.push({
+          id: markerId,
+          latitude: attraction.attractionsLat,
+          longitude: attraction.attractionsLng,
+          title: attraction.attractionsName || `景点${attractionIndex + 1}`,
+          callout: {
+            content: `${attraction.attractionsName || `景点${attractionIndex + 1}`}`,
+            color: '#000000',
+            fontSize: 12,
+            borderRadius: 4,
+            bgColor: '#ffffff',
+            padding: 5,
+            display: 'ALWAYS'
+          },
+          customCalloutData: {
+            routeId: route.id,
+            attractionIndex: attractionIndex,
+            isFirstAttraction: attractionIndex === 0,
+            isLastAttraction: attractionIndex === (route.attractions?.length || 0) - 1
+          }
+        })
+        
+        points.push({
+          latitude: attraction.attractionsLat,
+          longitude: attraction.attractionsLng
+        })
+        
+        markerId++
       })
-      points.push({
-        latitude: route.endAttractionLat,
-        longitude: route.endAttractionLng
-      })
-      markerId++
     })
-
-    this.setData({ 
+    
+    this.setData({
       mapMarkers: markers,
       includePoints: points
     })
   },
 
-  // 地图更新完成事件
-  onMapUpdated(e) {
-    console.log('地图更新完成', e)
+  // 地图更新完成
+  onMapUpdated(e: any) {
+    // 地图更新完成后的回调
   },
   
-  // 点击气泡事件
-  onCalloutTap(e) {
-    this.onMarkerTap(e)
+  // 点击标记气泡
+  onCalloutTap(e: any) {
+    // 可以在这里处理气泡点击事件
   },
-
-  // 点击地图标记
-  onMarkerTap(e) {
-    const markerId = e.markerId
-    const marker = this.data.mapMarkers[markerId]
+  
+  // 点击标记
+  onMarkerTap(e: any) {
+    const marker = this.data.mapMarkers.find(m => m.id === e.detail.markerId)
     if (marker && marker.customCalloutData) {
-      const routeId = marker.customCalloutData.routeId
-      if (routeId && this.data.loginUser.userRole == 'admin') {
-        wx.navigateTo({
-          url: `/subpages/manage/routes_edit/index?id=${routeId}`,
-          fail: () => {
-            Notify({ type: 'danger', message: '页面跳转失败' })
-          }
-        })
-      } else if (routeId) {
-        wx.navigateTo({
-          url: `/subpages/attraction/routes_show/index?id=${routeId}`,
-          fail: () => {
-            Notify({ type: 'danger', message: '页面跳转失败' })
-          }
-        })
+      const { routeId } = marker.customCalloutData
+      if (routeId) {
+        // 根据用户角色决定跳转页面
+        const userRole = this.data.loginUser.userRole
+        if (userRole === 'admin' || userRole === 'inspector') {
+          wx.navigateTo({
+            url: `/subpages/manage/routes_edit/index?id=${routeId}`,
+            fail: () => {
+              Notify({ type: 'danger', message: '页面跳转失败' })
+            }
+          })
+        } else {
+          wx.navigateTo({
+            url: `/subpages/attraction/routes_show/index?id=${routeId}`,
+            fail: () => {
+              Notify({ type: 'danger', message: '页面跳转失败' })
+            }
+          })
+        }
       }
     }
   },
   
-  // 点击新增路线按钮
+  // 新增路线
   onAddRouteTap() {
     wx.navigateTo({
       url: '/subpages/manage/routes_edit/index',
@@ -284,17 +273,16 @@ Page({
     })
   },
   
-  // 添加onShow方法，用于页面显示时检查是否需要刷新
+  // 页面显示时检查是否需要刷新
   onShow() {
-    // 如果需要刷新，则重新加载列表
     if (this.data.needRefresh) {
-      this.loadRouteList(true)
       this.setData({ needRefresh: false })
+      this.loadRouteList(true)
     }
   },
 
-  // 返回上一页
+  // 返回按钮
   onBack() {
     wx.navigateBack()
-  },
+  }
 })

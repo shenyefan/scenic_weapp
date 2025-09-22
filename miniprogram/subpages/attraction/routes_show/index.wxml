@@ -1,76 +1,122 @@
 <view class="container">
+  <van-notify id="van-notify" />
+  
   <!-- 加载状态 -->
-  <view wx:if="{{ loading && !route }}" class="loading-container">
+  <view wx:if="{{ loading }}" class="loading-container">
     <van-loading color="#1989fa" vertical>加载中...</van-loading>
   </view>
   
-  <!-- 路线详情 -->
-  <block wx:elif="{{ route }}">
-    <!-- 路线基本信息 -->
-    <van-cell-group inset title="路线信息">
-      <van-cell title="起点景点" value="{{ route.startAttractionName }}" />
-      <van-cell title="终点景点" value="{{ route.endAttractionName }}" />
-      <van-cell 
-        wx:if="{{ route.routeNote }}"
-        title="路线描述" 
-        value="{{ route.routeNote }}"
-        label="{{ route.routeNote }}"
-      />
-    </van-cell-group>
-    
-    <!-- 起点图片 -->
-    <van-cell-group wx:if="{{ route.startAttractionImg }}" inset title="起点图片">
-      <view class="image-container">
-        <van-image
-          src="{{ route.startAttractionImg }}"
-          width="100%"
-          height="400rpx"
-          fit="cover"
-          show-loading
-          show-error
-        />
-      </view>
-    </van-cell-group>
-        
-    <!-- 起点视频 -->
-    <van-cell-group wx:if="{{ route.startAttractionVideo }}" inset title="起点视频">
-      <view class="video-container">
-        <video
-          src="{{ route.startAttractionVideo }}"
-          controls
-          class="video-player"
-        ></video>
-      </view>
-    </van-cell-group>
-    
-    <!-- 终点图片 -->
-    <van-cell-group wx:if="{{ route.endAttractionImg }}" inset title="终点图片">
-      <view class="image-container">
-        <van-image
-          src="{{ route.endAttractionImg }}"
-          width="100%"
-          height="400rpx"
-          fit="cover"
-          show-loading
-          show-error
-        />
-      </view>
-    </van-cell-group>
-    
-    <!-- 终点视频 -->
-    <van-cell-group wx:if="{{ route.endAttractionVideo }}" inset title="终点视频">
-      <view class="video-container">
-        <video
-          src="{{ route.endAttractionVideo }}"
-          controls
-          class="video-player"
-        ></video>
-      </view>
-    </van-cell-group>
-  </block>
+  <!-- 空状态 -->
+  <view wx:elif="{{ !routeDetail }}" class="empty-container">
+    <van-empty description="路线信息不存在" />
+  </view>
   
-  <!-- 数据为空时的提示 -->
-  <view wx:else class="empty-container">
-    <text class="empty-text">暂无路线信息</text>
+  <!-- 路线详情内容 -->
+  <view wx:else class="content">
+    <!-- 路线卡片 - 与列表页面样式一致 -->
+    <view class="route-card">
+      <!-- 路线头部 -->
+      <view class="route-header">
+        <view class="route-title">
+          <van-icon name="location" size="16px" color="#1989fa" />
+          <text class="route-title-text">{{ routeDetail.routeName || '游览路线详情' }}</text>
+        </view>
+        <view class="attraction-count">
+          <van-tag type="primary" size="small">{{ routeDetail.attractions ? routeDetail.attractions.length : 0 }}个景点</van-tag>
+        </view>
+      </view>
+
+      <!-- 路线备注 -->
+      <view class="route-note" wx:if="{{ routeDetail.routeNote }}">
+        <van-icon name="description" size="14px" color="#666" />
+        <text>{{ routeDetail.routeNote }}</text>
+      </view>
+
+      <!-- 地图容器 -->
+      <view class="map-section">
+        <view class="section-title">
+          <van-icon name="location-o" size="16px" color="#1989fa" />
+          <text>路线地图</text>
+        </view>
+        <view class="map-container">
+          <map
+            id="routeMap"
+            class="map"
+            longitude="{{ mapCenter.longitude }}"
+            latitude="{{ mapCenter.latitude }}"
+            scale="14"
+            markers="{{ mapMarkers }}"
+            show-location
+            enable-zoom
+            enable-scroll
+            include-points="{{ includePoints }}"
+            bindmarkertap="onMarkerTap"
+            bindupdated="onMapUpdated"
+          />
+        </view>
+      </view>
+    </view>
+
+    <!-- 景点流程展示 - 与列表页面样式一致 -->
+    <view class="attractions-section">
+      <view class="section-title">
+        <van-icon name="guide-o" size="16px" color="#1989fa" />
+        <text>景点详情</text>
+      </view>
+      
+      <view wx:if="{{ !routeDetail.attractions || routeDetail.attractions.length === 0 }}" class="empty-attractions">
+        <van-empty description="暂无景点信息" />
+      </view>
+      
+      <view wx:else class="attractions-flow">
+        <view wx:for="{{ routeDetail.attractions }}" wx:for-item="attraction" wx:for-index="attractionIndex" wx:key="id" class="attraction-item" bind:tap="onAttractionTap" data-id="{{ attraction.id }}">
+          <!-- 景点标记点 -->
+          <view class="attraction-dot {{ attractionIndex === 0 ? 'start' : (attractionIndex === routeDetail.attractions.length - 1 ? 'end' : 'middle') }}">
+            <text class="dot-number">{{ attractionIndex + 1 }}</text>
+          </view>
+          
+          <!-- 景点内容 -->
+          <view class="attraction-content">
+            <!-- 景点基本信息 -->
+            <view class="attraction-info">
+              <text class="attraction-name">{{ attraction.attractionsName || '景点' + (attractionIndex + 1) }}</text>
+              <text class="attraction-order">第{{ attractionIndex + 1 }}站</text>
+            </view>
+            
+            <!-- 景点图片 -->
+            <view class="attraction-image-container" wx:if="{{ attraction.attractionsImg }}">
+              <van-image
+                src="{{ attraction.attractionsImg }}"
+                width="100%"
+                height="300rpx"
+                radius="12rpx"
+                fit="cover"
+                show-loading
+                show-error
+                data-url="{{ attraction.attractionsImg }}"
+              />
+            </view>
+            
+            <!-- 景点描述 -->
+            <view class="attraction-description" wx:if="{{ attraction.attractionsIntroduction }}">
+              <view class="description-label">
+                <van-icon name="description" size="14px" color="#666" />
+                <text>景点介绍</text>
+              </view>
+              <view class="description-text">{{ attraction.attractionsIntroduction }}</view>
+            </view>
+            
+            <!-- 景点位置信息 -->
+            <view class="attraction-location" wx:if="{{ attraction.attractionsLat && attraction.attractionsLng }}">
+              <van-icon name="location-o" size="14px" color="#999" />
+              <text>坐标: {{ attraction.attractionsLat }}, {{ attraction.attractionsLng }}</text>
+            </view>
+          </view>
+          
+          <!-- 连接线 -->
+          <view wx:if="{{ attractionIndex < routeDetail.attractions.length - 1 }}" class="connection-line"></view>
+        </view>
+      </view>
+    </view>
   </view>
 </view>

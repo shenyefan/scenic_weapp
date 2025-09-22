@@ -1,4 +1,5 @@
 import { listAttractionsRouteVoByPage } from '../../../api/attractionsRouteController'
+// @ts-ignore
 import Notify from '@vant/weapp/notify/notify'
 
 Page({
@@ -45,17 +46,17 @@ Page({
 
       const res = await listAttractionsRouteVoByPage(params)
       
-      if (res.code === 200 && res.data) {
+      if (res.code === 200 && res.data && res.data.records) {
         const { records, total, current, size } = res.data
         const newList = refresh ? records : [...this.data.routeList, ...records]
         
         // 判断是否还有更多数据
-        const hasMore = records.length > 0 && newList.length < total
+        const hasMore = records.length > 0 && newList.length < (total || 0)
         
         this.setData({
           routeList: newList,
           'pageInfo.current': refresh ? 2 : pageInfo.current + 1,
-          'pageInfo.total': total,
+          'pageInfo.total': total || 0,
           'pageInfo.hasMore': hasMore
         })
 
@@ -93,7 +94,7 @@ Page({
   },
   
   // 点击路线项 - 查看详情
-  onRouteTap(e) {
+  onRouteTap(e: any) {
     const { id } = e.currentTarget.dataset
     if (!id) return
     
@@ -107,118 +108,205 @@ Page({
 
   // 切换视图模式
   toggleViewMode() {
-    const newMode = this.data.viewMode === 'list' ? 'map' : 'list';
-    
-    this.setData({ 
-      viewMode: newMode,
-      'pageInfo.pageSize': newMode === 'map' ? 999 : 10 // 地图模式下加载更多数据
-    });
+    const newMode = this.data.viewMode === 'list' ? 'map' : 'list'
+    this.setData({ viewMode: newMode })
     
     if (newMode === 'map') {
-      this.loadRouteList(true);
+      // 切换到地图模式时，重新加载数据以获取更多路线用于地图显示
+      this.loadRouteList(true)
     }
   },
 
   // 更新地图标记和路线
   updateMapMarkers() {
-    const routes = this.data.routeList
-      .filter(item => 
-        item.startAttractionLat && item.startAttractionLng && 
-        item.endAttractionLat && item.endAttractionLng
-      )
-    
-    if (routes.length === 0) return
+    const routes = this.data.routeList.filter(item => 
+      item.attractions && item.attractions.length > 0
+    )
+    if (routes.length === 0) {
+      this.setData({
+        mapMarkers: [],
+        mapRoutes: [],
+        includePoints: []
+      })
+      return
+    }
     
     // 准备包含点数组用于自适应缩放
-    const points = []
-    const markers = []
+    const points: any[] = []
+    const markers: any[] = []
+    const polylines: any[] = []
     let markerId = 0
     
-    // 为每条路线创建起点和终点标记
-    routes.forEach((route, index) => {
-      // 起点标记
-      markers.push({
-        id: markerId,
-        latitude: route.startAttractionLat,
-        longitude: route.startAttractionLng,
-        title: route.startAttractionName || '起点',
-        callout: {
-          content: `${route.startAttractionName || '起点'}`,
-          color: '#000000',
-          fontSize: 12,
-          borderRadius: 4,
-          bgColor: '#ffffff',
-          padding: 5,
-          display: 'ALWAYS'
-        },
-        customCalloutData: {
-          routeId: route.id,
-          isStart: true
-        }
-      })
-      points.push({
-        latitude: route.startAttractionLat,
-        longitude: route.startAttractionLng
-      })
-      markerId++
+    // 为每条路线创建景点标记和路线
+    routes.forEach((route, routeIndex) => {
+      if (!route.attractions) return
       
-      // 终点标记
-      markers.push({
-        id: markerId,
-        latitude: route.endAttractionLat,
-        longitude: route.endAttractionLng,
-        title: route.endAttractionName || '终点',
-        callout: {
-          content: `${route.endAttractionName || '终点'}`,
-          color: '#000000',
-          fontSize: 12,
-          borderRadius: 4,
-          bgColor: '#ffffff',
-          padding: 5,
-          display: 'ALWAYS'
-        },
-        customCalloutData: {
-          routeId: route.id,
-          isEnd: true
+      const routePoints: any[] = []
+      const routeColor = this.getRouteColor(routeIndex)
+      
+      route.attractions.forEach((attraction, attractionIndex) => {
+        if (!attraction.attractionsLat || !attraction.attractionsLng) return
+        
+        const isStart = attractionIndex === 0
+        const isEnd = attractionIndex === (route.attractions?.length || 0) - 1
+        
+        markers.push({
+          id: markerId,
+          latitude: attraction.attractionsLat,
+          longitude: attraction.attractionsLng,
+          iconPath: this.getMarkerIcon(isStart, isEnd),
+          width: 30,
+          height: 30,
+          callout: {
+            content: `${attraction.attractionsName || `景点${attractionIndex + 1}`}`,
+            color: '#333333',
+            fontSize: 12,
+            borderRadius: 8,
+            bgColor: '#ffffff',
+            padding: 8,
+            display: 'BYCLICK',
+            borderWidth: 1,
+            borderColor: routeColor
+          },
+          customCalloutData: {
+            routeId: route.id,
+            attractionIndex: attractionIndex,
+            routeName: `路线${routeIndex + 1}`
+          }
+        })
+        
+        const point = {
+          latitude: attraction.attractionsLat,
+          longitude: attraction.attractionsLng
+        }
+        
+        points.push(point)
+        routePoints.push(point)
+        markerId++
+      })
+      
+      // 创建路线连线
+      if (routePoints.length >= 2) {
+        polylines.push({
+          points: routePoints,
+          color: routeColor,
+          width: 4,
+          dottedLine: false,
+          arrowLine: true,
+          borderColor: '#ffffff',
+          borderWidth: 2
+        })
+      }
+    })
+    
+    // 计算地图中心点
+    if (points.length > 0) {
+      const centerLat = points.reduce((sum, p) => sum + p.latitude, 0) / points.length
+      const centerLng = points.reduce((sum, p) => sum + p.longitude, 0) / points.length
+      
+      this.setData({
+        mapCenter: {
+          latitude: centerLat,
+          longitude: centerLng
         }
       })
-      points.push({
-        latitude: route.endAttractionLat,
-        longitude: route.endAttractionLng
-      })
-      markerId++
-    })
-
-    this.setData({ 
+    }
+    
+    this.setData({
       mapMarkers: markers,
+      mapRoutes: polylines,
       includePoints: points
     })
   },
 
-  // 地图更新完成事件
-  onMapUpdated(e) {
-    console.log('地图更新完成', e)
-  },
-  
-  // 点击气泡事件
-  onCalloutTap(e) {
-    this.onMarkerTap(e)
+  // 获取路线颜色
+  getRouteColor(index: number): string {
+    const colors = ['#1989fa', '#52c41a', '#f5222d', '#fa8c16', '#722ed1', '#eb2f96']
+    return colors[index % colors.length]
   },
 
-  // 点击地图标记
-  onMarkerTap(e) {
-    const markerId = e.markerId
-    const marker = this.data.mapMarkers[markerId]
+  // 获取标记图标
+  getMarkerIcon(isStart: boolean, isEnd: boolean): string {
+    if (isStart) return '/image/map/start-marker.svg'
+    if (isEnd) return '/image/map/end-marker.svg'
+    return '/image/map/middle-marker.svg'
+  },
+
+  // 地图更新完成
+  onMapUpdated(e: any) {
+    console.log('地图更新完成:', e)
+  },
+
+  // 地图区域变化
+  onMapRegionChange(e: any) {
+    if (e.type === 'end') {
+      // 区域变化结束，可以在这里处理相关逻辑
+      console.log('地图区域变化:', e.detail)
+    }
+  },
+
+  // 居中地图
+  centerMap() {
+    if (this.data.includePoints.length === 0) {
+      Notify({ type: 'warning', message: '暂无景点数据' })
+      return
+    }
+
+    const mapContext = wx.createMapContext('routeMap', this)
+    mapContext.includePoints({
+      points: this.data.includePoints,
+      padding: [50, 50, 50, 50]
+    })
+  },
+
+  // 刷新地图
+  refreshMap() {
+    this.updateMapMarkers()
+    Notify({ type: 'success', message: '地图已刷新' })
+  },
+  
+  // 点击标记气泡
+  onCalloutTap(e: any) {
+    const marker = this.data.mapMarkers.find(m => m.id === e.detail.markerId)
     if (marker && marker.customCalloutData) {
-      const routeId = marker.customCalloutData.routeId
+      const { routeId, routeName } = marker.customCalloutData
       if (routeId) {
-        Notify({ type: 'primary', message: '喵喵喵' })
+        wx.showModal({
+          title: '查看路线详情',
+          content: `是否查看${routeName}的详细信息？`,
+          success: (res) => {
+            if (res.confirm) {
+              wx.navigateTo({
+                url: `/subpages/attraction/routes_show/index?id=${routeId}`,
+                fail: () => {
+                  Notify({ type: 'danger', message: '页面跳转失败' })
+                }
+              })
+            }
+          }
+        })
+      }
+    }
+  },
+  
+  // 点击标记
+  onMarkerTap(e: any) {
+    const marker = this.data.mapMarkers.find(m => m.id === e.detail.markerId)
+    if (marker && marker.customCalloutData) {
+      const { routeId } = marker.customCalloutData
+      if (routeId) {
+        wx.navigateTo({
+          url: `/subpages/attraction/routes_show/index?id=${routeId}`,
+          fail: () => {
+            Notify({ type: 'danger', message: '页面跳转失败' })
+          }
+        })
       }
     }
   },
 
-  // 返回上一页
+  // 返回按钮
   onBack() {
     wx.navigateBack()
-  },
+  }
 })

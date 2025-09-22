@@ -9,49 +9,83 @@
   <van-empty wx:elif="{{ !routeList.length }}" description="暂无游览路线信息" />
 
   <!-- 地图视图 -->
-  <view wx:elif="{{ viewMode === 'map' }}" class="map-container">
-    <map id="map" 
-         class="map" 
-         longitude="{{ mapCenter.longitude }}" 
-         latitude="{{ mapCenter.latitude }}" 
-         markers="{{ mapMarkers }}" 
-         show-location="{{ true }}"
-         enable-poi="{{ true }}"
-         include-points="{{ includePoints }}"
-         show-compass="{{ true }}"
-         enable-rotate="{{ true }}"
-         enable-zoom="{{ true }}"
-         enable-3D="{{ false }}"
-         enable-satellite="{{ true }}"
-         bindmarkertap="onMarkerTap"
-         bindcallouttap="onCalloutTap"
-         bindupdated="onMapUpdated">
-    </map>
+  <view wx:elif="{{ viewMode === 'map' }}" class="map-view">
+    <view class="map-container">
+      <map id="routeMap" 
+           class="map" 
+           longitude="{{ mapCenter.longitude }}" 
+           latitude="{{ mapCenter.latitude }}" 
+           markers="{{ mapMarkers }}" 
+           polyline="{{ mapRoutes }}"
+           show-location="{{ true }}"
+           enable-poi="{{ false }}"
+           include-points="{{ includePoints }}"
+           show-compass="{{ true }}"
+           enable-rotate="{{ true }}"
+           enable-zoom="{{ true }}"
+           enable-3D="{{ false }}"
+           enable-satellite="{{ false }}"
+           scale="{{ 12 }}"
+           bindmarkertap="onMarkerTap"
+           bindcallouttap="onCalloutTap"
+           bindupdated="onMapUpdated"
+           bindregionchange="onMapRegionChange">
+      </map>
+      
+      <!-- 地图控制按钮 -->
+      <view class="map-controls">
+        <view class="control-btn" bind:tap="centerMap">
+          <van-icon name="aim" size="20px" />
+        </view>
+        <view class="control-btn" bind:tap="refreshMap">
+          <van-icon name="replay" size="20px" />
+        </view>
+      </view>
+    </view>
   </view>
 
   <!-- 路线列表 -->
   <view wx:else class="route-list">
-    <van-cell-group wx:for="{{ routeList }}" wx:key="id">
-      <van-cell bind:click="onRouteTap" data-id="{{ item.id }}" custom-class="route-cell">
-        <view slot="title" class="route-item">
-          <view class="route-images">
-            <view class="route-image" wx:if="{{ item.startAttractionImg }}">
-              <van-image src="{{ item.startAttractionImg }}" width="120rpx" height="120rpx" radius="8rpx" fit="cover" />
-            </view>
-            <view class="route-arrow">
-              <van-icon name="arrow" size="24px" color="#1989fa" />
-            </view>
-            <view class="route-image" wx:if="{{ item.endAttractionImg }}">
-              <van-image src="{{ item.endAttractionImg }}" width="120rpx" height="120rpx" radius="8rpx" fit="cover" />
-            </view>
-          </view>
-          <view class="route-info">
-            <view class="route-name">{{ item.startAttractionName || '未命名起点' }} → {{ item.endAttractionName || '未命名终点' }}</view>
-            <view class="route-note" wx:if="{{ item.routeNote }}">{{ item.routeNote }}</view>
-          </view>
+    <view wx:for="{{ routeList }}" wx:key="id" class="route-card" bind:tap="onRouteTap" data-id="{{ item.id }}">
+      <!-- 路线头部 -->
+      <view class="route-header">
+        <view class="route-title">
+          <van-icon name="location" size="16px" color="#1989fa" />
+          <text class="route-title-text">游览路线 {{ index + 1 }}</text>
         </view>
-      </van-cell>
-    </van-cell-group>
+        <view class="attraction-count">
+          <van-tag type="primary" size="small">{{ item.attractions ? item.attractions.length : 0 }}个景点</van-tag>
+        </view>
+      </view>
+
+      <!-- 路线景点列表 -->
+      <view class="attractions-flow" wx:if="{{ item.attractions && item.attractions.length > 0 }}">
+        <view wx:for="{{ item.attractions }}" wx:for-item="attraction" wx:for-index="attractionIndex" wx:key="id" class="attraction-item">
+          <view class="attraction-dot {{ attractionIndex === 0 ? 'start' : (attractionIndex === item.attractions.length - 1 ? 'end' : 'middle') }}"></view>
+          <view class="attraction-content">
+            <text class="attraction-name">{{ attraction.attractionsName || '景点' + (attractionIndex + 1) }}</text>
+            <text class="attraction-order">第{{ attractionIndex + 1 }}站</text>
+          </view>
+          <view wx:if="{{ attractionIndex < item.attractions.length - 1 }}" class="connection-line"></view>
+        </view>
+      </view>
+      
+      <!-- 空状态 -->
+      <view wx:else class="empty-attractions">
+        <van-icon name="location-o" size="20px" color="#ccc" />
+        <text>暂无景点信息</text>
+      </view>
+
+      <!-- 路线备注 -->
+      <view class="route-note" wx:if="{{ item.routeNote }}">
+        <text>{{ item.routeNote }}</text>
+      </view>
+
+      <!-- 路线操作区域 -->
+      <view class="route-actions">
+        <van-button type="primary" size="small" round>查看详情</van-button>
+      </view>
+    </view>
 
     <!-- 加载状态提示 -->
     <view class="loading-view">

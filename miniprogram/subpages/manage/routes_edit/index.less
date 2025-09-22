@@ -31,3 +31,194 @@
   padding: 20px;
   text-align: center;
 }
+
+/* 已选景点列表样式 */
+.selected-attractions {
+  margin-top: 20rpx;
+  margin-bottom: 20rpx;
+  background: #fff;
+  border-radius: 12rpx;
+  padding: 20rpx;
+}
+
+.attractions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1px solid #ebedf0;
+}
+
+.attractions-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #323233;
+}
+
+.attractions-tip {
+  font-size: 24rpx;
+  color: #969799;
+}
+
+.attractions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.attraction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx;
+  background: #f7f8fa;
+  border-radius: 8rpx;
+}
+
+.attraction-info {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  flex: 1;
+}
+
+.attraction-order {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48rpx;
+  height: 48rpx;
+  background: #1989fa;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.attraction-name {
+  font-size: 28rpx;
+  color: #323233;
+  font-weight: 500;
+}
+
+.attraction-actions {
+  display: flex;
+  gap: 16rpx;
+  align-items: center;
+}
+
+/* 圆形按钮基础样式 */
+.action-btn {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 1px solid #f0f0f0;
+}
+
+.action-btn:active {
+  transform: scale(0.9);
+  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.15);
+}
+
+/* 上移按钮 */
+.move-up-btn {
+  color: #1989fa;
+}
+
+.move-up-btn:hover {
+  background: #f0f9ff;
+  border-color: #1989fa;
+}
+
+/* 下移按钮 */
+.move-down-btn {
+  color: #1989fa;
+}
+
+.move-down-btn:hover {
+  background: #f0f9ff;
+  border-color: #1989fa;
+}
+
+/* 删除按钮 */
+.delete-btn {
+  color: #ee0a24;
+}
+
+.delete-btn:hover {
+  background: #fff1f0;
+  border-color: #ee0a24;
+}
+
+/* 景点选择器弹窗样式 */
+.popup-content {
+  max-height: 80vh;
+  background: #fff;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1px solid #ebedf0;
+}
+
+.popup-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #323233;
+}
+
+.attractions-selector {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 20rpx;
+}
+
+.selector-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx 20rpx;
+  border-bottom: 1px solid #ebedf0;
+  transition: background-color 0.2s;
+}
+
+.selector-item:last-child {
+  border-bottom: none;
+}
+
+.selector-item.selected {
+  background-color: #f0f9ff;
+}
+
+.selector-item:active {
+  background-color: #f7f8fa;
+}
+
+.item-info {
+  flex: 1;
+}
+
+.item-name {
+  display: block;
+  font-size: 28rpx;
+  color: #323233;
+  font-weight: 500;
+  margin-bottom: 8rpx;
+}
+
+.item-location {
+  display: block;
+  font-size: 24rpx;
+  color: #969799;
+}

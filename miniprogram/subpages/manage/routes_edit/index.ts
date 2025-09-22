@@ -1,7 +1,7 @@
+// @ts-ignore
 import Notify from '@vant/weapp/notify/notify'
 import { addAttractionsRoute, getAttractionsRouteVoById, updateAttractionsRoute, deleteAttractionsRoute } from '../../../api/attractionsRouteController'
 import { listAttractionsVoByPage } from '../../../api/attractionsController'
-import { uploadFile } from '../../../utils/file'
 
 Page({
   data: {
@@ -9,306 +9,194 @@ Page({
     route: null as API.AttractionsRouteVO | null,
     loading: true,
     submitting: false,
-    startAttractionFileList: [] as any[],
-    endAttractionFileList: [] as any[],
-    startAttractionVideoList: [] as any[],
-    endAttractionVideoList: [] as any[],
+    // 景点相关数据
     attractionList: [] as API.AttractionsVO[],
-    attractionPickerList: [] as string[],
-    showStartAttractionSelector: false,
-    showEndAttractionSelector: false,
-    selectedStartAttraction: null as number | null,
-    selectedEndAttraction: null as number | null,
-    selectedStartAttractionName: '',
-    selectedEndAttractionName: '',
+    selectedAttractions: [] as API.AttractionsVO[], // 已选择的景点列表
+    showAttractionSelector: false,
+    // 路线备注
+    routeNote: '',
+    // 删除确认
     showDeleteConfirm: false
   },
 
-  onLoad(options: { id?: string }) {
-    const id = options.id || ''
-    this.setData({ id })
-    
+  async onLoad(options: any) {
+    const { id } = options
     if (id) {
-      wx.setNavigationBarTitle({ title: '编辑游览路线' })
+      this.setData({ id })
+      wx.setNavigationBarTitle({ title: '编辑路线' })
       this.loadRouteDetail()
     } else {
-      wx.setNavigationBarTitle({ title: '新增游览路线' })
-      this.setData({
-        route: {
-          startAttractionName: '',
-          endAttractionName: '',
-          routeNote: ''
-        },
-        selectedStartAttractionName: '',
-        selectedEndAttractionName: '',
-        loading: false
-      })
+      wx.setNavigationBarTitle({ title: '新增路线' })
+      // 新建模式下，先加载景点列表，然后设置loading为false
+      await this.loadAttractionList()
+      this.setData({ loading: false })
+      return
     }
-    
     this.loadAttractionList()
   },
 
+  // 加载路线详情
   async loadRouteDetail() {
+    if (!this.data.id) return
+    
     try {
       this.setData({ loading: true })
 
       const res = await getAttractionsRouteVoById({ id: this.data.id })
       
       if (res.code === 200 && res.data) {
+        const route = res.data
         this.setData({
-          route: res.data
+          route: route,
+          selectedAttractions: route.attractions || [],
+          routeNote: route.routeNote || ''
         })
         
-        if (res.data.startAttractionImg) {
-          this.setData({
-            startAttractionFileList: [{
-              url: res.data.startAttractionImg,
-              name: '起点图片',
-              isImage: true
-            }]
-          })
-        }
-        
-        if (res.data.endAttractionImg) {
-          this.setData({
-            endAttractionFileList: [{
-              url: res.data.endAttractionImg,
-              name: '终点图片',
-              isImage: true
-            }]
-          })
-        }
-        
-        if (res.data.startAttractionVideo) {
-          this.setData({
-            startAttractionVideoList: [{
-              url: res.data.startAttractionVideo,
-              name: '起点视频',
-              isVideo: true
-            }]
-          })
-        }
-        
-        if (res.data.endAttractionVideo) {
-          this.setData({
-            endAttractionVideoList: [{
-              url: res.data.endAttractionVideo,
-              name: '终点视频',
-              isVideo: true
-            }]
-          })
-        }
-        
-        // 处理起点景点信息
-        if (res.data.startAttractionId) {
-          this.setData({
-            selectedStartAttraction: res.data.startAttractionId,
-            selectedStartAttractionName: res.data.startAttractionName || ''
-          })
-        } else {
-          this.setData({
-            selectedStartAttractionName: res.data.startAttractionName || ''
-          })
-        }
-        
-        // 处理终点景点信息
-        if (res.data.endAttractionId) {
-          this.setData({
-            selectedEndAttraction: res.data.endAttractionId,
-            selectedEndAttractionName: res.data.endAttractionName || ''
-          })
-        } else {
-          this.setData({
-            selectedEndAttractionName: res.data.endAttractionName || ''
-          })
-        }
+        // 更新景点列表的选中状态
+        this.updateAttractionListSelection()
       } else {
-        Notify({ type: 'danger', message: '获取路线详情失败' })
+        Notify({ type: 'danger', message: res.message || '获取路线详情失败' })
       }
     } catch (error) {
       console.error('获取路线详情失败:', error)
-      Notify({ type: 'danger', message: '网络请求失败，请稍后重试' })
+      Notify({ type: 'danger', message: '获取路线详情失败，请重试' })
     } finally {
       this.setData({ loading: false })
     }
   },
 
+  // 加载景点列表
   async loadAttractionList() {
     try {
       const res = await listAttractionsVoByPage({
-        pageSize: 999,
-        current: 1
+        current: 1,
+        pageSize: 999 // 获取所有景点
       })
       
       if (res.code === 200 && res.data && res.data.records) {
-        const attractionPickerList = res.data.records.map(item => item.attractionsName)
-        
         this.setData({
-          attractionList: res.data.records,
-          attractionPickerList
+          attractionList: res.data.records
         })
+        this.updateAttractionListSelection()
       }
     } catch (error) {
       console.error('获取景点列表失败:', error)
     }
   },
 
-  afterStartImgRead(event) {
-    const { file } = event.detail
-    
-    Notify({ type: 'primary', message: '上传中...', duration: 0 })
-    
-    uploadFile({
-      filePath: file.url,
-      biz: 'attractions_route_img'
-    }).then(res => {
-      if (res.code === 200 && res.data) {
-        this.setData({
-          startAttractionFileList: [{
-            url: res.data,
-            name: '起点图片',
-            isImage: true
-          }]
-        })
-        Notify({ type: 'success', message: '上传成功' })
-      } else {
-        Notify({ type: 'danger', message: res.message || '上传失败' })
-      }
-    }).catch(err => {
-      console.error('上传图片失败:', err)
-      Notify({ type: 'danger', message: '上传失败' })
-    })
+  // 更新景点列表的选中状态
+  updateAttractionListSelection() {
+    const attractionList = this.data.attractionList.map(attraction => ({
+      ...attraction,
+      selected: this.data.selectedAttractions.some(selected => selected.id === attraction.id)
+    }))
+    this.setData({ attractionList })
   },
 
-  onDeleteStartImg() {
+  // 显示景点选择器
+  showAttractionPopup() {
     this.setData({
-      startAttractionFileList: []
-    })
-  },
-
-  afterEndImgRead(event) {
-    const { file } = event.detail
-    
-    Notify({ type: 'primary', message: '上传中...', duration: 0 })
-    
-    uploadFile({
-      filePath: file.url,
-      biz: 'attractions_route_img'
-    }).then(res => {
-      if (res.code === 200 && res.data) {
-        this.setData({
-          endAttractionFileList: [{
-            url: res.data,
-            name: '终点图片',
-            isImage: true
-          }]
-        })
-        Notify({ type: 'success', message: '上传成功' })
-      } else {
-        Notify({ type: 'danger', message: res.message || '上传失败' })
-      }
-    }).catch(err => {
-      console.error('上传图片失败:', err)
-      Notify({ type: 'danger', message: '上传失败' })
-    })
-  },
-
-  onDeleteEndImg() {
-    this.setData({
-      endAttractionFileList: []
-    })
-  },
-
-  afterStartVideoRead(event) {
-    const { file } = event.detail
-    
-    Notify({ type: 'primary', message: '上传中...', duration: 0 })
-    
-    uploadFile({
-      filePath: file.url,
-      biz: 'attractions_route_video'
-    }).then(res => {
-      if (res.code === 200 && res.data) {
-        this.setData({
-          startAttractionVideoList: [{
-            url: res.data,
-            name: '起点视频',
-            isVideo: true
-          }]
-        })
-        Notify({ type: 'success', message: '上传成功' })
-      } else {
-        Notify({ type: 'danger', message: res.message || '上传失败' })
-      }
-    }).catch(err => {
-      console.error('上传视频失败:', err)
-      Notify({ type: 'danger', message: '上传失败' })
-    })
-  },
-
-  onDeleteStartVideo() {
-    this.setData({
-      startAttractionVideoList: []
-    })
-  },
-
-  afterEndVideoRead(event) {
-    const { file } = event.detail
-    
-    Notify({ type: 'primary', message: '上传中...', duration: 0 })
-    
-    uploadFile({
-      filePath: file.url,
-      biz: 'attractions_route_video'
-    }).then(res => {
-      if (res.code === 200 && res.data) {
-        this.setData({
-          endAttractionVideoList: [{
-            url: res.data,
-            name: '终点视频',
-            isVideo: true
-          }]
-        })
-        Notify({ type: 'success', message: '上传成功' })
-      } else {
-        Notify({ type: 'danger', message: res.message || '上传失败' })
-      }
-    }).catch(err => {
-      console.error('上传视频失败:', err)
-      Notify({ type: 'danger', message: '上传失败' })
-    })
-  },
-
-  onDeleteEndVideo() {
-    this.setData({
-      endAttractionVideoList: []
+      showAttractionSelector: true
     })
   },
   
-  async onFormSubmit(event) {
-    const formData = event.detail.value
+  // 关闭景点选择器
+  onAttractionPopupClose() {
+    this.setData({
+      showAttractionSelector: false
+    })
+  },
+
+  // 选择景点
+  selectAttraction(e: any) {
+    const { index } = e.currentTarget.dataset
+    const attraction = this.data.attractionList[index]
     
-    if (!this.data.selectedStartAttraction) {
-      Notify({ type: 'warning', message: '请选择起点景点' })
+    // 检查是否已经选择过该景点
+    const isSelected = this.data.selectedAttractions.some(item => item.id === attraction.id)
+    if (isSelected) {
+      Notify({ type: 'warning', message: '该景点已经添加过了' })
       return
     }
     
-    if (!this.data.selectedEndAttraction) {
-      Notify({ type: 'warning', message: '请选择终点景点' })
+    // 添加到已选择列表
+    const newSelectedAttractions = [...this.data.selectedAttractions, attraction]
+    this.setData({
+      selectedAttractions: newSelectedAttractions
+    })
+    
+    // 更新景点列表的选中状态
+    this.updateAttractionListSelection()
+  },
+
+  // 移除景点
+  removeAttraction(e: any) {
+    const { index } = e.currentTarget.dataset
+    const newSelectedAttractions = this.data.selectedAttractions.filter((_, i) => i !== index)
+    this.setData({
+      selectedAttractions: newSelectedAttractions
+    })
+    
+    // 更新景点列表的选中状态
+    this.updateAttractionListSelection()
+  },
+
+  // 上移景点
+  moveAttractionUp(e: any) {
+    const { index } = e.currentTarget.dataset
+    if (index === 0) return
+    
+    const attractions = [...this.data.selectedAttractions]
+    const temp = attractions[index]
+    attractions[index] = attractions[index - 1]
+    attractions[index - 1] = temp
+    
+    this.setData({
+      selectedAttractions: attractions
+    })
+  },
+
+  // 下移景点
+  moveAttractionDown(e: any) {
+    const { index } = e.currentTarget.dataset
+    if (index === this.data.selectedAttractions.length - 1) return
+    
+    const attractions = [...this.data.selectedAttractions]
+    const temp = attractions[index]
+    attractions[index] = attractions[index + 1]
+    attractions[index + 1] = temp
+    
+    this.setData({
+      selectedAttractions: attractions
+    })
+  },
+
+  // 路线备注输入
+  onRouteNoteInput(e: any) {
+    this.setData({
+      routeNote: e.detail.value
+    })
+  },
+
+  // 表单提交
+  async onFormSubmit(e: any) {
+    if (this.data.selectedAttractions.length < 2) {
+      Notify({ type: 'warning', message: '请至少选择2个景点' })
       return
     }
     
     this.setData({ submitting: true })
     
     try {
+      const attractionIds = this.data.selectedAttractions.map(item => item.id)
+      
+      // 从表单数据中获取routeNote，如果没有则使用页面data中的值作为备用
+      const formData = e.detail.value || {}
+      const routeNote = formData.routeNote || this.data.routeNote || ''
+      
       const params: any = {
-        startAttractionId: this.data.selectedStartAttraction,
-        endAttractionId: this.data.selectedEndAttraction,
-        startAttractionImg: this.data.startAttractionFileList.length > 0 ? this.data.startAttractionFileList[0].url : undefined,
-        endAttractionImg: this.data.endAttractionFileList.length > 0 ? this.data.endAttractionFileList[0].url : undefined,
-        startAttractionVideo: this.data.startAttractionVideoList.length > 0 ? this.data.startAttractionVideoList[0].url : undefined,
-        endAttractionVideo: this.data.endAttractionVideoList.length > 0 ? this.data.endAttractionVideoList[0].url : undefined,
-        routeNote: formData.routeNote
+        attractionIds: attractionIds,
+        routeNote: routeNote
       }
       
       let res
@@ -325,10 +213,12 @@ Page({
         setTimeout(() => {
           const pages = getCurrentPages()
           if (pages.length > 1) {
-            const prevPage = pages[pages.length - 2]
-            prevPage.setData({
-              needRefresh: true
-            })
+            const prevPage = pages[pages.length - 2] as any
+            if (prevPage.setData) {
+              prevPage.setData({
+                needRefresh: true
+              })
+            }
           }
           wx.navigateBack()
         }, 1500)
@@ -343,65 +233,18 @@ Page({
     }
   },
 
-  showStartAttractionPopup() {
-    this.setData({
-      showStartAttractionSelector: true
-    })
-  },
-  
-  onStartAttractionPopupClose() {
-    this.setData({
-      showStartAttractionSelector: false
-    })
-  },
-
-  showEndAttractionPopup() {
-    this.setData({
-      showEndAttractionSelector: true
-    })
-  },
-  
-  onEndAttractionPopupClose() {
-    this.setData({
-      showEndAttractionSelector: false
-    })
-  },
-
-  selectStartAttraction(event) {
-    const { detail } = event
-    const selectedAttraction = this.data.attractionList[detail.index]
-    
-    this.setData({
-      selectedStartAttraction: selectedAttraction.id,
-      selectedStartAttractionName: selectedAttraction.attractionsName,
-      'route.startAttractionName': selectedAttraction.attractionsName,
-      showStartAttractionSelector: false
-    })
-  },
-
-  selectEndAttraction(event) {
-    const { detail } = event
-    const selectedAttraction = this.data.attractionList[detail.index]
-    
-    this.setData({
-      selectedEndAttraction: selectedAttraction.id,
-      selectedEndAttractionName: selectedAttraction.attractionsName,
-      'route.endAttractionName': selectedAttraction.attractionsName,
-      showEndAttractionSelector: false
-    })
-  },
-
-  noop() {},
-  
+  // 显示删除确认
   showDeleteConfirm() {
     if (!this.data.id) return
     this.setData({ showDeleteConfirm: true })
   },
   
+  // 关闭删除确认
   closeDeleteConfirm() {
     this.setData({ showDeleteConfirm: false })
   },
   
+  // 确认删除
   async confirmDelete() {
     if (!this.data.id) return
     
@@ -410,16 +253,18 @@ Page({
     try {
       const res = await deleteAttractionsRoute({ id: this.data.id })
       
-      if (res.code === 200 && res.data) {
+      if (res.code === 200) {
         Notify({ type: 'success', message: '删除成功' })
         
         setTimeout(() => {
           const pages = getCurrentPages()
           if (pages.length > 1) {
-            const prevPage = pages[pages.length - 2]
-            prevPage.setData({
-              needRefresh: true
-            })
+            const prevPage = pages[pages.length - 2] as any
+            if (prevPage.setData) {
+              prevPage.setData({
+                needRefresh: true
+              })
+            }
           }
           wx.navigateBack()
         }, 1500)
@@ -437,7 +282,8 @@ Page({
     }
   },
 
+  // 返回
   onBack() {
     wx.navigateBack()
-  },
+  }
 })

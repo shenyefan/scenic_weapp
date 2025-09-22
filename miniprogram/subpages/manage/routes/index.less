@@ -1,133 +1,296 @@
 .container {
-  padding-bottom: 30rpx;
   min-height: 100vh;
-  background-color: #f7f8fa;
+  background-color: #f5f5f5;
 }
 
 .loading-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 50vh;
+  height: 400rpx;
 }
 
-.route-cell {
-  padding: 20rpx 30rpx !important;
-}
-
-.route-item {
+.empty-container {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
+  height: 400rpx;
+  color: #999;
+  
+  .empty-icon {
+    font-size: 80rpx;
+    margin-bottom: 20rpx;
+    color: #ddd;
+  }
+  
+  .empty-text {
+    font-size: 28rpx;
+  }
 }
 
-.route-images {
+.map-view {
+  height: 100vh;
+  position: relative;
+}
+
+.map-container {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0;
+  
+  .map {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+}
+
+// 地图控制按钮
+.map-controls {
+  position: absolute;
+  top: 40rpx;
+  right: 40rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  z-index: 999;
+  
+  .control-btn {
+    width: 80rpx;
+    height: 80rpx;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10rpx);
+    transition: all 0.3s ease;
+    
+    &:active {
+      transform: scale(0.95);
+      background: rgba(25, 137, 250, 0.1);
+    }
+  }
+}
+
+.list-view {
+  padding: 20rpx;
+}
+
+.route-list {
+  padding: 20rpx;
+  
+  .route-card {
+    background: white;
+    border-radius: 20rpx;
+    margin-bottom: 24rpx;
+    padding: 32rpx;
+    box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1rpx solid rgba(25, 137, 250, 0.1);
+    
+    &:active {
+      transform: translateY(-2rpx) scale(0.99);
+      box-shadow: 0 8rpx 32rpx rgba(25, 137, 250, 0.15);
+    }
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// 路线头部
+.route-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+  
+  .route-title {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+    
+    .route-title-text {
+      font-size: 32rpx;
+      font-weight: 600;
+      color: #333;
+    }
+  }
+}
+
+// 景点流程展示
+.attractions-flow {
+  margin-bottom: 24rpx;
+  
+  .attraction-item {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    margin-bottom: 20rpx;
+    
+    &:last-child {
+      margin-bottom: 0;
+      
+      .connection-line {
+        display: none;
+      }
+    }
+  }
+  
+  .attraction-dot {
+    width: 20rpx;
+    height: 20rpx;
+    border-radius: 50%;
+    margin-right: 24rpx;
+    margin-top: 8rpx;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+    
+    &.start {
+      background: linear-gradient(135deg, #52c41a, #73d13d);
+      box-shadow: 0 2rpx 8rpx rgba(82, 196, 26, 0.3);
+    }
+    
+    &.middle {
+      background: linear-gradient(135deg, #1989fa, #40a9ff);
+      box-shadow: 0 2rpx 8rpx rgba(25, 137, 250, 0.3);
+    }
+    
+    &.end {
+      background: linear-gradient(135deg, #f5222d, #ff4d4f);
+      box-shadow: 0 2rpx 8rpx rgba(245, 34, 45, 0.3);
+    }
+  }
+  
+  .attraction-content {
+    flex: 1;
+    
+    .attraction-name {
+      display: block;
+      font-size: 28rpx;
+      font-weight: 500;
+      color: #333;
+      line-height: 1.4;
+      margin-bottom: 4rpx;
+    }
+    
+    .attraction-order {
+      font-size: 22rpx;
+      color: #999;
+    }
+  }
+  
+  .connection-line {
+    position: absolute;
+    left: 10rpx;
+    top: 28rpx;
+    bottom: -20rpx;
+    width: 2rpx;
+    background: linear-gradient(to bottom, #e6f7ff, #bae7ff);
+    z-index: 1;
+  }
+}
+
+// 空状态
+.empty-attractions {
   display: flex;
   align-items: center;
-  margin-bottom: 16rpx;
-  width: 100%;
-}
-
-.route-image {
-  flex-shrink: 0;
-}
-
-.route-arrow {
-  margin: 0 20rpx;
-  flex-shrink: 0;
-}
-
-.route-info {
-  flex: 1;
-  overflow: hidden;
-  width: 100%;
-}
-
-.route-name {
-  font-size: 32rpx;
-  margin-bottom: 10rpx;
-  color: #323233;
-}
-
-.route-note {
+  justify-content: center;
+  gap: 12rpx;
+  padding: 40rpx 0;
+  color: #ccc;
   font-size: 26rpx;
-  color: #646566;
-  margin-bottom: 10rpx;
+}
+
+// 路线备注
+.route-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 12rpx;
+  background: white;
+  padding: 20rpx 24rpx;
+  border-radius: 16rpx;
+  border-left: 4rpx solid #1989fa;
+  margin-bottom: 24rpx;
+  
+  text {
+    font-size: 26rpx;
+    color: #666;
+    line-height: 1.5;
+    flex: 1;
+  }
+}
+
+// 路线操作区域 - 管理员端特有
+.route-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #f0f0f0;
 }
 
 .loading-view {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 60px;
+  padding: 40rpx 0;
+  color: #999;
 }
 
-/* 地图容器样式 */
-.map-container {
-  width: 100%;
-  height: 100vh;
-  position: relative;
-}
-
-.map {
-  width: 100%;
-  height: 100%;
-}
-
-/* 悬浮切换视图按钮 */
 .float-toggle-btn {
   position: fixed;
-  right: 30rpx;
-  bottom: 120rpx;
+  bottom: 200rpx;
+  right: 40rpx;
+  width: 120rpx;
+  height: 120rpx;
+  background: linear-gradient(135deg, #1989fa, #42a5f5);
+  border-radius: 60rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100rpx;
-  height: 100rpx;
-  background-color: #1989fa;
-  color: #fff;
-  border-radius: 50%;
-  box-shadow: 0 4rpx 16rpx rgba(25, 137, 250, 0.3);
-  z-index: 100;
-  transition: all 0.3s;
+  color: white;
+  box-shadow: 0 8rpx 24rpx rgba(25, 137, 250, 0.3);
+  z-index: 1000;
+  transition: all 0.3s ease;
+  
+  &:active {
+    transform: scale(0.95);
+    box-shadow: 0 4rpx 16rpx rgba(25, 137, 250, 0.4);
+  }
+  
+  text {
+    font-size: 20rpx;
+    margin-top: 8rpx;
+    font-weight: 500;
+  }
 }
 
-.float-toggle-btn text {
-  font-size: 22rpx;
-  margin-top: 4rpx;
-}
-
-.float-toggle-btn:active {
-  transform: scale(0.95);
-  background-color: #0e7fe9;
-}
-
-/* 悬浮新增按钮 */
-.float-add-btn {
+// 添加按钮 - 管理员端特有
+.add-btn {
   position: fixed;
-  right: 30rpx;
-  bottom: 240rpx;
+  bottom: 50rpx;
+  right: 40rpx;
+  width: 120rpx;
+  height: 120rpx;
+  background: linear-gradient(135deg, #52c41a, #73d13d);
+  border-radius: 60rpx;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100rpx;
-  height: 100rpx;
-  background-color: #07c160;
-  color: #fff;
-  border-radius: 50%;
-  box-shadow: 0 4rpx 16rpx rgba(7, 193, 96, 0.3);
-  z-index: 100;
-  transition: all 0.3s;
-}
-
-.float-add-btn text {
-  font-size: 22rpx;
-  margin-top: 4rpx;
-}
-
-.float-add-btn:active {
-  transform: scale(0.95);
-  background-color: #06ad56;
+  color: white;
+  box-shadow: 0 8rpx 24rpx rgba(82, 196, 26, 0.3);
+  z-index: 1001;
+  transition: all 0.3s ease;
+  
+  &:active {
+    transform: scale(0.95);
+    box-shadow: 0 4rpx 16rpx rgba(82, 196, 26, 0.4);
+  }
 }

@@ -1,7 +1,6 @@
 .container {
-  padding-bottom: 30rpx;
   min-height: 100vh;
-  background-color: #f7f8fa;
+  background-color: #f5f5f5;
 }
 
 .loading-container {
@@ -11,28 +10,243 @@
   height: 100vh;
 }
 
-.image-container {
-  padding: 20rpx;
-}
-
-.video-container {
-  padding: 20rpx;
-}
-
-.video-player {
-  width: 100%;
-  height: 400rpx;
-  border-radius: 8rpx;
-}
-
 .empty-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 60vh;
+  height: 100vh;
 }
 
-.empty-text {
-  color: #969799;
-  font-size: 28rpx;
+.content {
+  padding: 20rpx;
+}
+
+// 路线卡片样式 - 与列表页面一致
+.route-card {
+  background: white;
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  
+  .route-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24rpx 30rpx 20rpx;
+    
+    .route-title {
+      display: flex;
+      align-items: center;
+      gap: 12rpx;
+      flex: 1;
+      
+      .route-title-text {
+        font-size: 32rpx;
+        font-weight: 600;
+        color: #333;
+      }
+    }
+    
+    .attraction-count {
+      flex-shrink: 0;
+    }
+  }
+  
+  .route-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 8rpx;
+    padding: 0 30rpx 20rpx;
+    font-size: 26rpx;
+    color: #666;
+    line-height: 1.5;
+  }
+}
+
+.map-section {
+  padding: 20rpx 30rpx 30rpx;
+  
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 8rpx;
+    font-size: 28rpx;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20rpx;
+  }
+  
+  .map-container {
+    height: 400rpx;
+    border-radius: 12rpx;
+    overflow: hidden;
+    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+    
+    .map {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.attractions-section {
+  background: white;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 8rpx;
+    font-size: 28rpx;
+    font-weight: 600;
+    color: #333;
+    padding: 30rpx 30rpx 20rpx;
+    border-bottom: 1rpx solid #f0f0f0;
+  }
+  
+  .empty-attractions {
+    padding: 60rpx 30rpx;
+  }
+  
+  .attractions-flow {
+    padding: 30rpx;
+    position: relative;
+  }
+}
+
+// 景点流程展示样式
+.attraction-item {
+  display: flex;
+  margin-bottom: 40rpx;
+  position: relative;
+  
+  &:last-child {
+    margin-bottom: 0;
+    
+    .connection-line {
+      display: none;
+    }
+  }
+  
+  // 景点标记点
+  .attraction-dot {
+    width: 60rpx;
+    height: 60rpx;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 24rpx;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+    
+    .dot-number {
+      font-size: 24rpx;
+      font-weight: bold;
+      color: white;
+    }
+    
+    &.start {
+      background: linear-gradient(135deg, #52c41a, #389e0d);
+      box-shadow: 0 4rpx 12rpx rgba(82, 196, 26, 0.3);
+    }
+    
+    &.middle {
+      background: linear-gradient(135deg, #1989fa, #0066cc);
+      box-shadow: 0 4rpx 12rpx rgba(25, 137, 250, 0.3);
+    }
+    
+    &.end {
+      background: linear-gradient(135deg, #ff4d4f, #cf1322);
+      box-shadow: 0 4rpx 12rpx rgba(255, 77, 79, 0.3);
+    }
+  }
+  
+  // 景点内容区域
+  .attraction-content {
+    flex: 1;
+    background: #f8f9fa;
+    border-radius: 16rpx;
+    padding: 24rpx;
+    border: 1rpx solid #e8e8e8;
+    
+    .attraction-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20rpx;
+      
+      .attraction-name {
+        font-size: 30rpx;
+        font-weight: 600;
+        color: #333;
+        flex: 1;
+      }
+      
+      .attraction-order {
+        font-size: 24rpx;
+        color: #1989fa;
+        background: rgba(25, 137, 250, 0.1);
+        padding: 6rpx 12rpx;
+        border-radius: 20rpx;
+      }
+    }
+    
+    .attraction-image-container {
+      margin-bottom: 20rpx;
+      border-radius: 12rpx;
+      overflow: hidden;
+      box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+    }
+    
+    .attraction-description {
+      margin-bottom: 16rpx;
+      
+      .description-label {
+        display: flex;
+        align-items: center;
+        gap: 6rpx;
+        margin-bottom: 12rpx;
+        font-size: 26rpx;
+        font-weight: 500;
+        color: #333;
+      }
+      
+      .description-text {
+        font-size: 26rpx;
+        color: #666;
+        line-height: 1.6;
+        background: white;
+        padding: 20rpx;
+        border-radius: 12rpx;
+        border-left: 4rpx solid #1989fa;
+      }
+    }
+    
+    .attraction-location {
+      display: flex;
+      align-items: center;
+      gap: 6rpx;
+      font-size: 22rpx;
+      color: #999;
+      padding: 12rpx 16rpx;
+      background: rgba(0, 0, 0, 0.02);
+      border-radius: 8rpx;
+    }
+  }
+  
+  // 连接线
+  .connection-line {
+    position: absolute;
+    left: 30rpx;
+    top: 60rpx;
+    bottom: -40rpx;
+    width: 2rpx;
+    background: linear-gradient(to bottom, #e8e8e8, #f0f0f0);
+    z-index: 1;
+  }
 }
