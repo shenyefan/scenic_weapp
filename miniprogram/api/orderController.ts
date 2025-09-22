@@ -107,12 +107,12 @@ export async function listOrderVoByPage(
   });
 }
 
-/** 此处后端没有提供注释 POST /api/order/update/status */
-export async function updateOrderStatus(
-  body: API.OrderUpdateStatusRequest,
+/** 此处后端没有提供注释 POST /api/order/update */
+export async function updateOrder(
+  body: API.OrderUpdateRequest,
   options?: { [key: string]: any }
 ) {
-  return request<API.BaseResponseBoolean>("/api/order/update/status", {
+  return request<API.BaseResponseBoolean>("/api/order/update", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

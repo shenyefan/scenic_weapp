@@ -1,0 +1,104 @@
+/* 页面容器 */
+.container {
+  background: linear-gradient(180deg, #f8faff 0%, #ffffff 100%);
+  min-height: 100vh;
+  padding: 24rpx;
+  padding-bottom: 200rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+/* 加载状态 */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+  background: transparent;
+}
+
+/* 信息组 */
+.info-group {
+  background: #ffffff !important;
+  border-radius: 20rpx !important;
+  overflow: hidden !important;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08) !important;
+  
+  .van-cell-group__title {
+    background: #f8faff !important;
+    padding: 24rpx 32rpx 16rpx !important;
+    font-weight: 600 !important;
+    color: #333333 !important;
+    border-bottom: 1rpx solid #f0f2f5 !important;
+  }
+  
+  .van-cell {
+    padding: 24rpx 32rpx !important;
+    font-size: 28rpx !important;
+    line-height: 1.5 !important;
+    
+    &::after {
+      border-color: #f5f7fa !important;
+    }
+    
+    &:last-child::after {
+      display: none !important;
+    }
+  }
+  
+  .van-cell__title {
+    color: #333333 !important;
+    font-weight: 500 !important;
+    font-size: 28rpx !important;
+  }
+  
+  .van-cell__value {
+    color: #666666 !important;
+    font-size: 26rpx !important;
+    word-break: break-all !important;
+  }
+  
+  .van-cell__label {
+    color: #999999 !important;
+    font-size: 24rpx !important;
+    margin-top: 8rpx !important;
+  }
+}
+
+/* 门票项 */
+.ticket-item {
+  .ticket-price {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8rpx;
+    
+    .unit-price {
+      font-size: 24rpx;
+      color: #999999;
+    }
+    
+    .subtotal {
+      font-size: 28rpx;
+      color: #ff6b35;
+      font-weight: 600;
+    }
+  }
+}
+
+/* 总金额单元格 */
+.total-amount-cell {
+  background: linear-gradient(90deg, #fff5f0 0%, #ffffff 100%) !important;
+  
+  .van-cell__title {
+    font-weight: 600 !important;
+    color: #ff6b35 !important;
+  }
+  
+  .van-cell__value {
+    font-size: 32rpx !important;
+    font-weight: 700 !important;
+    color: #ff6b35 !important;
+  }
+}

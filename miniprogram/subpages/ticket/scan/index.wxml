@@ -1,0 +1,159 @@
+<view class="container">
+  <!-- 扫码区域 -->
+  <view class="scan-area" wx:if="{{!scanResult}}">
+    <view class="scan-header">
+      <text class="scan-title">扫码检票</text>
+      <text class="scan-desc">请将二维码对准扫描框进行检票</text>
+    </view>
+    
+    <view class="scan-frame">
+      <view class="scan-box">
+        <view class="scan-line"></view>
+        <view class="corner corner-tl"></view>
+        <view class="corner corner-tr"></view>
+        <view class="corner corner-bl"></view>
+        <view class="corner corner-br"></view>
+      </view>
+    </view>
+    
+    <view class="scan-actions">
+      <van-button
+        type="primary"
+        size="large"
+        bind:click="onStartScan"
+        custom-class="scan-btn"
+      >
+        <van-icon name="scan" size="20px" custom-style="margin-right: 8rpx;" />
+        开始扫码
+      </van-button>
+      
+      <van-button
+        type="default"
+        size="large"
+        bind:click="onManualInput"
+        custom-class="manual-btn"
+      >
+        手动输入订单号
+      </van-button>
+    </view>
+  </view>
+
+  <!-- 检票结果区域 -->
+  <view class="result-area" wx:if="{{scanResult}}">
+    <view class="result-card">
+      <!-- 状态图标和标题 -->
+      <view class="result-header">
+        <van-icon 
+          name="{{scanResult.isExpired ? 'warning-o' : (scanResult.success ? 'passed' : 'close')}}" 
+          size="48px" 
+          color="{{scanResult.isExpired ? '#ff6b35' : (scanResult.success ? '#07c160' : '#ff4757')}}"
+        />
+        <text class="result-title {{scanResult.isExpired ? 'expired' : (scanResult.success ? 'success' : 'error')}}">
+          {{scanResult.isExpired ? '订单已过期' : (scanResult.success ? '验票成功' : '验票失败')}}
+        </text>
+      </view>
+      
+      <!-- 状态消息 -->
+      <view class="result-message {{scanResult.isExpired ? 'expired-message' : ''}}">
+        {{scanResult.message}}
+      </view>
+      
+      <!-- 订单信息 -->
+      <view wx:if="{{scanResult.orderInfo}}" class="order-info-section">
+        <view class="section-title">订单信息</view>
+        
+        <view class="info-card">
+          <view class="info-row">
+            <text class="info-label">订单号</text>
+            <text class="info-value">{{scanResult.orderInfo.id}}</text>
+          </view>
+          
+          <view class="info-row">
+            <text class="info-label">联系人</text>
+            <text class="info-value">{{scanResult.orderInfo.contactName}}</text>
+          </view>
+          
+          <view class="info-row">
+            <text class="info-label">联系电话</text>
+            <text class="info-value">{{scanResult.orderInfo.contactPhone}}</text>
+          </view>
+          
+          <view class="info-row">
+            <text class="info-label">游玩日期</text>
+            <text class="info-value">{{scanResult.orderInfo.visitDate}}</text>
+          </view>
+          
+          <view class="info-row">
+            <text class="info-label">订单金额</text>
+            <text class="info-value price">¥{{scanResult.orderInfo.totalPrice}}</text>
+          </view>
+          
+          <view class="info-row">
+            <text class="info-label">订单状态</text>
+            <view class="status-tag status-{{scanResult.orderInfo.paymentStatus}}">
+              {{scanResult.orderInfo.statusText}}
+            </view>
+          </view>
+          
+          <view class="info-row">
+            <text class="info-label">下单时间</text>
+            <text class="info-value">{{scanResult.orderInfo.createTime}}</text>
+          </view>
+        </view>
+        
+        <!-- 门票详情 -->
+        <view wx:if="{{scanResult.orderInfo.orderItems && scanResult.orderInfo.orderItems.length > 0}}" class="tickets-section">
+          <view class="section-title">门票详情</view>
+          <view wx:for="{{scanResult.orderInfo.orderItems}}" wx:key="id" class="ticket-item">
+            <view class="ticket-info">
+              <text class="ticket-name">{{item.ticket.ticketName}}</text>
+              <text class="ticket-details">数量: {{item.quantity}}张 × ¥{{item.unitPrice}} = ¥{{item.subtotal}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 操作按钮 -->
+      <view class="result-actions">
+        <!-- 已过期：显示取消订单按钮 -->
+        <van-button
+          wx:if="{{scanResult.isExpired}}"
+          type="danger"
+          size="large"
+          bind:click="onCancelOrder"
+          loading="{{cancelling}}"
+          custom-class="cancel-btn"
+        >
+          取消订单
+        </van-button>
+        
+        <!-- 未过期且已支付：显示确定验票按钮 -->
+        <van-button
+          wx:if="{{!scanResult.isExpired && scanResult.success && scanResult.orderInfo.paymentStatus === 1}}"
+          type="primary"
+          size="large"
+          bind:click="onCompleteOrder"
+          loading="{{completing}}"
+          custom-class="complete-btn"
+        >
+          确定验票
+        </van-button>
+        
+        <!-- 继续扫描按钮 -->
+        <van-button
+          type="default"
+          size="large"
+          bind:click="onScanAgain"
+          custom-class="scan-again-btn"
+        >
+          继续扫描
+        </van-button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-overlay">
+    <van-loading size="24px" vertical>处理中...</van-loading>
+  </view>
+</view>

@@ -177,11 +177,10 @@ Page({
     }
   },
 
-  // 显示弹窗
+  // 跳转购票
   onTicketTap(e) {
-    this.setData({
-      show: true,
-      popupImg: "https://files.syf.sh/scenic/weapp/ticket.png"
+    wx.navigateTo({
+      url: '/subpages/ticket/list/index'
     })
   },
 

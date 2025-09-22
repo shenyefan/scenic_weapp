@@ -1,0 +1,52 @@
+<view class="container">
+  <van-dialog id="van-dialog" />
+  
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-container">
+    <van-loading size="24px" vertical>加载中...</van-loading>
+  </view>
+
+  <!-- 门票列表 -->
+  <view wx:else class="ticket-list">
+    <view wx:if="{{ticketList.length === 0}}" class="empty-container">
+      <van-empty description="暂无门票信息" />
+    </view>
+    
+    <view wx:else>
+      <view wx:for="{{ticketList}}" wx:key="id" class="ticket-item">
+        <van-card
+          num="{{item.quantity || 0}}"
+          price="{{item.price || 0}}"
+          title="{{item.title || ''}}"
+          desc="{{item.description || ''}}"
+          thumb="{{item.imageUrl || ''}}"
+          custom-class="ticket-card"
+        >
+          <view slot="footer" class="card-footer">
+            <view class="ticket-info">
+              <text class="stock">库存：{{item.stock}}张</text>
+              <text class="validity">有效期：{{item.validityPeriod}}天</text>
+            </view>
+            <view class="stepper-container">
+              <van-stepper
+                value="{{item.quantity || 0}}"
+                min="0"
+                max="{{item.stock}}"
+                bind:change="onQuantityChange"
+                data-id="{{item.id}}"
+              />
+            </view>
+          </view>
+        </van-card>
+      </view>
+    </view>
+  </view>
+
+  <!-- 购买栏 -->
+  <van-submit-bar
+    wx:if="{{selectedTickets.length > 0}}"
+    price="{{totalPrice * 100}}"
+    button-text="去结算"
+    bind:submit="onSubmitOrder"
+  />
+</view>

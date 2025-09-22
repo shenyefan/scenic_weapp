@@ -49,10 +49,10 @@
 
   <!-- 功能图标区 -->
   <van-grid column-num="4" border="{{ false }}" custom-class="icon-grid">
-    <van-grid-item icon="/image/home/surrounding.svg" text="周边门票" data-img="https://files.syf.sh/scenic/weapp/ticket.png" bind:click="showPopup" />
-    <van-grid-item icon="/image/home/daytour.svg" text="一日游" data-img="https://files.syf.sh/scenic/weapp/ticket.png" bind:click="showPopup" />
-    <van-grid-item icon="/image/home/hotel.svg" text="酒店" data-img="https://files.syf.sh/scenic/weapp/ticket.png" bind:click="showPopup" />
-    <van-grid-item icon="/image/home/bus.svg" text="周边交通" data-img="https://files.syf.sh/scenic/weapp/bus.png" bind:click="showPopup" />
+    <van-grid-item icon="/image/home/surrounding.svg" text="周边门票" data-img="https://files.syf.sh/scenic/weapp/qr.png" bind:click="showPopup" />
+    <van-grid-item icon="/image/home/daytour.svg" text="一日游" data-img="https://files.syf.sh/scenic/weapp/qr.png" bind:click="showPopup" />
+    <van-grid-item icon="/image/home/hotel.svg" text="酒店" data-img="https://files.syf.sh/scenic/weapp/qr.png" bind:click="showPopup" />
+    <van-grid-item icon="/image/home/bus.svg" text="周边交通" data-img="https://files.syf.sh/scenic/weapp/qr.png" bind:click="showPopup" />
   </van-grid>
 
   <!-- 弹出图片 -->

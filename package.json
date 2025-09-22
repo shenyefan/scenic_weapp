@@ -10,7 +10,8 @@
   "license": "",
   "dependencies": {
     "@vant/weapp": "^1.11.7",
-    "text-encoding-shim": "^1.0.5"
+    "text-encoding-shim": "^1.0.5",
+    "wx-base64-qrcode": "^1.0.4"
   },
   "devDependencies": {
     "@umijs/openapi": "^1.13.15",

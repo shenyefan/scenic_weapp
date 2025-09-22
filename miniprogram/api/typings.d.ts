@@ -51,12 +51,7 @@ declare namespace API {
 
   type AttractionsRoute = {
     id?: number;
-    startAttractionId?: number;
-    endAttractionId?: number;
-    startAttractionImg?: string;
-    endAttractionImg?: string;
-    startAttractionVideo?: string;
-    endAttractionVideo?: string;
+    attractionIds?: number[];
     routeNote?: string;
     createTime?: string;
     updateTime?: string;
@@ -64,12 +59,7 @@ declare namespace API {
   };
 
   type AttractionsRouteAddRequest = {
-    startAttractionId?: number;
-    endAttractionId?: number;
-    startAttractionImg?: string;
-    endAttractionImg?: string;
-    startAttractionVideo?: string;
-    endAttractionVideo?: string;
+    attractionIds?: number[];
     routeNote?: string;
   };
 
@@ -80,37 +70,20 @@ declare namespace API {
     sortOrder?: string;
     id?: number;
     notId?: number;
-    searchText?: string;
-    startAttractionId?: number;
-    endAttractionId?: number;
+    attractionId?: number;
     routeNote?: string;
   };
 
   type AttractionsRouteUpdateRequest = {
     id?: number;
-    startAttractionId?: number;
-    endAttractionId?: number;
-    startAttractionImg?: string;
-    endAttractionImg?: string;
-    startAttractionVideo?: string;
-    endAttractionVideo?: string;
+    attractionIds?: number[];
     routeNote?: string;
   };
 
   type AttractionsRouteVO = {
     id?: number;
-    startAttractionId?: number;
-    endAttractionId?: number;
-    startAttractionName?: string;
-    startAttractionLng?: number;
-    startAttractionLat?: number;
-    endAttractionName?: string;
-    endAttractionLng?: number;
-    endAttractionLat?: number;
-    startAttractionImg?: string;
-    endAttractionImg?: string;
-    startAttractionVideo?: string;
-    endAttractionVideo?: string;
+    attractionIds?: number[];
+    attractions?: Attractions[];
     routeNote?: string;
     createTime?: string;
     updateTime?: string;
@@ -619,8 +592,6 @@ declare namespace API {
   type Order = {
     id?: number;
     userId?: number;
-    ticketId?: number;
-    quantity?: number;
     totalPrice?: number;
     paymentStatus?: number;
     visitDate?: string;
@@ -632,8 +603,7 @@ declare namespace API {
   };
 
   type OrderCreateRequest = {
-    ticketId?: number;
-    quantity?: number;
+    orderItems?: OrderItemCreateRequest[];
     contactName?: string;
     contactPhone?: string;
     visitDate?: string;
@@ -642,6 +612,22 @@ declare namespace API {
   type OrderItem = {
     column?: string;
     asc?: boolean;
+  };
+
+  type OrderItemCreateRequest = {
+    ticketId?: number;
+    quantity?: number;
+  };
+
+  type OrderItemVO = {
+    id?: number;
+    orderId?: number;
+    ticket?: TicketVO;
+    quantity?: number;
+    unitPrice?: number;
+    subtotal?: number;
+    createTime?: string;
+    updateTime?: string;
   };
 
   type OrderQueryRequest = {
@@ -653,22 +639,26 @@ declare namespace API {
     userId?: number;
     ticketId?: number;
     paymentStatus?: number;
-  };
-
-  type OrderUpdateStatusRequest = {
-    id?: number;
-    quantity?: number;
+    userName?: string;
+    userPhone?: string;
     contactName?: string;
     contactPhone?: string;
     visitDate?: string;
-    status?: number;
+  };
+
+  type OrderUpdateRequest = {
+    id?: number;
+    totalPrice?: number;
+    paymentStatus?: number;
+    contactName?: string;
+    contactPhone?: string;
+    visitDate?: string;
   };
 
   type OrderVO = {
     id?: number;
     user?: UserVO;
-    ticket?: TicketVO;
-    quantity?: number;
+    orderItems?: OrderItemVO[];
     totalPrice?: number;
     paymentStatus?: number;
     contactName?: string;

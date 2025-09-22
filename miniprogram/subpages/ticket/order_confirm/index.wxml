@@ -1,0 +1,85 @@
+<view class="container">
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-container">
+    <van-loading size="24px" vertical>加载中...</van-loading>
+  </view>
+
+  <view wx:else>
+    <!-- 联系人信息 -->
+    <van-cell-group title="联系人信息" custom-class="info-group">
+      <van-field
+        value="{{ contactName }}"
+        label="联系人姓名"
+        placeholder="请输入联系人姓名"
+        required
+        bind:change="onContactNameChange"
+      />
+      <van-field
+        value="{{ contactPhone }}"
+        label="联系人手机"
+        placeholder="请输入联系人手机号"
+        type="number"
+        required
+        bind:change="onContactPhoneChange"
+      />
+    </van-cell-group>
+
+    <!-- 游览日期 -->
+    <van-cell-group title="游览信息" custom-class="info-group">
+      <van-cell 
+        title="游览日期" 
+        value="{{ selectedDateText }}" 
+        is-link 
+        bind:click="showDatePicker"
+        right-icon="calendar-o"
+        required
+      />
+    </van-cell-group>
+
+    <!-- 日期选择器弹窗 -->
+    <van-popup 
+      show="{{ showDatePickerPopup }}" 
+      position="bottom" 
+      bind:close="hideDatePicker"
+      round
+    >
+      <van-datetime-picker
+        type="date"
+        value="{{ currentDate }}"
+        min-date="{{ minDate }}"
+        max-date="{{ maxDate }}"
+        bind:confirm="onDateConfirm"
+        bind:cancel="hideDatePicker"
+      />
+    </van-popup>
+
+    <!-- 订单明细 -->
+    <van-cell-group title="订单明细" custom-class="info-group">
+      <view wx:for="{{orderItems}}" wx:key="id" class="ticket-item">
+        <van-cell 
+          title="{{item.title}}" 
+          label="{{item.description}}"
+        >
+          <view slot="right-icon" class="ticket-price">
+            <text class="unit-price">¥{{item.price}} ×{{item.quantity}}</text>
+            <text class="subtotal">¥{{item.totalPrice}}</text>
+          </view>
+        </van-cell>
+      </view>
+      <van-cell 
+        title="总计" 
+        value="¥{{totalPrice}}" 
+        custom-class="total-amount-cell"
+      />
+    </van-cell-group>
+  </view>
+
+  <!-- 提交按钮 -->
+  <van-submit-bar
+    wx:if="{{!loading}}"
+    price="{{totalPrice * 100}}"
+    button-text="提交订单"
+    bind:submit="onSubmitOrder"
+    loading="{{submitting}}"
+  />
+</view>

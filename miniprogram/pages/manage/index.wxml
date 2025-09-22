@@ -7,12 +7,52 @@
   <!-- banner 区域 -->
   <view class="banner">
     <van-image 
-      src="https://files.syf.sh/scenic/weapp/fj.jpeg" 
+      src="https://files.syf.sh/scenic/weapp/bpt.jpg" 
       width="100%" 
-      height="200" 
-      fit="cover"
-      custom-class="banner-img"
+      height="250" 
+      fit="fit"
     />
+  </view>
+
+  <!-- 票务管理 -->
+  <view class="module-card">
+    <view class="module-header">票务管理</view>
+    <van-grid clickable column-num="4" border="{{ false }}" custom-class="function-grid">
+      <!-- 门票购买 -->
+      <van-grid-item 
+        icon="/image/manage/ticket.svg" 
+        text="门票购买" 
+        link-type="navigateTo"
+        url="/subpages/ticket/list/index"
+      />
+      
+      <!-- 我的订单 -->
+      <van-grid-item 
+        wx:if="{{ loginUser.userRole == 'user' }}"
+        icon="/image/manage/order.svg" 
+        text="我的订单" 
+        link-type="navigateTo"
+        url="/subpages/ticket/order/index"
+      />
+      
+      <!-- 订单管理 (管理员) -->
+      <van-grid-item 
+        wx:if="{{ loginUser.userRole == 'admin' }}"
+        icon="/image/manage/order.svg" 
+        text="订单管理" 
+        link-type="navigateTo"
+        url="/subpages/ticket/order/index"
+      />
+      
+      <!-- 扫码检票 (管理员) -->
+      <van-grid-item 
+        wx:if="{{ loginUser.userRole == 'admin' }}"
+        icon="/image/manage/scan.svg" 
+        text="扫码检票" 
+        link-type="navigateTo"
+        url="/subpages/ticket/scan/index"
+      />
+    </van-grid>
   </view>
 
   <!-- 巡查模块 -->

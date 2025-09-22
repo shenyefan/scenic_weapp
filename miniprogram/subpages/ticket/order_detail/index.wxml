@@ -1,0 +1,65 @@
+<view class="container">
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-container">
+    <van-loading size="24px" vertical>加载中...</van-loading>
+  </view>
+  <!-- 订单详情 -->
+  <view wx:else class="order-detail">
+    <!-- 订单状态卡片 -->
+    <view class="status-card status-{{orderDetail.paymentStatus}}">
+      <view class="status-desc">
+        <text wx:if="{{orderDetail.paymentStatus === 0}}">订单已提交，等待支付</text>
+        <text wx:elif="{{orderDetail.paymentStatus === 1}}">订单已支付，可以使用</text>
+        <text wx:elif="{{orderDetail.paymentStatus === 2}}">订单已完成</text>
+        <text wx:elif="{{orderDetail.paymentStatus === 3}}">订单已取消</text>
+        <text wx:elif="{{orderDetail.paymentStatus === 4}}">订单已退款</text>
+        <text wx:else>未知状态</text>
+      </view>
+    </view>
+    <!-- 二维码卡片 -->
+    <view wx:if="{{orderDetail.paymentStatus === 1 || orderDetail.paymentStatus === 2}}" class="qrcode-card">
+      <view class="qrcode-header">
+        <van-icon name="qr" size="20px" />
+        <text>检票二维码</text>
+      </view>
+      <view class="qrcode-container">
+        <image class="qrcode" src="{{orderIdBase64}}"></image>
+      </view>
+      <view class="qrcode-tip">请向管理员出示此二维码进行检票</view>
+    </view>
+    <!-- 订单信息 -->
+    <van-cell-group title="订单信息" custom-class="info-group">
+      <van-cell title="订单编号" value="{{orderDetail.id}}" />
+      <van-cell title="游览日期" value="{{orderDetail.visitDate}}" />
+      <van-cell title="联系人" value="{{orderDetail.contactName}}" />
+      <van-cell title="联系电话" value="{{orderDetail.contactPhone}}" />
+      <van-cell title="创建时间" value="{{orderDetail.createTime}}" />
+    </van-cell-group>
+    <!-- 门票信息 -->
+    <van-cell-group title="门票信息" custom-class="info-group">
+      <view wx:for="{{orderDetail.orderItems}}" wx:key="id" class="ticket-item">
+        <van-cell title="{{item.ticket.ticketName}}" label="{{item.ticket.ticketDescription}}">
+          <view slot="right-icon" class="ticket-price">
+            <text class="unit-price">¥{{item.ticket.ticketPrice}} ×{{item.quantity}}</text>
+            <text class="subtotal">¥{{item.quantity * item.ticket.ticketPrice}}</text>
+          </view>
+        </van-cell>
+      </view>
+      <van-cell title="总金额" value="¥{{orderDetail.totalPrice}}" custom-class="total-amount-cell" />
+    </van-cell-group>
+    <!-- 用户信息 -->
+    <van-cell-group title="用户信息" custom-class="info-group">
+      <van-cell title="用户昵称" value="{{orderDetail.contactName || '未设置'}}" />
+      <van-cell title="用户手机" value="{{orderDetail.contactPhone || '未填写'}}" />
+    </van-cell-group>
+    <!-- 操作按钮 -->
+    <view class="action-buttons">
+      <van-button wx:if="{{isAdmin && orderDetail.paymentStatus === 0}}" type="primary" size="large" bind:click="onPayOrder" custom-class="action-btn pay-btn">
+        管理员标记已支付
+      </van-button>
+      <van-button wx:if="{{isAdmin && orderDetail.paymentStatus === 1}}" type="primary" size="large" bind:click="onCompleteOrder" custom-class="action-btn complete-btn">
+        管理员标记已检票
+      </van-button>
+    </view>
+  </view>
+</view>
