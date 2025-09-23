@@ -2,7 +2,7 @@ import { listAttractionsVoByPage } from '../../api/attractionsController'
 import { listPublicizeVideoVoByPage } from '../../api/publicizeVideoController'
 import { listPublicizeWxPlatformVoByPage } from '../../api/publicizeWxPlatformController'
 import { getWeatherInfo, WeatherData } from '../../utils/weather'
-import { getCurrentDateString } from '../../utils/date'
+import { formatISODate, getCurrentDateString } from '../../utils/date'
 import Notify from '@vant/weapp/notify/notify';
 
 Page({
@@ -351,28 +351,9 @@ Page({
       title: item.wxTitle || '未命名新闻',
       summary: item.wxNote || '暂无摘要',
       url: item.wxUrl,
-      publishTime: this.formatTime(item.createTime),
+      publishTime: formatISODate(item.createTime),
       user: item.user
     }))
-  },
-  
-  // 格式化时间
-  formatTime(timeStr) {
-    if (!timeStr) return ''
-    const date = new Date(timeStr)
-    const now = new Date()
-    const diff = now.getTime() - date.getTime()
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-    
-    if (days === 0) {
-      return '今天'
-    } else if (days === 1) {
-      return '昨天'
-    } else if (days < 7) {
-      return `${days}天前`
-    } else {
-      return date.toLocaleDateString()
-    }
   },
   
   // 点击景点项

@@ -7,9 +7,9 @@
   <!-- banner 区域 -->
   <view class="banner">
     <van-image 
-      src="https://files.syf.sh/scenic/weapp/bpt.jpg" 
+      src="/image/home/banner2.jpg" 
       width="100%" 
-      height="250" 
+      height="150" 
       fit="fit"
     />
   </view>

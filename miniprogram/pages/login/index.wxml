@@ -5,7 +5,7 @@
   <view class="logo">
     <image 
       class="login-logo" 
-      src="/image/login/logo.png" 
+      src="/image/login/logo.jpg" 
       mode="widthFix" 
     />
   </view>

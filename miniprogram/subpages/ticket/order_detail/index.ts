@@ -1,5 +1,6 @@
 import { getOrderVoById, updateOrder } from '../../../api/orderController'
 import { getLoginUser } from '../../../api/userController'
+import { formatISOTimeDetailed } from '../../../utils/date'
 import QR from "../../../miniprogram_npm/wx-base64-qrcode/index.js";
 
 Page({
@@ -52,8 +53,14 @@ Page({
       const result = await getOrderVoById({ id: this.data.orderId })
       
       if (result.code === 200 && result.data) {
+        // 格式化创建时间
+        const formattedData = {
+          ...result.data,
+          createTime: formatISOTimeDetailed(result.data.createTime)
+        }
+        
         this.setData({
-          orderDetail: result.data,
+          orderDetail: formattedData,
           loading: false
         })
         
@@ -187,20 +194,7 @@ Page({
     return (price / 100).toFixed(2)
   },
 
-  /**
-   * 格式化日期
-   */
-  formatDate(dateString: string): string {
-    if (!dateString) return ''
-    const date = new Date(dateString)
-    const year = date.getFullYear()
-    const month = (date.getMonth() + 1).toString()
-    const day = date.getDate().toString()
-    const hours = date.getHours().toString()
-    const minutes = date.getMinutes().toString()
-    
-    return `${year}-${month.length === 1 ? '0' + month : month}-${day.length === 1 ? '0' + day : day} ${hours.length === 1 ? '0' + hours : hours}:${minutes.length === 1 ? '0' + minutes : minutes}`
-  },
+
 
   /**
    * 标记订单为已完成
