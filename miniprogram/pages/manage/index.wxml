@@ -28,7 +28,6 @@
       
       <!-- 我的订单 -->
       <van-grid-item 
-        wx:if="{{ loginUser.userRole == 'user' }}"
         icon="/image/manage/order.svg" 
         text="我的订单" 
         link-type="navigateTo"

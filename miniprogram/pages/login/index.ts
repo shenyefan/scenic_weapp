@@ -43,7 +43,7 @@ Page({
       if (res.code === 200 && res.data) {
         // 已登录，跳转到用户页面
         wx.switchTab({
-          url: '/pages/user/index'
+          url: '/pages/home/index'
         })
       }
     } catch (error) {
