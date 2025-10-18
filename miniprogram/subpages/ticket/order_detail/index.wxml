@@ -17,7 +17,7 @@
       </view>
     </view>
     <!-- 二维码卡片 -->
-    <view wx:if="{{orderDetail.paymentStatus === 1 || orderDetail.paymentStatus === 2}}" class="qrcode-card">
+    <view wx:if="{{orderDetail.paymentStatus === 1 }}" class="qrcode-card">
       <view class="qrcode-header">
         <van-icon name="qr" size="20px" />
         <text>检票二维码</text>

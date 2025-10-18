@@ -1,6 +1,6 @@
 import { getOrderVoById, updateOrder } from '../../../api/orderController'
 import { getLoginUser } from '../../../api/userController'
-import { formatISOTimeDetailed } from '../../../utils/date'
+import { formatISOTimeDetailed, formatISODate } from '../../../utils/date'
 import QR from "../../../miniprogram_npm/wx-base64-qrcode/index.js";
 
 Page({
@@ -56,6 +56,7 @@ Page({
         // 格式化创建时间
         const formattedData = {
           ...result.data,
+          visitDate: formatISODate(result.data.visitDate),
           createTime: formatISOTimeDetailed(result.data.createTime)
         }
         
@@ -65,7 +66,7 @@ Page({
         })
         
         // 如果订单已支付或已完成，生成二维码
-        if (result.data.paymentStatus === 1 || result.data.paymentStatus === 2) {
+        if (result.data.paymentStatus === 1) {
           this.generateQRCode()
         }
       } else {
