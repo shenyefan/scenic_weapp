@@ -1,6 +1,6 @@
 import TextEncoding from 'text-encoding-shim';
 
-const domain = 'https://scenic.suki.icu'
+const domain = 'https://scenic.moenya.net'
 
 // 消息类型定义
 export interface Message {

@@ -18,7 +18,7 @@ export function uploadFile(params: UploadParams): Promise<UploadResponse> {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const domain = 'https://scenic.suki.icu';
+    const domain = 'https://scenic.moenya.net';
     
     wx.uploadFile({
       url: `${domain}/api/file/upload`,

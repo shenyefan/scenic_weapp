@@ -1,4 +1,4 @@
-const BASE_URL = "https://scenic.suki.icu"
+const BASE_URL = "https://scenic.moenya.net"
 
 // 微信原生请求封装
 export function request<T>(url: string, options: any = {}): Promise<T> {
