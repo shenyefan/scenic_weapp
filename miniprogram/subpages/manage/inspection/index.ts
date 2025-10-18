@@ -1,10 +1,10 @@
 import { listMyTaskInspectionVoByPage } from '../../../api/taskInspectionController'
-import { formatISOTimeDetailed, formatDate } from '../../../utils/date'
-import Notify from '@vant/weapp/notify/notify'
+import { formatISOTimeDetailed, formatISODate } from '../../../utils/date'
 
 interface TaskInspectionWithFormattedTime extends API.TaskInspectionVO {
   formattedCreateTime: string;
   statusText: string;
+  abnormalText: string;
 }
 
 Page({
@@ -24,7 +24,17 @@ Page({
     selectedDateText: '全部日期',
     currentDate: new Date().getTime(),
     minDate: new Date(2025, 0, 1).getTime(),
-    maxDate: new Date().getTime()
+    maxDate: new Date().getTime(),
+    // 异常状态筛选相关
+    showAbnormalPickerPopup: false,
+    selectedAbnormal: -1,
+    selectedAbnormalText: '全部状态',
+    abnormalOptions: ['全部状态', '未知', '正常', '异常'],
+    // 任务状态筛选相关
+    showStatusPickerPopup: false,
+    selectedStatus: -1,
+    selectedStatusText: '全部状态',
+    statusOptions: ['全部状态', '待开始', '进行中', '已完成']
   },
 
   onLoad() {
@@ -57,14 +67,25 @@ Page({
         requestData.taskDate = this.data.selectedDate
       }
       
+      // 添加异常状态筛选参数
+      if (this.data.selectedAbnormal !== -1) {
+        requestData.isAbnormal = this.data.selectedAbnormal
+      }
+      
+      // 添加任务状态筛选参数
+      if (this.data.selectedStatus !== -1) {
+        requestData.taskStatus = this.data.selectedStatus
+      }
+      
       const result = await listMyTaskInspectionVoByPage(requestData)
 
       if (result.code === 200 && result.data) {
-        const { records, total } = result.data
-        const formattedList = (records || []).map(item => ({
+        const { records = [], total = 0 } = result.data
+        const formattedList = records.map(item => ({
           ...item,
           formattedCreateTime: formatISOTimeDetailed(item.createTime || ''),
-          statusText: this.getStatusText(item.taskStatus || 0)
+          statusText: this.getStatusText(item.taskStatus || 0),
+          abnormalText: this.getAbnormalText(item.isAbnormal || 0)
         }))
         
         const newList = refresh ? formattedList : [...this.data.inspectionList, ...formattedList]
@@ -78,12 +99,12 @@ Page({
           loading: false
         })
       } else {
-        Notify({ type: 'danger', message: result.message || '加载失败' })
+        wx.showToast({ title: result.message || '加载失败', icon: 'none' })
         this.setData({ loading: false })
       }
     } catch (error) {
       console.error('加载巡查任务失败:', error)
-      Notify({ type: 'danger', message: '加载失败，请重试' })
+      wx.showToast({ title: '加载失败，请重试', icon: 'none' })
       this.setData({ loading: false })
     }
   },
@@ -102,7 +123,7 @@ Page({
   onDateConfirm(event: any) {
     const selectedTimestamp = event.detail
     const selectedDate = new Date(selectedTimestamp)
-    const dateString = formatDate(selectedDate)
+    const dateString = selectedDate.toISOString().split('T')[0]
     const displayText = `${selectedDate.getFullYear()}年${selectedDate.getMonth() + 1}月${selectedDate.getDate()}日`
     
     this.setData({
@@ -127,6 +148,90 @@ Page({
     this.loadInspectionList(true)
   },
 
+  // 显示异常状态选择器
+  showAbnormalPicker() {
+    this.setData({ showAbnormalPickerPopup: true })
+  },
+
+  // 隐藏异常状态选择器
+  hideAbnormalPicker() {
+    this.setData({ showAbnormalPickerPopup: false })
+  },
+
+  // 确认选择异常状态
+  onAbnormalConfirm(event: any) {
+    const { value, index } = event.detail
+    
+    // 根据索引映射到数字值：0=全部状态(-1), 1=未知(0), 2=正常(1), 3=异常(2)
+    let abnormalValue = -1
+    if (index === 1) abnormalValue = 0  // 未知
+    else if (index === 2) abnormalValue = 1  // 正常
+    else if (index === 3) abnormalValue = 2  // 异常
+    
+    this.setData({
+      selectedAbnormal: abnormalValue,
+      selectedAbnormalText: value,
+      showAbnormalPickerPopup: false
+    })
+    
+    // 重新加载数据
+    this.loadInspectionList(true)
+  },
+
+  // 清除异常状态筛选
+  clearAbnormalFilter(event: any) {
+    event.stopPropagation() // 阻止事件冒泡
+    this.setData({
+      selectedAbnormal: '',
+      selectedAbnormalText: '全部状态'
+    })
+    
+    // 重新加载数据
+    this.loadInspectionList(true)
+  },
+
+  // 显示任务状态选择器
+  showStatusPicker() {
+    this.setData({ showStatusPickerPopup: true })
+  },
+
+  // 隐藏任务状态选择器
+  hideStatusPicker() {
+    this.setData({ showStatusPickerPopup: false })
+  },
+
+  // 确认选择任务状态
+  onStatusConfirm(event: any) {
+    const { value, index } = event.detail
+    
+    // 根据索引映射到数字值：0=全部状态(-1), 1=待开始(0), 2=进行中(1), 3=已完成(2)
+    let statusValue = -1
+    if (index === 1) statusValue = 0  // 待开始
+    else if (index === 2) statusValue = 1  // 进行中
+    else if (index === 3) statusValue = 2  // 已完成
+    
+    this.setData({
+      selectedStatus: statusValue,
+      selectedStatusText: value,
+      showStatusPickerPopup: false
+    })
+    
+    // 重新加载数据
+    this.loadInspectionList(true)
+  },
+
+  // 清除任务状态筛选
+  clearStatusFilter(event: any) {
+    event.stopPropagation() // 阻止事件冒泡
+    this.setData({
+      selectedStatus: '',
+      selectedStatusText: '全部状态'
+    })
+    
+    // 重新加载数据
+    this.loadInspectionList(true)
+  },
+
   getStatusText(status: number): string {
     const statusMap: Record<number, string> = {
       0: '待开始',
@@ -134,6 +239,15 @@ Page({
       2: '已完成'
     }
     return statusMap[status] || '未知状态'
+  },
+
+  getAbnormalText(abnormal: number): string {
+    const abnormalMap: Record<number, string> = {
+      0: '未知',
+      1: '正常',
+      2: '异常'
+    }
+    return abnormalMap[abnormal] || '未知'
   },
 
   // 上拉加载更多

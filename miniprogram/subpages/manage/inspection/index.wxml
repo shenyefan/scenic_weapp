@@ -4,8 +4,8 @@
 <view class="inspection-list-page">
   <van-notify id="van-notify" />
 
-  <!-- 日期筛选器 -->
-  <view class="date-filter-container">
+  <!-- 筛选器 -->
+  <view class="filter-container">
     <van-cell-group>
       <van-cell 
         title="筛选日期" 
@@ -20,6 +20,42 @@
           type="default" 
           size="mini" 
           bind:click="clearDateFilter"
+          custom-style="margin-right: 8px;"
+        >
+          清除
+        </van-button>
+      </van-cell>
+      <van-cell 
+        title="异常状态" 
+        value="{{ selectedAbnormalText }}" 
+        is-link 
+        bind:click="showAbnormalPicker"
+        right-icon="arrow"
+      >
+        <van-button 
+          wx:if="{{ selectedAbnormal !== '' }}" 
+          slot="right-icon" 
+          type="default" 
+          size="mini" 
+          bind:click="clearAbnormalFilter"
+          custom-style="margin-right: 8px;"
+        >
+          清除
+        </van-button>
+      </van-cell>
+      <van-cell 
+        title="任务状态" 
+        value="{{ selectedStatusText }}" 
+        is-link 
+        bind:click="showStatusPicker"
+        right-icon="arrow"
+      >
+        <van-button 
+          wx:if="{{ selectedStatus !== '' }}" 
+          slot="right-icon" 
+          type="default" 
+          size="mini" 
+          bind:click="clearStatusFilter"
           custom-style="margin-right: 8px;"
         >
           清除
@@ -45,28 +81,77 @@
     />
   </van-popup>
 
+  <!-- 异常状态选择器弹窗 -->
+  <van-popup 
+    show="{{ showAbnormalPickerPopup }}" 
+    position="bottom" 
+    bind:close="hideAbnormalPicker"
+    round
+  >
+    <van-picker
+      columns="{{ abnormalOptions }}"
+      show-toolbar
+      title="选择异常状态"
+      confirm-button-text="确认"
+      cancel-button-text="取消"
+      bind:confirm="onAbnormalConfirm"
+      bind:cancel="hideAbnormalPicker"
+    />
+  </van-popup>
+
+  <!-- 任务状态选择器弹窗 -->
+  <van-popup
+        show="{{ showStatusPickerPopup }}"
+        position="bottom"
+        bind:close="hideStatusPicker"
+      >
+        <van-picker
+          columns="{{ statusOptions }}"
+          show-toolbar
+          title="选择任务状态"
+          confirm-button-text="确认"
+          cancel-button-text="取消"
+          bind:confirm="onStatusConfirm"
+          bind:cancel="onStatusCancel"
+        />
+      </van-popup>
+
   <!-- 加载中 -->
   <view wx:if="{{ loading && inspectionList.length === 0 }}" class="loading-container">
     <van-loading size="24px">加载中...</van-loading>
   </view>
 
   <!-- 巡查任务列表 -->
-  <van-cell-group wx:if="{{ !loading || inspectionList.length > 0 }}">
-    <van-cell 
+  <view wx:if="{{ !loading || inspectionList.length > 0 }}">
+    <view 
         wx:for="{{ inspectionList }}" 
         wx:key="id" 
-        title-width="70%" 
-        title="{{ item.attractionsName || '未知景点' }}"
-        label="{{ item.taskDate }} {{ item.formattedCreateTime }}"
-        value="{{ item.statusText }}"
-        value-class="status-{{ item.taskStatus }}"
-        is-link
-        bind:click="navigateToEdit"
+        class="inspection-item"
+        bind:tap="navigateToEdit"
         data-id="{{ item.id }}"
         data-index="{{ index }}"
     >
-    </van-cell>
-  </van-cell-group>
+      <van-cell 
+        title="{{ item.attractionsName || '未知景点' }}"
+        label="{{ item.taskDate }} {{ item.formattedCreateTime }}"
+      />
+      <view class="status-container">
+        <van-tag 
+          type="{{ item.taskStatus === 2 ? 'success' : (item.taskStatus === 1 ? 'primary' : 'default') }}"
+          size="medium"
+        >
+          {{ item.statusText }}
+        </van-tag>
+        <van-tag 
+          type="{{ item.isAbnormal === 2 ? 'danger' : (item.isAbnormal === 1 ? 'success' : 'default') }}"
+          size="medium"
+          custom-style="margin-left: 8px;"
+        >
+          {{ item.abnormalText }}
+        </van-tag>
+      </view>
+    </view>
+  </view>
   
   <!-- 加载状态提示 -->
   <view wx:if="{{ inspectionList.length > 0 }}" class="loading-view">

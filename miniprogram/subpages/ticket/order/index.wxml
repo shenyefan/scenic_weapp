@@ -57,7 +57,7 @@
           <!-- 订单编号和状态 -->
           <van-cell>
             <view slot="title" class="order-header">
-              <text class="order-id">游览日期：{{item.visitDate}}</text>
+              <text class="order-id">游览日期：{{item.formattedVisitDate}}</text>
               <van-tag 
                 type="{{item.paymentStatus === 1 ? 'success' : item.paymentStatus === 0 ? 'warning' : item.paymentStatus === 2 ? 'primary' : item.paymentStatus === 4 ? 'danger' : item.paymentStatus === 3 ? 'danger' : 'default'}}"
                 size="medium"

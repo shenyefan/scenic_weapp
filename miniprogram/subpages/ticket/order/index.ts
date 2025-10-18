@@ -1,3 +1,4 @@
+import { formatISOTime, formatISODate } from '../../../utils/date'
 import { listMyOrderVoByPage, listOrderVoByPage } from '../../../api/orderController'
 import { getLoginUser } from '../../../api/userController'
 
@@ -64,10 +65,11 @@ Page({
         : await listMyOrderVoByPage(queryData)
 
       if (result.code === 200 && result.data && result.data.records) {
-        // 预处理数据，为每个订单添加格式化后的门票信息和总数量
+        // 预处理数据，为每个订单添加格式化后的门票信息和游览日期
         const processedOrders = result.data.records.map(order => ({
           ...order,
-          formattedTicketInfo: this.formatOrderItems(order.orderItems || [])
+          formattedTicketInfo: this.formatOrderItems(order.orderItems || []),
+          formattedVisitDate: order.visitDate ? formatISODate(order.visitDate) : '未设置'
         }))
         
         this.setData({
@@ -160,20 +162,6 @@ Page({
   },
 
   /**
-   * 格式化日期
-   */
-  formatDate(dateString: string): string {
-    if (!dateString) return ''
-    const date = new Date(dateString)
-    const year = date.getFullYear()
-    const month = (date.getMonth() + 1).toString().length === 1 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1).toString()
-    const day = date.getDate().toString().length === 1 ? '0' + date.getDate() : date.getDate().toString()
-    const hour = date.getHours().toString().length === 1 ? '0' + date.getHours() : date.getHours().toString()
-    const minute = date.getMinutes().toString().length === 1 ? '0' + date.getMinutes() : date.getMinutes().toString()
-    return `${year}-${month}-${day} ${hour}:${minute}`
-  },
-
-  /**
    * 下拉刷新
    */
   onPullDownRefresh() {
@@ -213,7 +201,7 @@ Page({
   onDateConfirm(event: any) {
     const selectedTimestamp = event.detail
     const selectedDate = new Date(selectedTimestamp)
-    const dateString = this.formatDateToString(selectedDate)
+    const dateString = formatISODate(selectedDate.toISOString())
     
     this.setData({
       selectedDate: dateString,
@@ -236,17 +224,5 @@ Page({
       current: 1 // 重置页码
     })
     this.loadOrderList()
-  },
-
-  /**
-   * 格式化日期为字符串
-   */
-  formatDateToString(date: Date): string {
-    const year = date.getFullYear()
-    const month = date.getMonth() + 1
-    const day = date.getDate()
-    const monthStr = month < 10 ? '0' + month : String(month)
-    const dayStr = day < 10 ? '0' + day : String(day)
-    return `${year}-${monthStr}-${dayStr}`
   }
 })

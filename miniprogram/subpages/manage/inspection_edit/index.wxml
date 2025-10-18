@@ -32,6 +32,14 @@
           border
         />
         
+        <!-- 异常状态选择 -->
+        <van-cell 
+          title="异常状态" 
+          is-link 
+          value="{{ abnormalText }}"
+          bind:click="showAbnormalPicker"
+        />
+        
         <!-- 图片上传 -->
         <van-cell title-width="150rpx" title="巡查图片" border="{{ false }}">
           <van-uploader
@@ -53,4 +61,21 @@
       </view>
     </form>
   </block>
+
+  <!-- 异常状态选择器弹窗 -->
+  <van-popup
+    show="{{ showAbnormalPickerPopup }}"
+    position="bottom"
+    bind:close="hideAbnormalPicker"
+  >
+    <van-picker
+      columns="{{ abnormalOptions }}"
+      show-toolbar
+      title="选择异常状态"
+      confirm-button-text="确认"
+      cancel-button-text="取消"
+      bind:confirm="onAbnormalConfirm"
+      bind:cancel="onAbnormalCancel"
+    />
+  </van-popup>
 </view>
