@@ -2,6 +2,7 @@ import { addTaskDisposal } from '../../../api/taskDisposalController'
 import { listTaskInspectionVoByPage } from '../../../api/taskInspectionController'
 import { listUserByPage } from '../../../api/userController'
 import Notify from '@vant/weapp/notify/notify'
+import { formatISODate } from '../../../utils/date'
 
 Page({
   data: {
@@ -67,7 +68,7 @@ Page({
 
       if (result.code === 200 && result.data && Array.isArray(result.data.records)) {
         const options = result.data.records.map((item: any) => ({
-          text: `${item.attractionsName} - ${item.taskDate}`,
+          text: `${item.attractionsName} - ${formatISODate(item.taskDate)}`,
           value: item.id
         }))
         

@@ -55,10 +55,10 @@
     <van-cell 
         wx:for="{{ disposalList }}" 
         wx:key="id" 
-        title-width="70%" 
+        title-width="80%" 
         is-link
         title="{{ item.attractionsName || '未知景点' }}"
-        label="{{ item.taskDate }} {{ item.formattedCreateTime }}"
+        label="任务日期：{{ item.formattedTaskDate }}"
         value="{{ item.statusText }}"
         value-class="status-{{ item.disposalStatus }}"
         data-id="{{ item.id }}"

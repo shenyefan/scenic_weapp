@@ -1,9 +1,9 @@
 import { listTaskDisposalVoByPage } from '../../../api/taskDisposalController'
-import { formatISOTimeDetailed, formatDate } from '../../../utils/date'
+import { formatISOTimeDetailed, formatISODate, formatISOTime } from '../../../utils/date'
 import Notify from '@vant/weapp/notify/notify'
 
 interface TaskDisposalWithFormattedTime extends API.TaskDisposalVO {
-  formattedCreateTime: string;
+  formattedTaskDate: string;
   statusText: string;
 }
 
@@ -70,10 +70,10 @@ Page({
       const result = await listTaskDisposalVoByPage(requestData)
 
       if (result.code === 200 && result.data) {
-        const { records, total } = result.data
-        const formattedList = (records || []).map(item => ({
+        const { records = [], total = 0 } = result.data
+        const formattedList = records.map(item => ({
           ...item,
-          formattedCreateTime: formatISOTimeDetailed(item.createTime || ''),
+          formattedTaskDate: item.taskDate ? formatISODate(item.taskDate) : '未设置',
           statusText: this.getStatusText(item.disposalStatus || 0)
         }))
         
@@ -112,8 +112,8 @@ Page({
   onDateConfirm(event: any) {
     const selectedTimestamp = event.detail
     const selectedDate = new Date(selectedTimestamp)
-    const dateString = formatDate(selectedDate)
-    const displayText = `${selectedDate.getFullYear()}年${selectedDate.getMonth() + 1}月${selectedDate.getDate()}日`
+    const dateString = formatISODate(selectedDate.toISOString())
+    const displayText = `${selectedDate.getFullYear()}年${String(selectedDate.getMonth() + 1).padStart(2, '0')}月${String(selectedDate.getDate()).padStart(2, '0')}日`
     
     this.setData({
       selectedDate: dateString,

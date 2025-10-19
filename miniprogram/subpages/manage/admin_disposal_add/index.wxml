@@ -15,6 +15,7 @@
         <!-- 关联巡查任务选择 -->
         <van-cell 
           title="关联巡查任务" 
+          title-width="30%" 
           value="{{ selectedInspectionText || '请选择需要处置的景点' }}" 
           is-link 
           bind:click="showInspectionPicker"
