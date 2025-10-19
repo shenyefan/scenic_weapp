@@ -2,7 +2,7 @@ import { listMyTaskInspectionVoByPage } from '../../../api/taskInspectionControl
 import { formatISOTimeDetailed, formatISODate } from '../../../utils/date'
 
 interface TaskInspectionWithFormattedTime extends API.TaskInspectionVO {
-  formattedCreateTime: string;
+  formattedTaskDate: string;
   statusText: string;
   abnormalText: string;
 }
@@ -83,7 +83,7 @@ Page({
         const { records = [], total = 0 } = result.data
         const formattedList = records.map(item => ({
           ...item,
-          formattedCreateTime: formatISOTimeDetailed(item.createTime || ''),
+          formattedTaskDate: item.taskDate ? formatISODate(item.taskDate) : '未设置',
           statusText: this.getStatusText(item.taskStatus || 0),
           abnormalText: this.getAbnormalText(item.isAbnormal || 0)
         }))
@@ -123,8 +123,12 @@ Page({
   onDateConfirm(event: any) {
     const selectedTimestamp = event.detail
     const selectedDate = new Date(selectedTimestamp)
-    const dateString = selectedDate.toISOString().split('T')[0]
-    const displayText = `${selectedDate.getFullYear()}年${selectedDate.getMonth() + 1}月${selectedDate.getDate()}日`
+    // 使用本地时间格式化，避免时区问题
+    const year = selectedDate.getFullYear()
+    const month = String(selectedDate.getMonth() + 1).padStart(2, '0')
+    const day = String(selectedDate.getDate()).padStart(2, '0')
+    const dateString = `${year}-${month}-${day}`
+    const displayText = `${year}年${month}月${day}日`
     
     this.setData({
       selectedDate: dateString,

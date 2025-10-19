@@ -133,7 +133,7 @@
     >
       <van-cell 
         title="{{ item.attractionsName || '未知景点' }}"
-        label="{{ item.taskDate }} {{ item.formattedCreateTime }}"
+        label="{{ item.formattedTaskDate }}"
       />
       <view class="status-container">
         <van-tag 

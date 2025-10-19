@@ -1,6 +1,7 @@
 import { getTaskDisposalVoById, updateTaskDisposal } from '../../../api/taskDisposalController'
 import { getTaskInspectionVoById } from '../../../api/taskInspectionController'
 import { uploadFile } from '../../../utils/file'
+import { formatISODate } from '../../../utils/date'
 import Notify from '@vant/weapp/notify/notify'
 
 Page({
@@ -90,7 +91,8 @@ Page({
         this.setData({
           inspectionData: {
             ...result.data,
-            statusText: statusText
+            statusText: statusText,
+            formattedTaskDate: result.data.taskDate ? formatISODate(result.data.taskDate) : '未设置'
           }
         })
       }

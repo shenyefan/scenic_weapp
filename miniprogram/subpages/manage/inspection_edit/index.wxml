@@ -14,7 +14,7 @@
     <van-cell-group inset title="景点信息" wx:if="{{ inspectionData }}">
       <van-cell title="景点名称" value="{{ inspectionData.attractionsName || '未知景点' }}" />
       <van-cell title="巡查员" value="{{ inspectionData.inspectorName || '未知巡查员' }}" />
-      <van-cell title="巡查日期" value="{{ inspectionData.taskDate || '未知日期' }}" />
+      <van-cell title="巡查日期" value="{{ inspectionData.formattedTaskDate || '未设置' }}" />
       <van-cell title="任务状态" value="{{ inspectionData.statusText || '未知状态' }}" />
     </van-cell-group>
 

@@ -1,5 +1,6 @@
 import { getTaskInspectionVoById, updateTaskInspection } from '../../../api/taskInspectionController'
 import { uploadFile } from '../../../utils/file'
+import { formatISODate } from '../../../utils/date'
 
 Page({
   data: {
@@ -64,7 +65,8 @@ Page({
           },
           inspectionData: {
             ...data,
-            statusText: statusText
+            statusText: statusText,
+            formattedTaskDate: data.taskDate ? formatISODate(data.taskDate) : '未设置'
           },
           fileList,
           abnormalText,
