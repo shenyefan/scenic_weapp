@@ -92,3 +92,13 @@
 </t-popup>
 
 <t-toast id="t-toast" />
+
+<t-dialog
+  visible="{{deleteConfirmVisible}}"
+  title="确认删除"
+  content="删除后无法恢复，确定要删除这个会话吗？"
+  confirm-btn="删除"
+  cancel-btn="取消"
+  bind:confirm="onDeleteConfirm"
+  bind:cancel="onDeleteCancel"
+/>

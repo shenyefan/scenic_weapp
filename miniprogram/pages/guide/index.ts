@@ -3,6 +3,7 @@ import { streamAiChatMp } from '../../api/sse'
 import { listSessions, listMessages, deleteSession } from '../../api/controller/ai-chat-controller/ai-chat-controller'
 import { AiChatMessageRole } from '../../api/models/aiChatMessageRole'
 import { formatDate } from '../../utils/util'
+import Toast from 'tdesign-miniprogram/toast/index'
 
 const BOT_AVATAR = 'https://tdesign.gtimg.com/site/chat-avatar.png'
 const DEFAULT_USER_AVATAR = 'https://tdesign.gtimg.com/site/chat-avatar.png'
@@ -41,6 +42,8 @@ Page({
     activePopoverId: '',
     sessions: [] as any[],
     sessionsLoading: false,
+    deleteConfirmVisible: false,
+    pendingDeleteSid: '',
   },
 
   _requestTask: null as WechatMiniprogram.RequestTask | null,
@@ -138,7 +141,7 @@ Page({
         this.setData({ chatList: mapped.length > 0 ? mapped : [makeWelcomeMessage()] })
       })
       .catch(() => {
-        wx.showToast({ title: '加载历史失败', icon: 'none' })
+        Toast({ context: this, selector: '#t-toast', message: '加载历史失败', theme: 'error' })
         this.setData({ chatList: [makeWelcomeMessage()] })
       })
   },
@@ -163,26 +166,28 @@ Page({
   onDeleteSession(e: WechatMiniprogram.CustomEvent) {
     const sid = e.currentTarget.dataset.sid as string
     if (!sid) return
+    this.setData({ deleteConfirmVisible: true, pendingDeleteSid: sid })
+  },
 
-    wx.showModal({
-      title: '确认删除',
-      content: '删除后无法恢复，确定要删除这个会话吗？',
-      success: (res) => {
-        if (!res.confirm) return
-        deleteSession({ id: sid })
-          .then(() => {
-            wx.showToast({ title: '已删除', icon: 'success' })
-            // 如果删的是当前会话，重置
-            if (sid === this.data.sessionId) {
-              this.handleNew()
-            }
-            this.fetchSessions()
-          })
-          .catch((err: any) => {
-            wx.showToast({ title: err?.message || '删除失败', icon: 'none' })
-          })
-      },
-    })
+  async onDeleteConfirm() {
+    const sid = this.data.pendingDeleteSid
+    this.setData({ deleteConfirmVisible: false, pendingDeleteSid: '' })
+    if (!sid) return
+    try {
+      await deleteSession({ id: sid })
+      Toast({ context: this, selector: '#t-toast', message: '已删除', theme: 'success' })
+      // 如果删的是当前会话，重置
+      if (sid === this.data.sessionId) {
+        this.handleNew()
+      }
+      this.fetchSessions()
+    } catch (err: any) {
+      Toast({ context: this, selector: '#t-toast', message: err?.message || '删除失败', theme: 'error' })
+    }
+  },
+
+  onDeleteCancel() {
+    this.setData({ deleteConfirmVisible: false, pendingDeleteSid: '' })
   },
 
   // 发送消息
@@ -250,7 +255,7 @@ Page({
             loading: false,
             disabled: false,
           })
-          wx.showToast({ title: msg || '请求出错', icon: 'none', duration: 2000 })
+          Toast({ context: this, selector: '#t-toast', message: msg || '请求出错', theme: 'error', duration: 2000 })
         },
       },
     )

@@ -1,4 +1,5 @@
 import { logout } from "../../api/controller/user-controller/user-controller";
+import Toast from 'tdesign-miniprogram/toast/index';
 
 const roleMap: Record<string, string> = {
   admin: '管理员',
@@ -122,7 +123,7 @@ Page({
       isLoggedIn: false,
       userInfo: { avatar: '', nickname: '', account: '', roleName: '' },
     });
-    wx.showToast({ title: '已退出登录', icon: 'success' });
+    Toast({ context: this, selector: '#t-toast', message: '已退出登录', theme: 'success' });
   },
 
   /** 取消退出 */

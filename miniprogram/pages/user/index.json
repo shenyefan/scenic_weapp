@@ -8,6 +8,7 @@
     "t-icon": "tdesign-miniprogram/icon/icon",
     "t-image": "tdesign-miniprogram/image/image",
     "t-button": "tdesign-miniprogram/button/button",
-    "t-dialog": "tdesign-miniprogram/dialog/dialog"
+    "t-dialog": "tdesign-miniprogram/dialog/dialog",
+    "t-toast": "tdesign-miniprogram/toast/toast"
   }
 }

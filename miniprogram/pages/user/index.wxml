@@ -112,4 +112,6 @@
     bind:confirm="onLogoutConfirm"
     bind:cancel="onLogoutCancel"
   />
+
+  <t-toast id="t-toast" />
 </view>
