@@ -8,18 +8,13 @@ export type MutatorConfig = {
   headers?: Record<string, string>
 }
 
-type ApiResponse<T = unknown> = {
-  code?: number
-  message?: string
-  data?: T
-}
-
 function buildUrl(url: string, params?: Record<string, any>) {
   let fullUrl = BASE_URL + url
 
   if (params) {
     const query = Object.entries(params)
-      .map(([k, v]) => `${k}=${encodeURIComponent(String(v))}`)
+      .filter(([, v]) => v !== undefined && v !== null && v !== '')
+      .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(String(v))}`)
       .join('&')
 
     if (query) {
@@ -43,7 +38,6 @@ export const mutator = async <T>(
     },
   }
 
-  // token
   const token = wx.getStorageSync('token')
   if (token) {
     finalConfig.headers = {
@@ -59,19 +53,38 @@ export const mutator = async <T>(
       data: finalConfig.data,
       header: finalConfig.headers,
       success: (res) => {
-        const data = res.data as ApiResponse<T>
+        const raw = res.data as any
+        const code = Number(raw?.code)
 
-        if (data && data.code !== undefined && data.code !== 200) {
+        if (code === 401) {
+          wx.removeStorageSync('token')
+          const pages = getCurrentPages()
+          const currentRoute = pages[pages.length - 1]?.route
+          if (currentRoute !== 'pages/auth/login/index') {
+            wx.reLaunch({
+              url: '/pages/auth/login/index',
+            })
+          }
           reject(
-            Object.assign(new Error(data.message), {
-              code: data.code,
-              data: data.data,
+            Object.assign(new Error(raw?.message || '未登录或登录已失效'), {
+              code,
+              data: raw,
             })
           )
           return
         }
 
-        resolve(data as T)
+        if (code && code !== 200) {
+          reject(
+            Object.assign(new Error(raw?.message || '请求失败'), {
+              code,
+              data: raw,
+            })
+          )
+          return
+        }
+
+        resolve(raw as T)
       },
       fail: (error) => {
         reject(error)

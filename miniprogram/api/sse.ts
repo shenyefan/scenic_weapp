@@ -100,16 +100,18 @@ export function streamAiChatMp(
   const token = wx.getStorageSync('token') as string | undefined
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    Accept: 'text/event-stream',
+    Accept: 'text/event-stream, application/json',
   }
   if (token) {
     headers['Authorization'] = `Bearer ${token}`
   }
 
   let buffer = ''
+  let hasStreamContent = false // 是否收到过 SSE data 行
+  let errorHandled = false // 是否已处理过错误，避免重复回调
 
   // enableChunked 和 onChunkReceived 是微信小程序扩展 API，类型定义暂未覆盖
-  const requestTask = (wx.request as any)({  // eslint-disable-line
+  const requestTask = (wx.request as any)({
     url: `${BASE_URL}/api/ai/chat`,
     method: 'POST',
     header: headers,
@@ -117,6 +119,8 @@ export function streamAiChatMp(
     enableChunked: true,
     responseType: 'text',
     success(res: any) {
+      if (errorHandled) return
+
       const statusCode = res.statusCode as number
       if (statusCode !== 200) {
         // 非 SSE 流响应，解析错误信息
@@ -133,22 +137,42 @@ export function streamAiChatMp(
         return
       }
 
-      // 从响应头获取 session id
-      const respHeaders = res.header as Record<string, string>
-      const sid = respHeaders['x-ai-session-id'] || respHeaders['X-Ai-Session-Id']
-      if (sid) {
-        callbacks.onSessionId(sid)
+      // flush 剩余 buffer（SSE 流可能还有未处理的内容）
+      const remaining = buffer.trim()
+      buffer = ''
+
+      if (!hasStreamContent && remaining) {
+        // 没有收到任何 SSE data 行，尝试把整个响应解析为 JSON 错误
+        try {
+          const json = JSON.parse(remaining)
+          const msg = json?.message || json?.msg || `服务端错误`
+          const code = json?.code as number | undefined
+          if (code === 401) {
+            wx.removeStorageSync('token')
+            wx.navigateTo({ url: '/pages/auth/login/index' })
+          }
+          callbacks.onError(msg)
+          return
+        } catch {
+          callbacks.onError(remaining)
+          return
+        }
       }
 
-      // flush 剩余 buffer
-      if (buffer.trim()) {
-        for (const data of parseSseBlock(buffer)) {
+      if (remaining) {
+        for (const data of parseSseBlock(remaining)) {
           for (const action of parseChunk(data)) {
             if (action.type === 'content') callbacks.onContent(action.text)
             else if (action.type === 'error') callbacks.onError(action.message)
           }
         }
-        buffer = ''
+      }
+
+      // 从响应头获取 session id
+      const respHeaders = res.header as Record<string, string>
+      const sid = respHeaders['x-ai-session-id'] || respHeaders['X-Ai-Session-Id']
+      if (sid) {
+        callbacks.onSessionId(sid)
       }
 
       callbacks.onDone()
@@ -159,6 +183,8 @@ export function streamAiChatMp(
   })
 
   ;(requestTask as any).onChunkReceived((chunk: { data: ArrayBuffer }) => {
+    if (errorHandled) return
+
     const text = ab2str(chunk.data)
     buffer += text
 
@@ -168,6 +194,26 @@ export function streamAiChatMp(
 
     for (const block of blocks) {
       if (!block.trim()) continue
+
+      // 先尝试整块解析为业务 JSON 错误（HTTP 200 但 code 非正常，如 code: 401）
+      try {
+        const json = JSON.parse(block.trim())
+        if (json?.code && json.code !== 200) {
+          const msg = json?.message || json?.msg || '服务端错误'
+          if (json.code === 401) {
+            wx.removeStorageSync('token')
+            wx.navigateTo({ url: '/pages/auth/login/index' })
+          }
+          errorHandled = true
+          callbacks.onError(msg)
+          return
+        }
+      } catch {
+        // 不是纯 JSON block，按正常 SSE 解析
+      }
+
+      // 确认是 SSE 内容才标记
+      hasStreamContent = true
       for (const data of parseSseBlock(block)) {
         for (const action of parseChunk(data)) {
           if (action.type === 'content') callbacks.onContent(action.text)
