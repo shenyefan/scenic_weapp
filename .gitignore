@@ -1,2 +1,4 @@
 /node_modules/
 /miniprogram/miniprogram_npm/
+/scenic_react_web/
+.DS_Store

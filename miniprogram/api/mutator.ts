@@ -1,3 +1,5 @@
+const BASE_URL = 'https://scenic.moenya.net'
+
 export type MutatorConfig = {
   url: string
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
@@ -11,8 +13,6 @@ type ApiResponse<T = unknown> = {
   message?: string
   data?: T
 }
-
-const BASE_URL = 'https://scenic.moenya.net/api'
 
 function buildUrl(url: string, params?: Record<string, any>) {
   let fullUrl = BASE_URL + url

@@ -1,0 +1,69 @@
+<!--pages/user/orders/index.wxml-->
+<view class="orders-page">
+  <t-navbar title="我的订单" leftArrow placeholder />
+
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="orders-loading">
+    <t-loading theme="circular" size="40px" text="加载中..." />
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:elif="{{!loading && orders.length === 0}}" class="orders-empty">
+    <t-empty icon="cart" description="暂无订单" />
+  </view>
+
+  <!-- 订单列表 -->
+  <view wx:else class="orders-list">
+    <view wx:for="{{orders}}" wx:key="id" class="orders-item">
+      <!-- 订单头部 -->
+      <view class="orders-item__head">
+        <text class="orders-item__id">订单号：{{item.id}}</text>
+        <t-tag
+          theme="{{statusTheme[item.orderStatus]}}"
+          variant="light"
+          size="small"
+        >{{statusLabel[item.orderStatus]}}</t-tag>
+      </view>
+
+      <!-- 订单信息 -->
+      <t-cell-group>
+        <t-cell title="游览日期" note="{{item.visitDate || '—'}}" bordered="{{true}}" />
+        <t-cell title="联系人" note="{{item.contactName || '—'}}" bordered="{{true}}" />
+        <t-cell title="联系电话" note="{{item.contactPhone || '—'}}" bordered="{{true}}" />
+        <t-cell title="订单金额" bordered="{{false}}">
+          <text slot="note" class="orders-price">¥{{item.totalPrice}}</text>
+        </t-cell>
+      </t-cell-group>
+
+      <!-- 操作按钮 -->
+      <view class="orders-item__actions">
+        <t-button
+          wx:if="{{item.orderStatus === 'pending_payment' || item.orderStatus === 'paid'}}"
+          size="small"
+          variant="outline"
+          theme="danger"
+          data-id="{{item.id}}"
+          bind:tap="onCancelTap"
+        >取消订单</t-button>
+      </view>
+    </view>
+
+    <!-- 加载更多 -->
+    <view wx:if="{{hasMore}}" class="orders-loadmore" bind:tap="onLoadMore">加载更多</view>
+    <view wx:elif="{{!hasMore && orders.length > 0}}" class="orders-nomore">已显示全部订单</view>
+  </view>
+
+  <!-- 取消确认弹窗 -->
+  <t-dialog
+    visible="{{showCancelDialog}}"
+    title="取消订单"
+    content="确定要取消该订单吗？"
+    confirm-btn="确定取消"
+    cancel-btn="再想想"
+    bind:confirm="onCancelConfirm"
+    bind:cancel="onCancelDialogClose"
+    bind:close="onCancelDialogClose"
+  />
+
+  <t-toast id="t-toast" />
+</view>

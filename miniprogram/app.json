@@ -1,14 +1,27 @@
 {
+  "usingComponents": {
+    "t-navbar": "tdesign-miniprogram/navbar/navbar"
+  },
   "pages": [
     "pages/home/index",
     "pages/guide/index",
     "pages/workbench/index",
     "pages/user/index",
-    "pages/login/index"
+    "pages/auth/login/index",
+    "pages/auth/register/index",
+    "pages/auth/forgot-password/index",
+    "pages/user/profile/index",
+    "pages/user/account/index",
+    "pages/user/orders/index",
+    "pages/user/notifications/index",
+    "pages/user/agreement/index",
+    "pages/user/privacy/index",
+    "pages/user/about/index"
   ],
   "window": {
+    "navigationStyle": "custom",
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "Weixin",
+    "navigationBarTitleText": "智慧文旅管理系统",
     "navigationBarBackgroundColor": "#ffffff"
   },
   "tabBar": {

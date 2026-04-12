@@ -1,0 +1,83 @@
+<view class="auth-page">
+  <t-navbar title="忘记密码" placeholder leftArrow/>
+  <view class="auth-content">
+    <view class="auth-logo">
+      <image src="/assets/logo.svg" class="auth-logo__img" mode="aspectFit" />
+      <text class="auth-logo__text">智慧文旅管理系统</text>
+    </view>
+
+    <view class="auth-header">
+      <view class="auth-header__title">忘记密码</view>
+      <view class="auth-header__desc">输入您的注册邮箱，我们将协助您重置密码</view>
+    </view>
+
+    <view class="auth-form">
+      <view class="auth-form__item">
+        <t-input
+          borderless
+          placeholder="注册邮箱"
+          value="{{userEmail}}"
+          bind:change="onFieldChange"
+          data-field="userEmail"
+          maxlength="{{64}}"
+        />
+      </view>
+
+      <view class="auth-form__item auth-form__code-row">
+        <t-input
+          borderless
+          class="auth-form__code-input"
+          placeholder="验证码"
+          value="{{code}}"
+          bind:change="onFieldChange"
+          data-field="code"
+          maxlength="{{16}}"
+        />
+        <t-button
+          class="auth-form__code-btn"
+          theme="primary"
+          variant="text"
+          size="small"
+          disabled="{{countdown > 0 || sendingCode}}"
+          loading="{{sendingCode}}"
+          bind:tap="onSendCode"
+        >{{countdown > 0 ? countdown + 's' : '获取验证码'}}</t-button>
+      </view>
+
+      <view class="auth-form__item">
+        <t-input
+          borderless
+          placeholder="新密码（至少8位）"
+          type="{{showPassword ? 'text' : 'password'}}"
+          value="{{newPassword}}"
+          bind:change="onFieldChange"
+          data-field="newPassword"
+          maxlength="{{32}}"
+          suffixIcon="{{showPassword ? 'browse' : 'browse-off'}}"
+          bind:click="onTogglePassword"
+        />
+      </view>
+
+      <t-button
+        theme="primary"
+        block
+        loading="{{loading}}"
+        disabled="{{loading}}"
+        bind:tap="onSubmit"
+        class="auth-form__btn"
+      >重置密码</t-button>
+    </view>
+  </view>
+
+  <view class="auth-footer">
+    <view class="auth-footer__links">
+      <text class="auth-footer__link" bindtap="goSignIn">登录</text>
+      <text class="auth-footer__divider">|</text>
+      <text class="auth-footer__link auth-footer__link--active">忘记密码</text>
+    </view>
+    <view class="auth-footer__copyright">Copyright © 2026 Moenya. All Rights Reserved.</view>
+  </view>
+
+  <t-toast id="t-toast" />
+  <t-message id="t-message" />
+</view>

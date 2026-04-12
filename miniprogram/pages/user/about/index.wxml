@@ -1,0 +1,21 @@
+<!--pages/user/about/index.wxml-->
+<view class="about-page">
+  <t-navbar title="关于" leftArrow placeholder />
+
+  <!-- Logo 区域 -->
+  <view class="about-logo">
+    <view class="about-logo__icon">
+      <t-icon name="map" size="80rpx" color="#0052d9" />
+    </view>
+    <view class="about-logo__name">智慧文旅管理系统</view>
+  </view>
+
+  <!-- 应用信息 -->
+  <t-cell-group>
+    <t-cell title="当前版本" note="{{version}}" bordered="{{true}}" />
+    <t-cell title="开发人员" note="申业凡" bordered="{{true}}" />
+    <t-cell title="联系邮箱" note="shenyefan0793@163.com" bordered="{{false}}" />
+  </t-cell-group>
+
+  <view class="about-footer">Copyright © 2026 Moenya. All Rights Reserved.</view>
+</view>

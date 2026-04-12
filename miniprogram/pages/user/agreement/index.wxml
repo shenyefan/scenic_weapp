@@ -1,0 +1,48 @@
+<!--pages/user/agreement/index.wxml-->
+<view class="doc-page">
+  <t-navbar title="用户协议" leftArrow placeholder />
+  <view class="doc-content">
+    <view class="doc-title">智慧文旅管理系统用户协议</view>
+    <view class="doc-updated">最后更新：2026年1月1日</view>
+
+    <view class="doc-section">
+      <view class="doc-section__title">一、总则</view>
+      <view class="doc-section__body">本协议是您与智慧文旅管理系统（以下简称"本系统"）之间关于您使用本系统服务所订立的协议。请您仔细阅读本协议，您使用本系统即表示您已接受本协议的全部条款。</view>
+    </view>
+
+    <view class="doc-section">
+      <view class="doc-section__title">二、账号注册与安全</view>
+      <view class="doc-section__body">您在注册账号时须提供真实、准确、完整的个人信息。您有责任妥善保管账号及密码，因您保管不善导致的任何损失由您自行承担。</view>
+    </view>
+
+    <view class="doc-section">
+      <view class="doc-section__title">三、服务内容</view>
+      <view class="doc-section__body">本系统为注册用户提供景区导览、门票购买、任务管理等服务。我们保留在不通知用户的情况下修改或终止服务的权利。</view>
+    </view>
+
+    <view class="doc-section">
+      <view class="doc-section__title">四、用户行为规范</view>
+      <view class="doc-section__body">您同意不利用本系统从事任何违反法律法规或侵害他人权益的行为。违规行为将导致账号封禁。</view>
+    </view>
+
+    <view class="doc-section">
+      <view class="doc-section__title">五、知识产权</view>
+      <view class="doc-section__body">本系统中的所有内容，包括但不限于文字、图片、音频、视频等，均受知识产权法律保护，未经授权不得使用。</view>
+    </view>
+
+    <view class="doc-section">
+      <view class="doc-section__title">六、免责声明</view>
+      <view class="doc-section__body">因自然灾害、网络故障等不可抗力原因导致的服务中断，本系统不承担责任。</view>
+    </view>
+
+    <view class="doc-section">
+      <view class="doc-section__title">七、协议修改</view>
+      <view class="doc-section__body">我们可能会不时修改本协议，修改后的协议将在本页面公布。继续使用本系统即视为接受修改后的协议。</view>
+    </view>
+
+    <view class="doc-section">
+      <view class="doc-section__title">八、联系我们</view>
+      <view class="doc-section__body">如您对本协议有任何疑问，请通过系统内"关于"页面联系我们。</view>
+    </view>
+  </view>
+</view>

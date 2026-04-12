@@ -1,2 +1,115 @@
-<!--pages/user/index.wxml-->
-<text>pages/user/index.wxml</text>
+<view class="user-page">
+  <t-navbar title="我的" placeholder />
+  <!-- 用户信息区域 -->
+  <view class="user-header" bindtap="onHeaderTap">
+    <view class="user-header__avatar">
+      <t-avatar
+        wx:if="{{isLoggedIn && userInfo.avatar}}"
+        image="{{userInfo.avatar}}"
+        size="{{avatarSize}}"
+      />
+      <t-avatar
+        wx:else
+        icon="user"
+        size="{{avatarSize}}"
+      />
+    </view>
+    <view class="user-header__info">
+      <block wx:if="{{isLoggedIn}}">
+        <view class="user-header__name">{{userInfo.nickname || userInfo.account}}</view>
+        <view class="user-header__role">{{userInfo.roleName}}</view>
+      </block>
+      <block wx:else>
+        <view class="user-header__name">登录/注册</view>
+        <view class="user-header__desc">登录后享受更多服务</view>
+      </block>
+    </view>
+    <t-icon name="chevron-right" size="40rpx" color="#bbb" />
+  </view>
+
+  <!-- 功能宫格 -->
+  <view class="user-grid">
+    <t-grid column="{{4}}" theme="card">
+      <t-grid-item
+        text="个人资料"
+        icon="user"
+        badge-props="{{null}}"
+        data-page="profile"
+        bind:click="onGridItemTap"
+      />
+      <t-grid-item
+        text="账号设置"
+        icon="setting"
+        badge-props="{{null}}"
+        data-page="account"
+        bind:click="onGridItemTap"
+      />
+      <t-grid-item
+        text="我的订单"
+        icon="order"
+        badge-props="{{null}}"
+        data-page="orders"
+        bind:click="onGridItemTap"
+      />
+      <t-grid-item
+        text="消息通知"
+        icon="notification"
+        badge-props="{{null}}"
+        data-page="notifications"
+        bind:click="onGridItemTap"
+      />
+    </t-grid>
+  </view>
+
+  <!-- 其他 -->
+  <view class="user-section">
+    <t-cell-group theme="card">
+    <t-cell
+      title="用户协议"
+      arrow
+      bordered="{{true}}"
+      data-page="agreement"
+      bind:click="onCellTap"
+    />
+    <t-cell
+      title="隐私政策"
+      arrow
+      bordered="{{true}}"
+      data-page="privacy"
+      bind:click="onCellTap"
+    />
+    <t-cell
+      title="关于"
+      arrow
+      bordered="{{false}}"
+      data-page="about"
+      bind:click="onCellTap"
+    />
+  </t-cell-group>
+  </view>
+
+
+  <!-- 退出登录 -->
+  <view class="user-section">
+    <t-cell-group theme="card" wx:if="{{isLoggedIn}}">
+    <t-cell
+      title="退出登录"
+      bordered="{{false}}"
+      hover
+      bind:click="onLogoutTap"
+      t-class="user-logout-cell"
+    />
+  </t-cell-group>
+  </view>
+
+  <!-- 退出确认弹窗 -->
+  <t-dialog
+    visible="{{showLogoutDialog}}"
+    title="提示"
+    content="确定要退出登录吗？"
+    confirm-btn="确定"
+    cancel-btn="取消"
+    bind:confirm="onLogoutConfirm"
+    bind:cancel="onLogoutCancel"
+  />
+</view>

@@ -1,0 +1,104 @@
+<view class="account-page">
+  <t-navbar title="编辑" leftArrow placeholder />
+
+  <view class="scenic-title">账号安全</view>
+  <view class="scenic-desc">管理您的账号安全信息</view>
+  
+  <t-cell-group>
+    <t-input
+      label="账号"
+      placeholder="请输入账号"
+      value="{{form.userAccount}}"
+      bind:change="onAccountChange"
+      align="right"
+    />
+    <t-input
+      label="手机号"
+      placeholder="请输入手机号"
+      type="number"
+      maxlength="{{11}}"
+      value="{{form.userPhone}}"
+      bind:change="onPhoneChange"
+      align="right"
+    />
+    <t-input
+      label="邮箱"
+      placeholder="请输入邮箱"
+      value="{{form.userEmail}}"
+      bind:change="onEmailChange"
+      align="right"
+    />
+    
+    <t-input
+      label="新密码"
+      placeholder="至少8位，留空不修改"
+      type="{{showPassword ? 'text' : 'password'}}"
+      value="{{form.userPassword}}"
+      bind:change="onPasswordChange"
+      align="right"
+    >
+      <t-icon
+        slot="suffix"
+        name="{{showPassword ? 'browse' : 'browse-off'}}"
+        size="40rpx"
+        color="#999"
+        bind:tap="onTogglePassword"
+      />
+    </t-input>
+  </t-cell-group>
+
+
+  <!-- 安全验证码（修改敏感信息时需要） -->
+  <view wx:if="{{needsCode || needsCode}}" class="account-section-title">安全验证</view>
+  <t-cell-group wx:if="{{needsCode}}">
+    <t-input
+      wx:if="{{isEmailChanged}}"
+      label="新邮箱验证"
+      placeholder="请输入验证码"
+      type="number"
+      maxlength="{{6}}"
+      value="{{form.emailCode}}"
+      bind:change="onEmailCodeChange"
+      align="right"
+    >
+      <t-button
+        slot="suffix"
+        size="small"
+        variant="text"
+        theme="primary"
+        disabled="{{emailCountdown > 0}}"
+        bind:tap="onSendEmailCode"
+      >{{emailCountdown > 0 ? emailCountdown + 's' : '发送'}}</t-button>
+    </t-input>
+    <t-input
+      label="验证码"
+      placeholder="请输入验证码"
+      type="number"
+      maxlength="{{6}}"
+      value="{{form.code}}"
+      bind:change="onCodeChange"
+      align="right"
+    >
+      <t-button
+        slot="suffix"
+        size="small"
+        variant="text"
+        theme="primary"
+        disabled="{{codeCountdown > 0}}"
+        bind:tap="onSendCode"
+      >{{codeCountdown > 0 ? codeCountdown + 's' : '发送'}}</t-button>
+    </t-input>
+  </t-cell-group>
+
+  <view class="account-footer">
+    <t-button
+      theme="primary"
+      size="large"
+      block
+      loading="{{submitting}}"
+      bind:tap="onSubmit"
+    >保存修改</t-button>
+  </view>
+
+  <t-toast id="t-toast" />
+</view>

@@ -1,66 +1,132 @@
-// pages/user/index.ts
+import { logout } from "../../api/controller/user-controller/user-controller";
+
+const roleMap: Record<string, string> = {
+  admin: '管理员',
+  inspector: '巡查员',
+  disposer: '处置员',
+  user: '普通用户',
+};
+
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    isLoggedIn: false,
+    avatarSize: '120rpx',
+    showLogoutDialog: false,
+    statusBarHeight: 20,
+    userInfo: {
+      avatar: '',
+      nickname: '',
+      account: '',
+      roleName: '',
+    },
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad() {
-
+    const sysInfo = wx.getSystemInfoSync();
+    this.setData({ statusBarHeight: sysInfo.statusBarHeight || 20 });
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
   onShow() {
-
+    if (typeof this.getTabBar === 'function') {
+      this.getTabBar().setData({ selected: 3 });
+    }
+    this._loadUserInfo();
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
+  _loadUserInfo() {
+    const token = wx.getStorageSync('token');
+    if (!token) {
+      this.setData({
+        isLoggedIn: false,
+        userInfo: { avatar: '', nickname: '', account: '', roleName: '' },
+      });
+      return;
+    }
+    try {
+      const raw = wx.getStorageSync('userInfo');
+      const info = raw ? JSON.parse(raw) : null;
+      if (info) {
+        this.setData({
+          isLoggedIn: true,
+          userInfo: {
+            avatar: info.avatar || '',
+            nickname: info.nickname || '',
+            account: info.account || '',
+            roleName: roleMap[info.role] || info.role || '',
+          },
+        });
+      }
+    } catch {
+      this.setData({ isLoggedIn: false });
+    }
   },
 
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
+  /** 点击头部区域 */
+  onHeaderTap() {
+    if (!this.data.isLoggedIn) {
+      wx.navigateTo({ url: '/pages/auth/login/index' });
+      return;
+    }
+    wx.navigateTo({ url: '/pages/user/profile/index' });
   },
 
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
+  /** Grid 项点击 */
+  onGridItemTap(e: WechatMiniprogram.TouchEvent) {
+    const page = e.currentTarget.dataset.page as string;
+    const routeMap: Record<string, string> = {
+      profile: '/pages/user/profile/index',
+      account: '/pages/user/account/index',
+      orders: '/pages/user/orders/index',
+      notifications: '/pages/user/notifications/index',
+    };
+    if (!this.data.isLoggedIn) {
+      wx.navigateTo({ url: '/pages/auth/login/index' });
+      return;
+    }
+    const url = routeMap[page];
+    if (url) {
+      wx.navigateTo({ url });
+    }
   },
 
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
+  /** Cell 项点击 */
+  onCellTap(e: WechatMiniprogram.TouchEvent) {
+    const page = e.currentTarget.dataset.page as string;
+    const routeMap: Record<string, string> = {
+      agreement: '/pages/user/agreement/index',
+      privacy: '/pages/user/privacy/index',
+      about: '/pages/user/about/index',
+    };
+    const url = routeMap[page];
+    if (url) {
+      wx.navigateTo({ url });
+    }
   },
 
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
+  /** 点击退出登录 */
+  onLogoutTap() {
+    this.setData({ showLogoutDialog: true });
+  },
 
-  }
-})
+  /** 确认退出 */
+  async onLogoutConfirm() {
+    try {
+      await logout();
+    } catch {
+      // 即使接口失败也清除本地状态
+    }
+    wx.removeStorageSync('token');
+    wx.removeStorageSync('userInfo');
+    this.setData({
+      showLogoutDialog: false,
+      isLoggedIn: false,
+      userInfo: { avatar: '', nickname: '', account: '', roleName: '' },
+    });
+    wx.showToast({ title: '已退出登录', icon: 'success' });
+  },
+
+  /** 取消退出 */
+  onLogoutCancel() {
+    this.setData({ showLogoutDialog: false });
+  },
+});

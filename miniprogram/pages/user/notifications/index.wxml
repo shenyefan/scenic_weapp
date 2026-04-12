@@ -1,0 +1,64 @@
+<!--pages/user/notifications/index.wxml-->
+<view class="notif-page">
+  <t-navbar title="编辑" leftArrow placeholder />
+
+  <view class="scenic-title">消息通知</view>
+  <view class="scenic-desc">配置业务邮件通知</view>
+  
+  <view wx:if="{{loading}}" class="notif-loading">
+    <t-loading theme="circular" size="40px" text="加载中..." />
+  </view>
+
+  <view wx:elif="{{role === 'user' || role === 'ban'}}" class="notif-tip">
+    当前角色暂无业务通知配置。
+  </view>
+
+  <block wx:else>
+    <!-- 巡查员通知 -->
+    <view wx:if="{{role === 'inspector'}}">
+      <view class="notif-section-title">任务提醒</view>
+      <t-cell-group>
+        <t-cell title="巡查任务下发通知" description="邮件通知至绑定邮箱" bordered="{{false}}">
+          <t-switch
+            slot="right-icon"
+            value="{{settings.notifyInspectionDispatch}}"
+            bind:change="onInspectionDispatchChange"
+            loading="{{saving}}"
+          />
+        </t-cell>
+      </t-cell-group>
+    </view>
+
+    <!-- 处置员通知 -->
+    <view wx:if="{{role === 'disposer'}}">
+      <view class="notif-section-title">任务提醒</view>
+      <t-cell-group>
+        <t-cell title="处置任务分配通知" description="邮件通知至绑定邮箱" bordered="{{false}}">
+          <t-switch
+            slot="right-icon"
+            value="{{settings.notifyDisposalAssigned}}"
+            bind:change="onDisposalAssignedChange"
+            loading="{{saving}}"
+          />
+        </t-cell>
+      </t-cell-group>
+    </view>
+
+    <!-- 管理员通知 -->
+    <view wx:if="{{role === 'admin'}}">
+      <view class="notif-section-title">任务提醒</view>
+      <t-cell-group>
+        <t-cell title="景区异常通知" description="邮件通知至绑定邮箱" bordered="{{false}}">
+          <t-switch
+            slot="right-icon"
+            value="{{settings.notifyAbnormalToAdmin}}"
+            bind:change="onAbnormalToAdminChange"
+            loading="{{saving}}"
+          />
+        </t-cell>
+      </t-cell-group>
+    </view>
+  </block>
+
+  <t-toast id="t-toast" />
+</view>

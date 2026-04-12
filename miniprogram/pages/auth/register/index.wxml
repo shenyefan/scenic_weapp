@@ -1,0 +1,108 @@
+<view class="auth-page">
+  <t-navbar title="注册" placeholder leftArrow/>
+  <view class="auth-content">
+    <view class="auth-logo">
+      <image src="/assets/logo.svg" class="auth-logo__img" mode="aspectFit" />
+      <text class="auth-logo__text">智慧文旅管理系统</text>
+    </view>
+
+    <view class="auth-header">
+      <view class="auth-header__title">创建账号</view>
+      <view class="auth-header__desc">填写以下信息完成账号注册</view>
+    </view>
+
+    <view class="auth-form">
+      <view class="auth-form__item">
+        <t-input
+          borderless
+          placeholder="账号（至少4位）"
+          value="{{userAccount}}"
+          bind:change="onFieldChange"
+          data-field="userAccount"
+          maxlength="{{32}}"
+        />
+      </view>
+
+      <view class="auth-form__item">
+        <t-input
+          borderless
+          placeholder="邮箱"
+          value="{{email}}"
+          bind:change="onFieldChange"
+          data-field="email"
+          maxlength="{{64}}"
+        />
+      </view>
+
+      <view class="auth-form__item auth-form__code-row">
+        <t-input
+          borderless
+          class="auth-form__code-input"
+          placeholder="验证码"
+          value="{{code}}"
+          bind:change="onFieldChange"
+          data-field="code"
+          maxlength="{{16}}"
+        />
+        <t-button
+          class="auth-form__code-btn"
+          theme="primary"
+          variant="text"
+          size="small"
+          disabled="{{countdown > 0 || sendingCode}}"
+          loading="{{sendingCode}}"
+          bind:tap="onSendCode"
+        >{{countdown > 0 ? countdown + 's' : '获取验证码'}}</t-button>
+      </view>
+
+      <view class="auth-form__item">
+        <t-input
+          borderless
+          placeholder="密码（至少8位）"
+          type="{{showPassword ? 'text' : 'password'}}"
+          value="{{password}}"
+          bind:change="onFieldChange"
+          data-field="password"
+          maxlength="{{32}}"
+          suffixIcon="{{showPassword ? 'browse' : 'browse-off'}}"
+          bind:click="onTogglePassword"
+        />
+      </view>
+
+      <view class="auth-form__item">
+        <t-input
+          borderless
+          placeholder="确认密码"
+          type="{{showConfirmPassword ? 'text' : 'password'}}"
+          value="{{confirmPassword}}"
+          bind:change="onFieldChange"
+          data-field="confirmPassword"
+          maxlength="{{32}}"
+          suffixIcon="{{showConfirmPassword ? 'browse' : 'browse-off'}}"
+          bind:click="onToggleConfirmPassword"
+        />
+      </view>
+
+      <t-button
+        theme="primary"
+        block
+        loading="{{loading}}"
+        disabled="{{loading}}"
+        bind:tap="onSubmit"
+        class="auth-form__btn"
+      >注册</t-button>
+    </view>
+  </view>
+
+  <view class="auth-footer">
+    <view class="auth-footer__links">
+      <text class="auth-footer__link" bindtap="goSignIn">登录</text>
+      <text class="auth-footer__divider">|</text>
+      <text class="auth-footer__link auth-footer__link--active">注册</text>
+    </view>
+    <view class="auth-footer__copyright">Copyright © 2026 Moenya. All Rights Reserved.</view>
+  </view>
+
+  <t-toast id="t-toast" />
+  <t-message id="t-message" />
+</view>

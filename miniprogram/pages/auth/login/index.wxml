@@ -1,0 +1,62 @@
+<view class="auth-page">
+  <t-navbar title="登录" placeholder leftArrow />
+  <view class="auth-content">
+    <view class="auth-logo">
+      <image src="/assets/logo.svg" class="auth-logo__img" mode="aspectFit" />
+      <text class="auth-logo__text">智慧文旅管理系统</text>
+    </view>
+
+    <view class="auth-header">
+      <view class="auth-header__title">欢迎回来</view>
+      <view class="auth-header__desc">在下方输入您的账号和密码以登录</view>
+    </view>
+
+    <view class="auth-form">
+      <view class="auth-form__item">
+        <t-input
+          borderless
+          placeholder="账号"
+          value="{{userAccount}}"
+          bind:change="onAccountChange"
+          maxlength="{{32}}"
+        />
+      </view>
+
+      <view class="auth-form__item">
+        <t-input
+          borderless
+          placeholder="登录密码"
+          type="{{showPassword ? 'text' : 'password'}}"
+          value="{{userPassword}}"
+          bind:change="onPasswordChange"
+          maxlength="{{32}}"
+          suffixIcon="{{showPassword ? 'browse' : 'browse-off'}}"
+          bind:click="onTogglePassword"
+        />
+      </view>
+
+      <t-button
+        theme="primary"
+        block
+        loading="{{loading}}"
+        disabled="{{loading}}"
+        bind:tap="onSubmit"
+        class="auth-form__btn"
+      >登录</t-button>
+    </view>
+  </view>
+
+  <view class="auth-footer">
+    <view class="auth-footer__links">
+      <text class="auth-footer__link auth-footer__link--active">登录</text>
+      <text class="auth-footer__divider">|</text>
+      <text class="auth-footer__link" bindtap="goSignUp">注册</text>
+      <text class="auth-footer__divider">|</text>
+      <text class="auth-footer__link" bindtap="goForgotPassword">忘记密码</text>
+    </view>
+    <view class="auth-footer__copyright">Copyright © 2026 Moenya. All Rights Reserved.</view>
+  </view>
+
+  <t-toast id="t-toast" />
+  <t-message id="t-message" />
+</view>

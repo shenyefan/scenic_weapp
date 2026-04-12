@@ -1,2 +1,2 @@
-<!--pages/workbench/index.wxml-->
+<t-navbar title="工作台" fixed placeholder />
 <text>pages/workbench/index.wxml</text>

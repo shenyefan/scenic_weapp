@@ -1,2 +1,4 @@
 <!--pages/home/index.wxml-->
+<t-navbar title="首页" fixed placeholder />
+
 <text>pages/home/index.wxml</text>

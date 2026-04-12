@@ -1,0 +1,101 @@
+<view class="profile-page">
+  <t-navbar title="编辑" leftArrow placeholder />
+
+  <view class="scenic-title">个人资料</view>
+  <view class="scenic-desc">管理您在系统中的公开信息</view>
+
+  <!-- 头像 -->
+  <t-cell-group class="profile-info">
+    <button
+      class="profile-avatar-cell"
+      open-type="chooseAvatar"
+      bindchooseavatar="onChooseAvatar"
+    >
+      <view class="profile-avatar-cell__label">头像</view>
+      <view class="profile-avatar-cell__right">
+        <t-avatar
+          wx:if="{{form.userAvatar}}"
+          image="{{form.userAvatar}}"
+          size="80rpx"
+        />
+        <t-avatar wx:else icon="user" size="80rpx" />
+        <t-icon name="chevron-right" size="36rpx" color="#bbb" />
+      </view>
+    </button>
+  </t-cell-group>
+
+  <t-cell-group class="profile-info" >
+    <t-input
+      label="昵称"
+      type="nickname"
+      placeholder="请输入昵称"
+      value="{{form.userNickname}}"
+      bind:change="onNicknameChange"
+      align="right"
+    />
+    <t-cell
+      title="性别"
+      note="{{genderLabel}}"
+      arrow
+      bordered="{{true}}"
+      bind:click="onGenderTap"
+    />
+    <t-cell
+      title="生日"
+      note="{{form.userBirthDate || '未设置'}}"
+      arrow
+      bordered="{{true}}"
+      bind:click="onBirthDateTap"
+    />
+  </t-cell-group>
+
+  <t-cell-group class="profile-info" >
+    <t-textarea
+      label="个人简介"
+        slot="note"
+        placeholder="介绍一下自己吧"
+        value="{{form.userProfile}}"
+        maxlength="{{160}}"
+        confirm-type="done"
+        bind:change="onProfileChange"
+        auto-size
+      />
+    </t-cell-group>
+
+  <view class="profile-footer">
+    <t-button
+      theme="primary"
+      size="large"
+      block
+      loading="{{submitting}}"
+      bind:tap="onSubmit"
+    >保存</t-button>
+  </view>
+
+  <!-- 性别选择器 -->
+  <t-picker
+    visible="{{genderPickerVisible}}"
+    value="{{[form.userGender]}}"
+    title="选择性别"
+    bind:confirm="onGenderConfirm"
+    bind:cancel="onGenderCancel"
+    bind:close="onGenderCancel"
+  >
+    <t-picker-item options="{{genderOptions}}" />
+  </t-picker>
+
+  <!-- 生日选择器 -->
+  <t-date-time-picker
+    visible="{{birthdayPickerVisible}}"
+    title="选择生日"
+    mode="date"
+    value="{{form.userBirthDate || today}}"
+    start="1900-01-01"
+    end="{{today}}"
+    bind:confirm="onBirthDateConfirm"
+    bind:cancel="onBirthDateCancel"
+    bind:close="onBirthDateCancel"
+  />
+
+  <t-toast id="t-toast" />
+</view>

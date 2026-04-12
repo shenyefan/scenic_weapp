@@ -1,0 +1,57 @@
+/* pages/user/orders/index.wxss */
+@import '../../../variable.less';
+
+.orders-page {
+  background: @bg-color;
+  min-height: 100vh;
+}
+
+.orders-loading,
+.orders-empty {
+  display: flex;
+  justify-content: center;
+  padding-top: 120rpx;
+}
+
+.orders-list {
+  padding-bottom: 32rpx;
+}
+
+.orders-item {
+  background: @bg-color-white;
+  margin-bottom: 24rpx;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24rpx @page-padding 16rpx;
+    border-bottom: 1rpx solid @gray3;
+  }
+
+  &__id {
+    font-size: @font-size-mini;
+    color: @gy3;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16rpx @page-padding;
+    border-top: 1rpx solid @gray3;
+  }
+}
+
+.orders-price {
+  font-size: @font-size-large;
+  font-weight: @font-weight-bold;
+  color: @error-color;
+}
+
+.orders-loadmore,
+.orders-nomore {
+  text-align: center;
+  padding: 32rpx;
+  font-size: @font-size-mini;
+  color: @gy3;
+}
