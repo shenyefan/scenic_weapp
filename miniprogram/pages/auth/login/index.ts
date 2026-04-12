@@ -60,6 +60,10 @@ Page({
     }
   },
 
+  goHome() {
+    wx.navigateTo({ url: '/pages/home/index' });
+  },
+
   goSignUp() {
     wx.navigateTo({ url: '/pages/auth/register/index' });
   },
