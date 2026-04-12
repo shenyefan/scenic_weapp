@@ -1,0 +1,7 @@
+<view class="wrapper">
+  <t-tab-bar value="{{value}}" bindchange="handleChange" split="{{false}}">
+    <t-tab-bar-item wx:for="{{list}}" wx:key="value" icon="{{item.icon}}" value="{{item.value}}">
+      {{item.label}}
+    </t-tab-bar-item>
+  </t-tab-bar>
+</view>
