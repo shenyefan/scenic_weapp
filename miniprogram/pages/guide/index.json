@@ -1,5 +1,10 @@
 {
+  "navigationStyle": "custom",
+  "styleIsolation": "shared",
   "usingComponents": {
+    "t-navbar": "tdesign-miniprogram/navbar/navbar",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-popup": "tdesign-miniprogram/popup/popup",
     "t-chat-message": "tdesign-miniprogram/chat-message/chat-message",
     "t-chat-content": "tdesign-miniprogram/chat-content/chat-content",
     "t-chat": "tdesign-miniprogram/chat-list/chat-list",
