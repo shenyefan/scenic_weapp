@@ -94,6 +94,27 @@ Page({
     this.setData({ activeTab: e?.detail?.value || 'attractions' })
   },
 
+  onShortcutTap(e: any) {
+    const index = e?.detail?.index ?? e?.currentTarget?.dataset?.index
+    const shortcut = SHORTCUTS[index]
+    if (!shortcut) return
+    if (shortcut.text === '周边交通') {
+      wx.navigateToMiniProgram({
+        appId: 'wx7643d5f831302ab0',
+        fail: () => {
+          Toast({ context: this, selector: '#t-toast', message: '跳转腾讯地图失败', theme: 'error' })
+        },
+      })
+    } else {
+      wx.navigateToMiniProgram({
+        appId: 'wx0e6ed4f51db9d078',
+        fail: () => {
+          Toast({ context: this, selector: '#t-toast', message: '跳转携程失败', theme: 'error' })
+        },
+      })
+    }
+  },
+
   async fetchWeather() {
     try {
       const res = await listWeatherByPage({ current: 1, pageSize: 1, sortField: 'weatherTime', sortOrder: 'descend' })
@@ -185,6 +206,7 @@ Page({
         id: item.id || `n-${page}-${i}`,
         title: item.wxTitle || '未命名动态',
         description: item.wxDescription || '',
+        url: item.wxUrl || '',
         publishTime: formatDate(item.updateTime || item.createTime),
       }))
       const newsList = page === 1 ? newItems : [...this.data.newsList, ...newItems]
@@ -199,6 +221,17 @@ Page({
       this.setData({ skeletonNews: false, newsLoadingMore: false })
       if (page === 1) Toast({ context: this, selector: '#t-toast', message: '新闻数据加载失败', theme: 'error' })
     }
+  },
+
+  onNewsTap(e: any) {
+    const { url } = e.currentTarget.dataset
+    if (!url) return
+    wx.openOfficialAccountArticle({
+      url,
+      fail: () => {
+        Toast({ context: this, selector: '#t-toast', message: '文章打开失败', theme: 'error' })
+      },
+    })
   },
 
   loadMoreNews() {
