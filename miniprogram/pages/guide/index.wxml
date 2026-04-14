@@ -1,5 +1,6 @@
 <view class="chat-page">
-  <t-navbar title="智慧导览" fixed placeholder>
+  <image class="page-bg" src="/assets/bg.png" mode="aspectFill" />
+  <t-navbar title="智慧导览" fixed placeholder style="--td-navbar-bg-color: transparent;">
     <view slot="left" class="navbar-left" bindtap="openDrawer">
       <t-icon name="history" size="44rpx" />
     </view>
@@ -8,44 +9,19 @@
   <view class="chat-main">
     <t-chat id="chatList" class="chat-content">
       <block wx:for="{{chatList}}" wx:key="chatId">
-        <t-chat-message
-          chat-id="{{item.chatId}}"
-          avatar="{{item.avatar || ''}}"
-          name="{{item.name || ''}}"
-          datetime="{{item.datetime || ''}}"
-          content="{{item.content}}"
-          role="{{item.role}}"
-          placement="{{item.role === 'user' ? 'right' : 'left'}}"
-          status="{{item.status || ''}}"
-          bind:message-longpress="showPopover"
-        >
+        <t-chat-message chat-id="{{item.chatId}}" avatar="{{item.avatar || ''}}" name="{{item.name || ''}}" datetime="{{item.datetime || ''}}" content="{{item.content}}" role="{{item.role}}" placement="{{item.role === 'user' ? 'right' : 'left'}}" status="{{item.status || ''}}" bind:message-longpress="showPopover">
         </t-chat-message>
       </block>
     </t-chat>
 
     <view class="chat-sender-wrap">
-      <t-chat-sender
-        value="{{value}}"
-        loading="{{loading}}"
-        disabled="{{disabled}}"
-        auto-rise-with-keyboard="{{true}}"
-        renderPresets="{{[{ name: 'send', type: 'icon'}]}}"
-        bind:send="onSend"
-        bind:stop="onStop"
-      />
+      <t-chat-sender value="{{value}}" loading="{{loading}}" disabled="{{disabled}}" auto-rise-with-keyboard="{{true}}" renderPresets="{{[{ name: 'send', type: 'icon'}]}}" bind:send="onSend" bind:stop="onStop" />
     </view>
   </view>
 </view>
 
 <!-- 历史会话抽屉 -->
-<t-popup
-  visible="{{drawerVisible}}"
-  placement="left"
-  bind:visible-change="onDrawerVisibleChange"
-  close-on-overlay-click
-  using-custom-navbar
-  class="popup"
->
+<t-popup visible="{{drawerVisible}}" placement="left" bind:visible-change="onDrawerVisibleChange" close-on-overlay-click using-custom-navbar class="popup">
   <view class="popup-header">
     <text class="popup-title">历史会话</text>
     <view class="popup-new-btn" bindtap="handleNewFromDrawer">
@@ -68,37 +44,18 @@
     </view>
 
     <view wx:else class="session-list">
-      <view
-        wx:for="{{sessions}}"
-        wx:key="sessionId"
-        class="session-item {{item.sessionId === sessionId ? 'active' : ''}}"
-        bindtap="onSelectSession"
-        data-sid="{{item.sessionId}}"
-      >
+      <view wx:for="{{sessions}}" wx:key="sessionId" class="session-item {{item.sessionId === sessionId ? 'active' : ''}}" bindtap="onSelectSession" data-sid="{{item.sessionId}}">
         <view class="session-info">
           <text class="session-title">{{item.title || '未命名会话'}}</text>
           <text class="session-time">{{item._timeLabel || ''}}</text>
         </view>
-        <view
-          class="session-delete"
-          catchtap="onDeleteSession"
-          data-sid="{{item.sessionId}}"
-        >
+        <view class="session-delete" catchtap="onDeleteSession" data-sid="{{item.sessionId}}">
           <t-icon name="delete" size="36rpx" color="#e34d59" />
         </view>
       </view>
     </view>
   </scroll-view>
+  <t-dialog visible="{{deleteConfirmVisible}}" title="确认删除" content="删除后无法恢复，确定要删除这个会话吗？" confirm-btn="删除" cancel-btn="取消" bind:confirm="onDeleteConfirm" bind:cancel="onDeleteCancel" />
 </t-popup>
 
 <t-toast id="t-toast" />
-
-<t-dialog
-  visible="{{deleteConfirmVisible}}"
-  title="确认删除"
-  content="删除后无法恢复，确定要删除这个会话吗？"
-  confirm-btn="删除"
-  cancel-btn="取消"
-  bind:confirm="onDeleteConfirm"
-  bind:cancel="onDeleteCancel"
-/>
