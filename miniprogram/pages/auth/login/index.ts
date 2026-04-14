@@ -61,7 +61,7 @@ Page({
   },
 
   goHome() {
-    wx.navigateTo({ url: '/pages/home/index' });
+    wx.reLaunch({ url: '/pages/home/index' });
   },
 
   goSignUp() {

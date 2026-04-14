@@ -1,5 +1,6 @@
 <view class="user-page">
-  <t-navbar title="我的" placeholder />
+  <image class="page-bg" src="/assets/bg.png" mode="aspectFill" />
+  <t-navbar placeholder style="--td-navbar-bg-color: transparent;"/>
   <!-- 用户信息区域 -->
   <view class="user-header" bindtap="onHeaderTap">
     <view class="user-header__avatar">

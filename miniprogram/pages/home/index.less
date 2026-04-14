@@ -1,1 +1,365 @@
-/* pages/home/index.wxss */
+@import '../../variable.less';
+
+page {
+	background: linear-gradient(180deg, #f0f6ff 0%, #f7fbff 38%, #f6f7fb 100%);
+}
+
+.home-page {
+	min-height: 100vh;
+}
+
+.hero-wrap {
+	position: relative;
+	width: 100vw;
+	height: 560rpx;
+	overflow: hidden;
+  top: 0;
+  left: 0;
+}
+
+.hero-image {
+	width: 100vw;
+	height: 560rpx;
+	object-fit: cover;
+}
+
+.hero-fade {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 100rpx;
+	background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #ffffff 100%);
+	z-index: 1;
+}
+
+.hero-card {
+	position: relative;
+	margin: -120rpx 32rpx 0;
+	background: #fff;
+	border-radius: 28rpx;
+	box-shadow: 0 8rpx 32rpx rgba(0, 82, 217, 0.10);
+	padding: 36rpx 32rpx 28rpx 32rpx;
+	z-index: 2;
+}
+
+.hero-card-row {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 24rpx;
+}
+
+.hero-card-row-second {
+	margin-top: 12rpx;
+}
+
+.hero-card-title-group {
+	flex: 1;
+	min-width: 0;
+}
+
+.title-zh {
+	font-size: 32rpx;
+	font-weight: 600;
+	line-height: 1.35;
+}
+
+.title-en {
+	font-size: 22rpx;
+	line-height: 1.4;
+}
+
+.hero-card-info {
+	flex-shrink: 0;
+	max-width: 240rpx;
+	text-align: right;
+	font-size: 26rpx;
+}
+
+.weather-info {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+}
+
+.weather-temp {
+	font-size: 32rpx;
+	font-weight: 600;
+	line-height: 1.35;
+}
+
+.weather-text {
+	font-size: 22rpx;
+	line-height: 1.4;
+	text-align: right;
+}
+
+.hero-card-entries {
+	display: flex;
+	gap: 24rpx;
+	margin-top: 28rpx;
+}
+
+.entry-btn {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: space-between;
+	background: #f7faff;
+	border-radius: 18rpx;
+	padding: 24rpx 28rpx;
+	min-height: 100rpx;
+	box-shadow: 0 2rpx 8rpx rgba(0,82,217,0.04);
+}
+.map-btn {
+	background: linear-gradient(135deg, #e9f3ff 0%, #f4f9ff 100%);
+}
+.ticket-btn {
+	background: linear-gradient(135deg, #fff4e8 0%, #fffaf4 100%);
+}
+.entry-btn-icon {
+  width: 86rpx;
+  height: 86rpx;
+  align-self: flex-end;
+}
+.entry-btn-text {
+	font-size: 36rpx;
+	font-weight: 600;
+	color: transparent;
+	background-clip: text;
+	-webkit-background-clip: text;
+}
+.map-btn .entry-btn-text {
+	background-image: linear-gradient(135deg, #3b7dd8 0%, #6fb3f5 100%);
+}
+.ticket-btn .entry-btn-text {
+	background-image: linear-gradient(135deg, #d4650a 0%, #e8a45c 100%);
+}
+
+.shortcut-immersive {
+	padding: 0 32rpx;
+}
+
+.notice-immersive {
+	margin: 0 32rpx;
+	border-radius: 16rpx;
+}
+
+.tabs-immersive {
+	margin: 32rpx 0 0 0;
+	padding: 0 16rpx;
+}
+
+.attractions-waterfall {
+	display: flex;
+	gap: 16rpx;
+}
+.waterfall-col {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 18rpx;
+}
+.attraction-waterfall-item {
+	background: #fff;
+	border-radius: 16rpx;
+	box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+	overflow: hidden;
+}
+.attraction-image {
+	width: 100%;
+	height: 220rpx;
+	object-fit: cover;
+}
+.attraction-body {
+	padding: 16rpx 14rpx 14rpx 14rpx;
+}
+.attraction-name {
+	font-size: 28rpx;
+	font-weight: 600;
+	color: @gy1;
+}
+.attraction-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8rpx;
+	margin-top: 8rpx;
+}
+.attraction-desc {
+	margin-top: 8rpx;
+	font-size: 22rpx;
+	color: @gy2;
+	line-height: 1.55;
+}
+.video-card {
+	background: #fff;
+	border-radius: 16rpx;
+	box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+	overflow: hidden;
+	margin-bottom: 16rpx;
+	padding: 16rpx;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+.video-header {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 16rpx;
+}
+.video-title {
+	flex: 1;
+	font-size: 28rpx;
+	font-weight: 600;
+	color: @gy1;
+	line-height: 1.5;
+}
+.video-time {
+	flex-shrink: 0;
+	font-size: 22rpx;
+	color: @gy3;
+}
+.video-player {
+	margin-top: 12rpx;
+	width: 100%;
+	height: 340rpx;
+	border-radius: 12rpx;
+}
+.video-desc {
+	margin-top: 10rpx;
+	font-size: 22rpx;
+	color: @gy2;
+	line-height: 1.55;
+}
+@keyframes skeleton-shimmer {
+  0% { background-position: -600rpx 0; }
+  100% { background-position: 600rpx 0; }
+}
+
+.skeleton-image,
+.skeleton-video-player,
+.skeleton-line {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 600rpx 100%;
+  animation: skeleton-shimmer 1.4s infinite linear;
+  border-radius: 8rpx;
+}
+
+.skeleton-image {
+  width: 100%;
+  height: 220rpx;
+  border-radius: 0;
+}
+
+.skeleton-image-tall {
+  height: 280rpx;
+}
+
+.skeleton-body {
+  padding: 16rpx 14rpx 14rpx;
+}
+
+.skeleton-attraction-item {
+  background: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+  overflow: hidden;
+}
+
+.skeleton-line {
+  height: 24rpx;
+  width: 100%;
+  margin-bottom: 0;
+  border-radius: 6rpx;
+}
+
+.skeleton-line-title {
+  height: 28rpx;
+  width: 70%;
+  margin-bottom: 0;
+}
+
+.skeleton-line-short {
+  width: 50%;
+}
+
+.skeleton-video-item {
+  background: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+  overflow: hidden;
+  padding: 16rpx;
+  margin-bottom: 16rpx;
+
+  &:last-child { margin-bottom: 0; }
+}
+
+.skeleton-video-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 12rpx;
+}
+
+.skeleton-video-player {
+  width: 100%;
+  height: 340rpx;
+  border-radius: 12rpx;
+}
+
+.skeleton-news-item {
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+
+  &:last-child { border-bottom: none; }
+}
+
+.tab-panel-body {
+  padding: 24rpx;
+}
+
+.news-item {
+  padding: 24rpx 8rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.news-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: @gy1;
+  line-height: 1.5;
+}
+
+.news-footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16rpx;
+  margin-top: 10rpx;
+}
+
+.news-desc {
+  flex: 1;
+  font-size: 22rpx;
+  color: @gy2;
+  line-height: 1.55;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.news-time {
+  flex-shrink: 0;
+  font-size: 22rpx;
+  color: @gy3;
+}

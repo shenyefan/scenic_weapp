@@ -1,2 +1,5 @@
-<t-navbar title="工作台" fixed placeholder />
-<text>pages/workbench/index.wxml</text>
+<view class="workbench-page">
+  <image class="page-bg" src="/assets/bg.png" mode="aspectFill" />
+  <t-navbar title="工作台" fixed placeholder style="--td-navbar-bg-color: transparent;"/>
+  <text>pages/workbench/index.wxml</text>
+</view>

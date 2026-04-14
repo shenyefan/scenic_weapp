@@ -1,4 +1,170 @@
-<!--pages/home/index.wxml-->
-<t-navbar title="首页" fixed placeholder />
+<view class="home-page">
+  <!-- 滚动后出现的顶部导航栏 -->
+  <t-navbar wx:if="{{showNavBar}}" title="锦州北普陀山景区" fixed z-index="100"/>
 
-<text>pages/home/index.wxml</text>
+  <!-- 顶部沉浸大图 -->
+  <view class="hero-wrap">
+    <t-image class="hero-image" src="/assets/home/banner1.jpg" mode="aspectFill" />
+    <view class="hero-fade"></view>
+  </view>
+
+  <!-- 悬浮信息卡 -->
+  <view class="hero-card">
+    <view class="hero-card-row">
+      <view class="hero-card-title-group">
+        <view class="title-zh">锦州北普陀山景区</view>
+        <view class="title-en">Jinzhou northof Mount Putuo Scenic Area</view>
+      </view>
+      <view class="hero-card-info date-info">{{currentDate}}</view>
+    </view>
+    <view class="hero-card-row hero-card-row-second">
+      <view class="hero-card-title-group">
+        <view class="title-zh">国家AAAA级景区</view>
+        <view class="title-en">National AAAA Scenic Spot</view>
+      </view>
+      <view class="hero-card-info weather-info">
+        <text class="weather-temp">{{weatherTemp}}</text>
+        <text class="weather-text">{{weatherText}}</text>
+      </view>
+    </view>
+    <view class="hero-card-entries">
+      <view class="entry-btn map-btn">
+        <text class="entry-btn-text">景区地图</text>
+        <image class="entry-btn-icon" src="/assets/home/map.svg" mode="aspectFit" />
+      </view>
+      <view class="entry-btn ticket-btn">
+        <text class="entry-btn-text">预约购票</text>
+        <image class="entry-btn-icon" src="/assets/home/ticket.svg" mode="aspectFit" />
+      </view>
+    </view>
+  </view>
+
+  <!-- 快捷入口 -->
+  <view class="shortcut-immersive">
+    <t-grid column="4" border="{{false}}" hover="{{false}}" theme="default" style="--td-grid-bg-color: transparent;">
+      <t-grid-item wx:for="{{shortcuts}}" wx:key="text" text="{{item.text}}" image="{{item.image}}" style="--td-grid-item-bg-color: transparent;" />
+    </t-grid>
+  </view>
+
+  <!-- 通知栏 -->
+  <t-notice-bar visible content="{{noticeText}}" prefix-icon="sound" theme="info" t-class="notice-immersive" />
+
+  <!-- tab 内容区 -->
+  <t-tabs value="{{activeTab}}" bind:change="onTabsChange" sticky-props="{{ {offsetTop: navBarHeight} }}" sticky class="tabs">
+
+    <!-- 景点信息 -->
+    <t-tab-panel value="attractions" label="景点信息">
+      <!-- 骨架屏 -->
+      <view class="tab-panel-body" wx:if="{{skeletonAttractions}}">
+        <view class="attractions-waterfall">
+          <view class="waterfall-col">
+            <view class="skeleton-attraction-item" wx:for="{{[1,2,3]}}" wx:key="*this">
+              <view class="skeleton-image"></view>
+              <view class="skeleton-body">
+                <view class="skeleton-line skeleton-line-title"></view>
+                <view class="skeleton-line skeleton-line-short"></view>
+                <view class="skeleton-line"></view>
+              </view>
+            </view>
+          </view>
+          <view class="waterfall-col">
+            <view class="skeleton-attraction-item" wx:for="{{[1,2,3]}}" wx:key="*this">
+              <view class="skeleton-image skeleton-image-tall"></view>
+              <view class="skeleton-body">
+                <view class="skeleton-line skeleton-line-title"></view>
+                <view class="skeleton-line"></view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <!-- 实际内容 -->
+      <view class="tab-panel-body" wx:elif="{{attractionList.length > 0}}">
+        <view class="attractions-waterfall">
+          <view class="waterfall-col">
+            <view class="attraction-waterfall-item" wx:for="{{attractionListLeft}}" wx:key="id">
+              <t-image wx:if="{{item.image}}" class="attraction-image" src="{{item.image}}" mode="aspectFill" />
+              <view class="attraction-body">
+                <view class="attraction-name">{{item.name}}</view>
+                <view class="attraction-tags" wx:if="{{item.tags.length > 0}}">
+                  <t-tag wx:for="{{item.tags}}" wx:key="*this" wx:for-item="tag" size="small" theme="primary" variant="light">{{tag}}</t-tag>
+                </view>
+                <view class="attraction-desc">{{item.description}}</view>
+              </view>
+            </view>
+          </view>
+          <view class="waterfall-col">
+            <view class="attraction-waterfall-item" wx:for="{{attractionListRight}}" wx:key="id">
+              <t-image wx:if="{{item.image}}" class="attraction-image" src="{{item.image}}" mode="aspectFill" />
+              <view class="attraction-body">
+                <view class="attraction-name">{{item.name}}</view>
+                <view class="attraction-tags" wx:if="{{item.tags.length > 0}}">
+                  <t-tag wx:for="{{item.tags}}" wx:key="*this" wx:for-item="tag" size="small" theme="primary" variant="light">{{tag}}</t-tag>
+                </view>
+                <view class="attraction-desc">{{item.description}}</view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <t-divider content="已加载全部" wx:if="{{!attractionHasMore}}" />
+      </view>
+      <t-empty wx:else description="暂无景点数据" class="empty" />
+    </t-tab-panel>
+
+    <!-- 宣传视频 -->
+    <t-tab-panel value="video" label="宣传视频">
+      <!-- 骨架屏 -->
+      <view class="tab-panel-body" wx:if="{{skeletonVideo}}">
+        <view class="skeleton-video-item" wx:for="{{[1,2,3]}}" wx:key="*this">
+          <view class="skeleton-video-header">
+            <view class="skeleton-line skeleton-line-title" style="width:60%"></view>
+            <view class="skeleton-line" style="width:80rpx"></view>
+          </view>
+          <view class="skeleton-video-player"></view>
+          <view class="skeleton-line" style="margin-top:10rpx"></view>
+          <view class="skeleton-line skeleton-line-short" style="margin-top:8rpx"></view>
+        </view>
+      </view>
+      <!-- 实际内容 -->
+      <view class="tab-panel-body" wx:elif="{{videoList.length > 0}}">
+        <view class="video-card" wx:for="{{videoList}}" wx:key="id">
+          <view class="video-header">
+            <view class="video-title">{{item.title}}</view>
+            <view class="video-time">{{item.publishTime}}</view>
+          </view>
+          <video class="video-player" src="{{item.videoUrl}}" controls show-center-play-btn show-play-btn></video>
+          <view class="video-desc">{{item.description}}</view>
+        </view>
+        <t-divider content="已加载全部" wx:if="{{!videoHasMore}}" />
+      </view>
+      <t-empty wx:else description="暂无宣传视频" class="empty" />
+    </t-tab-panel>
+
+    <!-- 新闻动态 -->
+    <t-tab-panel value="news" label="新闻动态">
+      <!-- 骨架屏 -->
+      <view class="tab-panel-body" wx:if="{{skeletonNews}}">
+        <view class="skeleton-news-item" wx:for="{{[1,2,3,4,5]}}" wx:key="*this">
+          <view class="skeleton-line skeleton-line-title"></view>
+          <view class="skeleton-line" style="margin-top:10rpx;width:90%"></view>
+          <view class="skeleton-line skeleton-line-short" style="margin-top:8rpx"></view>
+        </view>
+      </view>
+      <!-- 实际内容 -->
+      <view class="tab-panel-body" wx:elif="{{newsList.length > 0}}">
+        <view class="news-item" wx:for="{{newsList}}" wx:key="id">
+          <view class="news-title">{{item.title}}</view>
+          <view class="news-footer">
+            <view class="news-desc">{{item.description}}</view>
+            <view class="news-time">{{item.publishTime}}</view>
+          </view>
+        </view>
+        <t-divider content="已加载全部" wx:if="{{!newsHasMore}}" />
+      </view>
+      <t-empty wx:else description="暂无新闻动态" class="empty" />
+    </t-tab-panel>
+
+  </t-tabs>
+
+  <t-toast id="t-toast" />
+</view>
