@@ -1,5 +1,32 @@
 <view class="workbench-page">
   <image class="page-bg" src="/assets/bg.png" mode="aspectFill" />
-  <t-navbar title="工作台" fixed placeholder style="--td-navbar-bg-color: transparent;"/>
-  <text>pages/workbench/index.wxml</text>
+  <t-navbar title="工作台" fixed placeholder style="{{showNavBar ? '' : '--td-navbar-bg-color: transparent;'}}" />
+
+  <!-- Banner -->
+  <view class="wb-banner">
+    <t-image class="wb-banner-image" src="/assets/home/banner2.jpg" mode="cover" />
+  </view>
+  <!-- Grid sections -->
+  <view class="wb-sections">
+    <view class="wb-section" wx:for="{{sections}}" wx:key="title" wx:for-item="section">
+      <view class="wb-section-header">
+        <view class="wb-section-title">{{section.title}}</view>
+      </view>
+      <view class="wb-section-card">
+        <t-grid column="4" border="{{false}}" hover="{{false}}" style="--td-grid-bg-color: transparent;">
+          <t-grid-item
+            wx:for="{{section.items}}"
+            wx:key="text"
+            wx:for-item="item"
+            text="{{item.text}}"
+            image="{{item.image}}"
+            style="--td-grid-item-bg-color: transparent;"
+            t-class-image="wb-section-image" 
+            data-url="{{item.url}}"
+            bind:click="onGridItemTap"
+          />
+        </t-grid>
+      </view>
+    </view>
+  </view>
 </view>

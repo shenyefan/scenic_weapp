@@ -1,9 +1,11 @@
-/* pages/workbench/index.wxss */
+@import '../../variable.less';
 
 .workbench-page {
   min-height: 100vh;
+	padding-bottom: calc(env(safe-area-inset-bottom) + 128rpx);
 }
 
+// 背景图
 .page-bg {
   position: fixed;
   top: 0;
@@ -11,4 +13,57 @@
   width: 100%;
   height: 100%;
   z-index: -1;
+}
+
+.wb-banner {
+  padding: @page-padding;
+}
+
+.wb-banner-image {
+  width: 100%;
+  height: 256rpx;
+  overflow: hidden;
+}
+
+.wb-sections {
+  padding: 0 @page-padding;
+}
+
+.wb-section {
+  margin-bottom: @page-padding;
+}
+
+.wb-section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+  padding: 0 4rpx;
+}
+
+.wb-section-dot {
+  width: 8rpx;
+  height: 32rpx;
+  background: @color-brand;
+  border-radius: @radius-sm;
+  margin-right: 16rpx;
+}
+
+.wb-section-title {
+  font-size: @font-size-subtitle;
+  font-weight: @font-weight-bold;
+  color: @color-text-dark;
+  padding-left: 16rpx;
+  border-left: 6rpx solid @color-brand;
+}
+
+.wb-section-card {
+  background: @color-white;
+  border-radius: @radius-lg;
+  box-shadow: @shadow-card-brand;
+  overflow: hidden;
+}
+
+.wb-section-image {
+  border-radius: @radius-lg;
+  transform: scale(0.8);
 }
