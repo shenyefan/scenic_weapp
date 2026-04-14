@@ -1,0 +1,7 @@
+{
+  "navigationStyle": "custom",
+  "styleIsolation": "shared",
+  "usingComponents": {
+    "t-navbar": "tdesign-miniprogram/navbar/navbar"
+  }
+}
