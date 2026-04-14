@@ -3,7 +3,7 @@
 page {
   height: 100%;
   overflow: hidden;
-  background-color: #fff;
+  background-color: @color-white;
 }
 
 // 背景图
@@ -73,8 +73,8 @@ page {
 
 .popup-title {
   font-size: 34rpx;
-  font-weight: 600;
-  color: #333;
+  font-weight: @font-weight-bold;
+  color: @color-text-dark;
 }
 
 .popup-new-btn {
@@ -82,9 +82,9 @@ page {
   align-items: center;
   gap: 8rpx;
   font-size: 26rpx;
-  color: @brand7-normal;
+  color: @color-brand;
   padding: 8rpx 16rpx;
-  border-radius: @border-radius-default;
+  border-radius: @radius-md;
 
   &:active {
     opacity: 0.7;
@@ -105,22 +105,22 @@ page {
 
 .skeleton-item {
   padding: 24rpx 0;
-  border-bottom: 1rpx solid #eee;
+  border-bottom: 1rpx solid @color-border;
 }
 
 .skeleton-title {
   width: 60%;
   height: 28rpx;
-  background: #e5e5e5;
-  border-radius: 8rpx;
+  background: @color-border;
+  border-radius: @radius-sm;
   margin-bottom: 12rpx;
 }
 
 .skeleton-time {
   width: 30%;
   height: 22rpx;
-  background: #eee;
-  border-radius: 8rpx;
+  background: @color-border;
+  border-radius: @radius-sm;
 }
 
 // 空状态
@@ -130,13 +130,13 @@ page {
   align-items: center;
   justify-content: center;
   padding-top: 120rpx;
-  color: #999;
-  font-size: 28rpx;
+  color: @color-text-hint;
+  font-size: @font-size-body;
 }
 
 .popup-empty-sub {
-  font-size: 24rpx;
-  color: #bbb;
+  font-size: @font-size-caption;
+  color: @color-text-3;
   margin-top: 12rpx;
 }
 
@@ -146,20 +146,20 @@ page {
   align-items: center;
   justify-content: space-between;
   padding: 24rpx 16rpx;
-  border-radius: @border-radius-default;
+  border-radius: @radius-md;
   margin: 8rpx;
-  transition: background 0.15s;
+  transition: background @transition-base;
 
   &:active {
     background: rgba(0, 0, 0, 0.04);
   }
 
   &.active {
-    background: @brand7-normal;
+    background: @color-brand;
 
     .session-title,
     .session-time {
-      color: #fff;
+      color: @color-white;
     }
   }
 }
@@ -172,16 +172,16 @@ page {
 }
 
 .session-title {
-  font-size: 28rpx;
-  color: #333;
+  font-size: @font-size-body;
+  color: @color-text-dark;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
 .session-time {
-  font-size: 22rpx;
-  color: #999;
+  font-size: @font-size-caption;
+  color: @color-text-hint;
   margin-top: 6rpx;
 }
 

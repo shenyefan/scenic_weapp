@@ -1,24 +1,24 @@
 @import 'variable.less';
 
 page {
-  background-color: #f3f3f3;
+  background-color: @color-bg;
 }
 
 .page {
   height: 100vh;
-  background-color: #fff;
+  background-color: @color-white;
 }
 
 .scenic-title {
-  font-size: 48rpx;
-  font-weight: 700;
+  font-size: @font-size-display;
+  font-weight: @font-weight-bold;
   line-height: 64rpx;
-  margin: 48rpx 32rpx 0;
+  margin: 48rpx @page-padding 0;
 }
 
 .scenic-desc {
-  font-size: 28rpx;
-  color: @gy3;
-  margin: 16rpx 32rpx;
+  font-size: @font-size-body;
+  color: @color-text-3;
+  margin: 16rpx @page-padding;
   line-height: 44rpx;
 }

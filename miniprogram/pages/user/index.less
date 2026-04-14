@@ -18,7 +18,7 @@
 
   &__avatar {
     flex-shrink: 0;
-    margin-right: 24rpx;
+    margin-right: @block-padding;
     --td-avatar-bg-color: rgba(255, 255, 255, 0.6);
   }
 
@@ -31,9 +31,9 @@
   }
 
   &__name {
-    font-size: 36rpx;
+    font-size: @font-size-title;
     font-weight: @font-weight-bold;
-    color: @gy1;
+    color: @color-text-1;
     line-height: 1.4;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -42,8 +42,8 @@
 
   &__role,
   &__desc {
-    font-size: 24rpx;
-    color: @gy2;
+    font-size: @font-size-caption;
+    color: @color-text-2;
     margin-top: 6rpx;
     line-height: 1.4;
   }
@@ -52,10 +52,10 @@
 // 内容区域
 .user-grid,
 .user-section {
-  margin-bottom: 32rpx;
+  margin-bottom: @page-padding;
 }
 
 // 退出登录
 .user-logout-cell {
-  --td-cell-title-color: @error-color;
+  --td-cell-title-color: @color-error;
 }

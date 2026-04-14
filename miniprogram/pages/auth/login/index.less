@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: @bg-color-white;
+  background-color: @color-white;
   padding: 0 @page-padding;
 }
 
@@ -29,7 +29,7 @@
   &__text {
     font-size: 36rpx;
     font-weight: @font-weight-bold;
-    color: @gy1;
+    color: @color-text-1;
   }
 }
 
@@ -39,19 +39,19 @@
   &__title {
     font-size: 52rpx;
     font-weight: @font-weight-bold;
-    color: @gy1;
+    color: @color-text-1;
     margin-bottom: 12rpx;
   }
 
   &__desc {
-    font-size: @font-size-small;
-    color: @gy3;
+    font-size: @font-size-base;
+    color: @color-text-3;
   }
 }
 
 .auth-form {
   &__item {
-    border-bottom: 2rpx solid @gray3;
+    border-bottom: 2rpx solid @color-border;
   }
 
   &__btn {
@@ -84,24 +84,24 @@
   }
 
   &__link {
-    font-size: @font-size-small;
-    color: @gy2;
+    font-size: @font-size-base;
+    color: @color-text-2;
     padding: 0 20rpx;
 
     &--active {
-      color: @gy1;
+      color: @color-text-1;
       font-weight: @font-weight-bold;
     }
   }
 
   &__divider {
-    font-size: @font-size-mini;
-    color: @gray3;
+    font-size: @font-size-sm;
+    color: @color-border;
   }
 
   &__copyright {
     text-align: center;
-    font-size: @font-size-mini;
-    color: @gy3;
+    font-size: @font-size-sm;
+    color: @color-text-3;
   }
 }

@@ -2,7 +2,7 @@
 @import '../../../variable.less';
 
 .orders-page {
-  background: @bg-color;
+  background: @color-bg;
   min-height: 100vh;
 }
 
@@ -18,7 +18,7 @@
 }
 
 .orders-item {
-  background: @bg-color-white;
+  background: @color-white;
   margin-bottom: 24rpx;
 
   &__head {
@@ -26,32 +26,32 @@
     align-items: center;
     justify-content: space-between;
     padding: 24rpx @page-padding 16rpx;
-    border-bottom: 1rpx solid @gray3;
+    border-bottom: 1rpx solid @color-border;
   }
 
   &__id {
-    font-size: @font-size-mini;
-    color: @gy3;
+    font-size: @font-size-sm;
+    color: @color-text-3;
   }
 
   &__actions {
     display: flex;
     justify-content: flex-end;
     padding: 16rpx @page-padding;
-    border-top: 1rpx solid @gray3;
+    border-top: 1rpx solid @color-border;
   }
 }
 
 .orders-price {
-  font-size: @font-size-large;
+  font-size: @font-size-lg;
   font-weight: @font-weight-bold;
-  color: @error-color;
+  color: @color-error;
 }
 
 .orders-loadmore,
 .orders-nomore {
   text-align: center;
   padding: 32rpx;
-  font-size: @font-size-mini;
-  color: @gy3;
+  font-size: @font-size-sm;
+  color: @color-text-3;
 }
