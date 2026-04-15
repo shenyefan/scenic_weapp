@@ -14,6 +14,9 @@
         bind:change="onSearchChange"
         bind:clear="onSearchClear"
       />
+      <view wx:if="{{role == 'admin'}}" class="action-btn-wrap">
+        <t-button theme="primary" bind:tap="onAddTap" icon="add">新建</t-button>
+      </view>
     </view>
   </t-sticky>
 

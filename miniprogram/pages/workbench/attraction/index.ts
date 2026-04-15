@@ -161,6 +161,10 @@ Page({
     if (id) wx.navigateTo({ url: `../attraction-edit/index?id=${id}` })
   },
 
+  onAddTap() {
+    wx.navigateTo({ url: '../attraction-edit/index' })
+  },
+
   onDeleteTap(e: any) {
     const { id, name } = e.currentTarget.dataset
     this.setData({ showDeleteDialog: true, deleteTargetId: id, deleteTargetName: name })
