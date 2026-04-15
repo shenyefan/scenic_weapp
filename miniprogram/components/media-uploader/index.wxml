@@ -1,0 +1,23 @@
+<view>
+  <view wx:if="{{src}}" class="media-preview-wrap">
+    <t-image wx:if="{{mediaType != 'video'}}" src="{{src}}" mode="aspectFill" class="media-preview-img" />
+    <video wx:else src="{{src}}" class="media-preview-video" controls />
+    <view class="media-delete-btn" catchtap="onClear">
+      <t-icon name="close-circle-filled" size="44rpx" color="#fff" />
+    </view>
+    <view class="media-change-btn" bind:tap="onPick">
+      <t-icon wx:if="{{!uploading}}" name="{{mediaType == 'video' ? 'refresh' : 'camera'}}" size="32rpx" color="#fff" />
+      <t-loading wx:else size="32px" theme="circular" />
+      <text class="media-change-text">{{uploading ? '上传中' : '更换'}}</text>
+    </view>
+  </view>
+  <view wx:else class="media-empty" bind:tap="onPick">
+    <t-loading wx:if="{{uploading}}" size="48px" theme="circular" />
+    <block wx:else>
+      <t-icon name="upload" size="48px" color="#c0c0c0" />
+      <text class="media-empty-text">{{emptyText}}</text>
+    </block>
+  </view>
+  <text class="media-hint">{{hint}}</text>
+  <t-toast id="t-toast" />
+</view>

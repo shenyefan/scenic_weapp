@@ -1,10 +1,25 @@
 <view class="page-container">
   <t-navbar title="{{isEdit ? '编辑景点' : '新建景点'}}" leftArrow placeholder z-index="100"/>
 
-  <!-- 加载中 -->
-  <view class="loading-wrap" wx:if="{{initLoading}}">
-    <t-loading theme="circular" size="40px" text="加载中..." />
-  </view>
+  <!-- 骨架屏 -->
+  <block wx:if="{{initLoading}}">
+    <view class="skeleton-section-header"></view>
+    <view class="form-group">
+      <view class="skeleton-cell-row" wx:for="{{[1,2,3]}}" wx:key="*this">
+        <view class="skeleton-block skeleton-cell-label"></view>
+        <view class="skeleton-block skeleton-cell-value"></view>
+      </view>
+    </view>
+    <view class="skeleton-section-header" style="margin-top:24rpx;"></view>
+    <view class="form-group">
+      <view class="skeleton-cell-row">
+        <view class="skeleton-block skeleton-cell-label"></view>
+        <view class="skeleton-block skeleton-cell-value"></view>
+      </view>
+    </view>
+    <view class="skeleton-section-header" style="margin-top:24rpx;"></view>
+    <view class="form-group skeleton-media-block"></view>
+  </block>
 
   <block wx:else>
     <!-- 基本信息 -->
@@ -81,49 +96,27 @@
     <!-- 景点图片 -->
     <view class="section-header">景点图片</view>
     <view class="form-group media-section">
-      <view wx:if="{{form.attractionsImage}}" class="media-preview-wrap">
-        <t-image src="{{form.attractionsImage}}" mode="aspectFill" class="media-preview-img" />
-        <view class="media-delete-btn" catchtap="onClearImage">
-          <t-icon name="close-circle-filled" size="44rpx" color="#fff" />
-        </view>
-        <view class="media-change-btn" bind:tap="onPickImage">
-          <t-icon wx:if="{{!imageUploading}}" name="camera" size="32rpx" color="#fff" />
-          <t-loading wx:else size="32px" theme="circular" />
-          <text class="media-change-text">{{imageUploading ? '上传中' : '更换'}}</text>
-        </view>
-      </view>
-      <view wx:else class="media-empty" bind:tap="onPickImage">
-        <t-loading wx:if="{{imageUploading}}" size="48px" theme="circular" />
-        <block wx:else>
-          <t-icon name="upload" size="48px" color="#c0c0c0" />
-          <text class="media-empty-text">点击上传图片</text>
-        </block>
-      </view>
-      <text class="media-hint">支持 JPG/PNG，建议比例 16:9，大小不超过 5MB</text>
+      <media-uploader
+        src="{{form.attractionsImage}}"
+        folder="attraction"
+        mediaType="image"
+        hint="支持 JPG/PNG，建议比例 16:9，大小不超过 5MB"
+        emptyText="点击上传图片"
+        bind:change="onImageChange"
+      />
     </view>
 
     <!-- 景点视频 -->
     <view class="section-header">景点视频</view>
     <view class="form-group media-section">
-      <view wx:if="{{form.attractionsVideo}}" class="media-preview-wrap">
-        <video src="{{form.attractionsVideo}}" class="media-preview-video" controls />
-        <view class="media-delete-btn" catchtap="onClearVideo">
-          <t-icon name="close-circle-filled" size="44rpx" color="#fff" />
-        </view>
-        <view class="media-change-btn" bind:tap="onPickVideo">
-          <t-icon wx:if="{{!videoUploading}}" name="refresh" size="32rpx" color="#fff" />
-          <t-loading wx:else size="32px" theme="circular" />
-          <text class="media-change-text">{{videoUploading ? '上传中' : '更换'}}</text>
-        </view>
-      </view>
-      <view wx:else class="media-empty" bind:tap="onPickVideo">
-        <t-loading wx:if="{{videoUploading}}" size="48px" theme="circular" />
-        <block wx:else>
-          <t-icon name="upload" size="48px" color="#c0c0c0" />
-          <text class="media-empty-text">点击上传视频</text>
-        </block>
-      </view>
-      <text class="media-hint">支持 MP4，时长建议不超过 3 分钟，大小不超过 50MB</text>
+      <media-uploader
+        src="{{form.attractionsVideo}}"
+        folder="attraction"
+        mediaType="video"
+        hint="支持 MP4，时长建议不超过 3 分钟，大小不超过 50MB"
+        emptyText="点击上传视频"
+        bind:change="onVideoChange"
+      />
     </view>
 
     <!-- 提交按钮 -->
@@ -138,23 +131,15 @@
     </view>
   </block>
 
-  <!-- 景点类型多选弹窗（picker 样式） -->
-  <t-popup visible="{{showTypePicker}}" placement="bottom" bind:visible-change="onTypePickerVisibleChange">
-    <view class="multi-picker-popup">
-      <view class="multi-picker-header">
-        <text class="multi-picker-cancel" bind:tap="onTypePickerCancel">取消</text>
-        <text class="multi-picker-title">选择景点类型</text>
-        <text class="multi-picker-confirm" bind:tap="onTypePickerConfirm">确认</text>
-      </view>
-      <scroll-view scroll-y class="multi-picker-body">
-        <t-checkbox-group value="{{pendingTypeIds}}" bind:change="onPendingTypeChange">
-          <view wx:for="{{typeList}}" wx:key="id">
-            <t-checkbox value="{{item.id}}" label="{{item.typeName}}" />
-          </view>
-        </t-checkbox-group>
-      </scroll-view>
-    </view>
-  </t-popup>
+  <!-- 景点类型多选弹窗 -->
+  <multi-select-picker
+    visible="{{showTypePicker}}"
+    title="选择景点类型"
+    options="{{typeOptions}}"
+    value="{{form.typeIds}}"
+    bind:confirm="onTypePickerConfirm"
+    bind:cancel="onTypePickerCancel"
+  />
 
   <!-- 巡查员 picker -->
   <t-picker

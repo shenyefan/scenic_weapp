@@ -57,7 +57,7 @@ function buildSections(role: string): GridSection[] {
         title: '工作台',
         items: [
           ...common,
-          { text: '巡查任务', image: '/assets/workbench/task.svg', url: '/pages/workbench/inspection-task/index' },
+          { text: '巡查任务', image: '/assets/workbench/task.svg', url: '/pages/workbench/inspection/index' },
           { text: '巡查检查', image: '/assets/workbench/inspect.svg', url: '/pages/workbench/inspection/index' },
           { text: '巡查记录', image: '/assets/workbench/track.svg', url: '/pages/workbench/inspection-record/index' },
         ],
@@ -75,9 +75,9 @@ function buildSections(role: string): GridSection[] {
         title: '工作台',
         items: [
           ...common,
-          { text: '巡查任务', image: '/assets/workbench/task.svg', url: '/pages/workbench/inspection-task/index' },
+          { text: '巡查任务', image: '/assets/workbench/task.svg', url: '/pages/workbench/inspection/index' },
           { text: '巡查轨迹', image: '/assets/workbench/track.svg', url: '/pages/workbench/track/index' },
-          { text: '处置任务', image: '/assets/workbench/disposal.svg', url: '/pages/workbench/disposal-task/index' },
+          { text: '处置任务', image: '/assets/workbench/disposal.svg', url: '/pages/workbench/disposal/index' },
           { text: '签到记录', image: '/assets/workbench/checkin.svg', url: '/pages/workbench/checkin-record/index' },
           { text: '用户管理', image: '/assets/workbench/users.svg', url: '/pages/workbench/user-manage/index' },
         ],

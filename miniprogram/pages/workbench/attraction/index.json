@@ -15,14 +15,10 @@
     "t-tag": "tdesign-miniprogram/tag/tag",
     "t-button": "tdesign-miniprogram/button/button",
     "t-icon": "tdesign-miniprogram/icon/icon",
-    "t-popup": "tdesign-miniprogram/popup/popup",
-    "t-checkbox": "tdesign-miniprogram/checkbox/checkbox",
-    "t-checkbox-group": "tdesign-miniprogram/checkbox-group/checkbox-group",
     "t-empty": "tdesign-miniprogram/empty/empty",
     "t-loading": "tdesign-miniprogram/loading/loading",
     "t-divider": "tdesign-miniprogram/divider/divider",
-    "t-picker": "tdesign-miniprogram/picker/picker",
-    "t-picker-item": "tdesign-miniprogram/picker-item/picker-item",
-    "t-toast": "tdesign-miniprogram/toast/toast"
+    "t-toast": "tdesign-miniprogram/toast/toast",
+    "multi-select-picker": "/components/multi-select-picker/index"
   }
 }

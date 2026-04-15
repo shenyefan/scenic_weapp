@@ -1,0 +1,16 @@
+<t-popup visible="{{visible}}" placement="bottom" bind:visible-change="onVisibleChange">
+  <view class="multi-picker-popup">
+    <view class="multi-picker-header">
+      <text class="multi-picker-cancel" bind:tap="onCancel">取消</text>
+      <text class="multi-picker-title">{{title}}</text>
+      <text class="multi-picker-confirm" bind:tap="onConfirm">确认</text>
+    </view>
+    <scroll-view scroll-y class="multi-picker-body">
+      <t-checkbox-group value="{{pendingValue}}" bind:change="onPendingChange">
+        <view wx:for="{{options}}" wx:key="id" class="multi-picker-item">
+          <t-checkbox value="{{item.id}}" label="{{item.label}}" />
+        </view>
+      </t-checkbox-group>
+    </scroll-view>
+  </view>
+</t-popup>

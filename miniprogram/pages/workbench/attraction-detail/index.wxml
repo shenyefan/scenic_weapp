@@ -1,10 +1,24 @@
 <view class="page-container">
   <t-navbar title="景点详情" leftArrow placeholder z-index="100"/>
 
-  <!-- 加载中 -->
-  <view class="loading-wrap" wx:if="{{loading}}">
-    <t-loading theme="circular" size="40px" text="加载中..." />
-  </view>
+  <!-- 骨架屏 -->
+  <block wx:if="{{loading}}">
+    <view class="skeleton-hero"></view>
+    <view class="skeleton-section">
+      <view class="skeleton-row">
+        <view class="skeleton-block skeleton-name"></view>
+        <view class="skeleton-block skeleton-tag"></view>
+      </view>
+      <view class="skeleton-block skeleton-meta-row"></view>
+      <view class="skeleton-block skeleton-meta-row"></view>
+    </view>
+    <view class="skeleton-section" style="margin-top:16rpx;">
+      <view class="skeleton-block skeleton-section-title"></view>
+      <view class="skeleton-block skeleton-line"></view>
+      <view class="skeleton-block skeleton-line skeleton-line--short"></view>
+      <view class="skeleton-block skeleton-line"></view>
+    </view>
+  </block>
 
   <block wx:elif="{{detail}}">
     <!-- 头部图片 -->

@@ -9,6 +9,73 @@ page {
   padding-bottom: calc(env(safe-area-inset-bottom) + 32rpx);
 }
 
+// ===== 骨架屏 =====
+@keyframes skeleton-shine {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-block {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shine 1.4s infinite;
+  border-radius: @radius-sm;
+}
+
+.skeleton-hero {
+  width: 100%;
+  height: 480rpx;
+  .skeleton-block();
+  border-radius: 0;
+}
+
+.skeleton-section {
+  background: @color-white;
+  margin-top: 0;
+  padding: 32rpx @page-padding;
+}
+
+.skeleton-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24rpx;
+  margin-bottom: 24rpx;
+}
+
+.skeleton-name {
+  height: 44rpx;
+  width: 300rpx;
+}
+
+.skeleton-tag {
+  height: 36rpx;
+  width: 100rpx;
+  border-radius: 100rpx;
+}
+
+.skeleton-meta-row {
+  height: 32rpx;
+  width: 60%;
+  margin-bottom: 20rpx;
+}
+
+.skeleton-section-title {
+  height: 36rpx;
+  width: 160rpx;
+  margin-bottom: 24rpx;
+}
+
+.skeleton-line {
+  height: 28rpx;
+  width: 100%;
+  margin-bottom: 16rpx;
+
+  &--short {
+    width: 65%;
+  }
+}
+
 // ===== 加载 =====
 .loading-wrap {
   display: flex;

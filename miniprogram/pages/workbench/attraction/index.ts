@@ -16,8 +16,8 @@ Page({
     hasMore: true,
     searchKeyword: '',
     selectedTypeIds: [] as string[],
-    pendingTypeIds: [] as string[],
     typeList: [] as { id: string; typeName: string }[],
+    typeOptions: [] as { id: string; label: string }[],
     showTypeFilter: false,
     showDeleteDialog: false,
     deleteTargetId: '',
@@ -63,7 +63,8 @@ Page({
     try {
       const res = await listAllTypes()
       const typeList = (res?.data ?? []).map((t: any) => ({ id: t.id, typeName: t.typeName || '未知类型' }))
-      this.setData({ typeList })
+      const typeOptions = typeList.map((t) => ({ id: t.id, label: t.typeName }))
+      this.setData({ typeList, typeOptions })
     } catch {}
   },
 
@@ -130,21 +131,13 @@ Page({
   },
 
   onFilterTap() {
-    this.setData({ pendingTypeIds: [...this.data.selectedTypeIds], showTypeFilter: true })
+    this.setData({ showTypeFilter: true })
   },
 
-  onTypeFilterChange(e: any) {
-    this.setData({ pendingTypeIds: e?.detail?.value ?? [] })
-  },
-
-  onFilterReset() {
-    this.setData({ pendingTypeIds: [] })
-  },
-
-  onFilterConfirm() {
-    const { pendingTypeIds } = this.data
+  onFilterConfirm(e: any) {
+    const ids: string[] = e?.detail?.value ?? []
     this.setData({
-      selectedTypeIds: pendingTypeIds,
+      selectedTypeIds: ids,
       showTypeFilter: false,
       list: [],
       page: 1,
@@ -156,10 +149,6 @@ Page({
 
   onFilterCancel() {
     this.setData({ showTypeFilter: false })
-  },
-
-  onFilterVisibleChange(e: any) {
-    if (!e?.detail?.visible) this.setData({ showTypeFilter: false })
   },
 
   onItemTap(e: any) {

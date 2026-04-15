@@ -1,0 +1,50 @@
+@import '../../variable.less';
+
+.multi-picker-popup {
+  background: @color-white;
+  border-radius: @radius-lg @radius-lg 0 0;
+  overflow: hidden;
+}
+
+.multi-picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 @page-padding;
+  height: 96rpx;
+  border-bottom: 1rpx solid @color-border;
+}
+
+.multi-picker-cancel {
+  font-size: @font-size-subtitle;
+  color: @color-text-3;
+  padding: 16rpx 0;
+  min-width: 80rpx;
+}
+
+.multi-picker-title {
+  font-size: @font-size-subtitle;
+  color: @color-text-1;
+  font-weight: @font-weight-bold;
+}
+
+.multi-picker-confirm {
+  font-size: @font-size-subtitle;
+  color: @color-brand;
+  padding: 16rpx 0;
+  text-align: right;
+  min-width: 80rpx;
+}
+
+.multi-picker-body {
+  max-height: 560rpx;
+  padding: 8rpx 0;
+}
+
+.multi-picker-item {
+  border-bottom: 1rpx @color-border;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}

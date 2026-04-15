@@ -6,20 +6,15 @@ import {
 } from '../../../api/controller/attractions-controller/attractions-controller'
 import { listAllTypes } from '../../../api/controller/attractions-type-controller/attractions-type-controller'
 import { listUserByPage } from '../../../api/controller/user-controller/user-controller'
-import { uploadFile } from '../../../api/upload'
 
 Page({
   data: {
     isEdit: false,
     initLoading: false,
     submitting: false,
-    imageUploading: false,
-    videoUploading: false,
     showTypePicker: false,
     showInspectorPicker: false,
-    typeList: [] as { id: string; typeName: string }[],
-    pendingTypeIds: [] as string[],
-    inspectorPickerOptions: [] as { label: string; value: string }[],
+    typeOptions: [] as { id: string; label: string }s { label: string; value: string }[],
     inspectorPickerValue: [''] as string[],
     form: {
       attractionsName: '',
@@ -82,8 +77,8 @@ Page({
     try {
       const res = await listAllTypes()
       this.setData({
-        typeList: (res?.data ?? []).map((t: any) => ({ id: t.id, typeName: t.typeName || '' })),
-      })
+        typeOptions: (res?.data ?? []).map((t: any) => ({ id: t.id, label: t.typeName || '' })),
+      })Options: (res?.data ?? []).map((t: any) => ({ id: t.id, label
     } catch {}
   },
 
@@ -101,58 +96,8 @@ Page({
     } catch {}
   },
 
-  onPickImage() {
-    if (this.data.imageUploading) return
-    wx.chooseMedia({
-      count: 1,
-      mediaType: ['image'],
-      sizeType: ['compressed'],
-      sourceType: ['album', 'camera'],
-      success: (res) => {
-        const path = res.tempFiles[0]?.tempFilePath
-        if (!path) return
-        this.setData({ imageUploading: true })
-        uploadFile(path, 'attraction')
-          .then((url) => {
-            this.setData({ 'form.attractionsImage': url, imageUploading: false })
-          })
-          .catch(() => {
-            this.setData({ imageUploading: false })
-            Toast({ context: this, selector: '#t-toast', message: '图片上传失败', theme: 'error' })
-          })
-      },
-    })
-  },
-
-  onClearImage() {
-    this.setData({ 'form.attractionsImage': '' })
-  },
-
-  onClearVideo() {
-    this.setData({ 'form.attractionsVideo': '' })
-  },
-
-  onPickVideo() {
-    if (this.data.videoUploading) return
-    wx.chooseMedia({
-      count: 1,
-      mediaType: ['video'],
-      sourceType: ['album', 'camera'],
-      success: (res) => {
-        const path = res.tempFiles[0]?.tempFilePath
-        if (!path) return
-        this.setData({ videoUploading: true })
-        uploadFile(path, 'attraction')
-          .then((url) => {
-            this.setData({ 'form.attractionsVideo': url, videoUploading: false })
-          })
-          .catch(() => {
-            this.setData({ videoUploading: false })
-            Toast({ context: this, selector: '#t-toast', message: '视频上传失败', theme: 'error' })
-          })
-      },
-    })
-  },
+  onImageChange(e: any) { this.setData({ 'form.attractionsImage': e.detail?.value ?? '' }) },
+  onVideoChange(e: any) { this.setData({ 'form.attractionsVideo': e.detail?.value ?? '' }) },
 
   onNameChange(e: any) { this.setData({ 'form.attractionsName': e.detail?.value ?? '' }) },
   onDescChange(e: any) { this.setData({ 'form.attractionsDescription': e.detail?.value ?? '' }) },
@@ -160,24 +105,14 @@ Page({
   onLatChange(e: any) { this.setData({ 'form.latStr': e.detail?.value ?? '' }) },
 
   // 景点类型多选
-  onTypePickerTap() {
-    this.setData({ pendingTypeIds: [...this.data.form.typeIds], showTypePicker: true })
-  },
+  onTypePickerTap() { this.setData({ showTypePicker: true }) },
+  onTypePickerCancel( this.setData({ showTypePicker: true }) },
   onTypePickerCancel() { this.setData({ showTypePicker: false }) },
-  onTypePickerVisibleChange(e: any) {
-    if (!e?.detail?.visible) this.setData({ showTypePicker: false })
-  },
-  onPendingTypeChange(e: any) { this.setData({ pendingTypeIds: e?.detail?.value ?? [] }) },
-  onTypePickerConfirm() {
-    const { pendingTypeIds, typeList } = this.data
-    const typeNames = pendingTypeIds.map((id) => typeList.find((t) => t.id === id)?.typeName ?? '').filter(Boolean)
-    this.setData({ 'form.typeIds': pendingTypeIds, 'form.typeNames': typeNames, showTypePicker: false })
-  },
-
-  // 巡查员 picker
-  onInspectorPickerTap() { this.setData({ showInspectorPicker: true }) },
-  onInspectorPickerCancel() { this.setData({ showInspectorPicker: false }) },
-  onInspectorPickerConfirm(e: any) {
+  onTypePickerConfirm(e: any) {
+    const value: string[] = e?.detail?.value ?? []
+    const { typeOptions } = this.data
+    const typeNames = value.map((id) => typeOptions.find((t) => t.id === id)?.label ?? '').filter(Boolean)
+    this.setData({ 'form.typeIds': value
     const value: string = e.detail.value?.[0] ?? ''
     const label: string = e.detail.label?.[0] ?? ''
     this.setData({

@@ -1,6 +1,159 @@
 <view class="page-container">
-  <t-navbar title="处置任务" leftArrow/>
-  <view class="page-body">
-    <view>功能开发中…</view>
-  </view>
+  <t-navbar title="{{isEdit ? '编辑处置任务' : '派发处置任务'}}" leftArrow placeholder z-index="100" />
+
+  <!-- 骨架屏 -->
+  <block wx:if="{{initLoading}}">
+    <view class="skeleton-section-header"></view>
+    <view class="form-group">
+      <view class="skeleton-cell-row" wx:for="{{[1,2,3]}}" wx:key="*this">
+        <view class="skeleton-block skeleton-cell-label"></view>
+        <view class="skeleton-block skeleton-cell-value"></view>
+      </view>
+    </view>
+    <view class="skeleton-section-header" style="margin-top:24rpx;"></view>
+    <view class="form-group skeleton-media-block"></view>
+  </block>
+
+  <block wx:else>
+    <!-- 关联巡查事件信息（编辑时展示） -->
+    <block wx:if="{{isEdit && linkedInspection}}">
+      <view class="section-header">巡查事件信息</view>
+      <view class="form-group">
+        <t-cell title="景点" note="{{linkedInspection.attractionsName}}" />
+        <t-cell title="巡查员" note="{{linkedInspection.inspectorName || '-'}}" />
+        <t-cell title="巡查日期" note="{{linkedInspection.taskDate || '-'}}" />
+        <t-cell title="任务状态" note="{{linkedInspection.taskStatusLabel}}" />
+        <t-cell title="异常状态" note="{{linkedInspection.abnormalStatusLabel}}" />
+        <t-cell title="异常描述" note="{{linkedInspection.inspectionDescription}}" wx:if="{{linkedInspection.inspectionDescription}}"/>
+      </view>
+
+      <view class="section-header" wx:if="{{linkedInspection.inspectionImages}}">巡查图片</view>
+      <view wx:if="{{linkedInspection.inspectionImages}}" class="inspection-img-section">
+          <t-image src="{{linkedInspection.inspectionImages}}" mode="aspectFill" class="inspection-img" />
+      </view>
+    </block>
+
+    <!-- 新增时选择巡查事件（仅 admin） -->
+    <block wx:if="{{!isEdit && role == 'admin'}}">
+      <view class="section-header">巡查事件</view>
+      <view class="form-group">
+        <t-cell
+          title="巡查记录"
+          note="{{form.inspectionTaskLabel || '请选择异常巡查记录'}}"
+          arrow
+          hover
+          bind:click="onInspectionPickerTap"
+          t-class-note="{{form.inspectionTaskId ? '' : 'cell-note-placeholder'}}"
+        />
+      </view>
+    </block>
+
+    <!-- 处置信息 -->
+    <view class="section-header">处置信息</view>
+    <view class="form-group">
+      <t-cell
+        wx:if="{{role == 'admin'}}"
+        title="处置员"
+        note="{{form.disposerName || '请选择处置员'}}"
+        arrow
+        hover
+        bind:click="onDisposerPickerTap"
+        t-class-note="{{form.disposerName ? '' : 'cell-note-placeholder'}}"
+      />
+      <t-cell
+        wx:else
+        title="处置员"
+        note="{{form.disposerName || '-'}}"
+      />
+      <t-cell
+        title="处置状态"
+        note="{{form.disposalStatusLabel}}"
+        arrow
+        hover
+        bind:click="onDisposalStatusPickerTap"
+      />
+    </view>
+
+    <!-- 处置描述 -->
+    <view class="section-header">处置记录</view>
+    <view class="form-group">
+      <t-textarea
+        value="{{form.disposalDescription}}"
+        placeholder="请输入处置经过和结果说明（可选）"
+        maxlength="1000"
+        indicator
+        autosize
+        bind:change="onDescChange"
+        class="desc-textarea"
+      />
+    </view>
+
+    <!-- 处置凭证图 -->
+    <view class="section-header">处置凭证图</view>
+    <view class="form-group media-section">
+      <media-uploader
+        src="{{form.disposalImages}}"
+        folder="disposal"
+        mediaType="image"
+        hint="支持 JPG/PNG，建议大小不超过 5MB"
+        emptyText="点击上传处置凭证图"
+        bind:change="onImageChange"
+      />
+    </view>
+
+    <!-- 提交 -->
+    <view class="form-footer">
+      <t-button
+        theme="primary"
+        size="large"
+        style="width:100%;"
+        loading="{{submitting}}"
+        bind:tap="onSubmit"
+      >{{isEdit ? '保存修改' : '派发任务'}}</t-button>
+    </view>
+  </block>
+
+  <!-- 巡查记录 picker -->
+  <t-picker
+    visible="{{showInspectionPicker}}"
+    value="{{inspectionPickerValue}}"
+    title="选择异常巡查记录"
+    cancelBtn="取消"
+    confirmBtn="确认"
+    usingCustomNavbar
+    bindchange="onInspectionPickerConfirm"
+    bindcancel="onInspectionPickerCancel"
+  >
+    <t-picker-item options="{{inspectionPickerOptions}}" />
+  </t-picker>
+
+  <!-- 处置员 picker -->
+  <t-picker
+    visible="{{showDisposerPicker}}"
+    value="{{disposerPickerValue}}"
+    title="选择处置员"
+    cancelBtn="取消"
+    confirmBtn="确认"
+    usingCustomNavbar
+    bindchange="onDisposerPickerConfirm"
+    bindcancel="onDisposerPickerCancel"
+  >
+    <t-picker-item options="{{disposerPickerOptions}}" />
+  </t-picker>
+
+  <!-- 处置状态 picker -->
+  <t-picker
+    visible="{{showDisposalStatusPicker}}"
+    value="{{disposalStatusPickerValue}}"
+    title="选择处置状态"
+    cancelBtn="取消"
+    confirmBtn="确认"
+    usingCustomNavbar
+    bindchange="onDisposalStatusPickerConfirm"
+    bindcancel="onDisposalStatusPickerCancel"
+  >
+    <t-picker-item options="{{disposalStatusPickerOptions}}" />
+  </t-picker>
+
+  <t-toast id="t-toast" />
 </view>

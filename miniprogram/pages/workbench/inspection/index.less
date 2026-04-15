@@ -8,6 +8,201 @@ page {
   min-height: 100vh;
 }
 
+.search-bar-wrap {
+  display: flex;
+  align-items: center;
+  padding: 16rpx @page-padding 16rpx @block-padding;
+  background: @color-white;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
+  gap: 16rpx;
+}
+
+.filter-icon-btn {
+  flex-shrink: 0;
+  --td-button-default-color: @color-text-2;
+  --td-button-default-bg-color: @color-bg;
+  --td-button-default-border-color: @color-bg;
+
+  &.filter-btn-active {
+    color: @color-brand;
+    --td-button-default-bg-color: @color-brand-light;
+    --td-button-default-border-color: @color-brand-light;
+  }
+}
+
+.add-btn {
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 0;
+}
+
+// ===== 骨架屏 =====
+@keyframes skeleton-shimmer {
+  0% { background-position: -600rpx 0; }
+  100% { background-position: 600rpx 0; }
+}
+.skeleton-shimmer() {
+  background: linear-gradient(90deg, @color-border 25%, #ebebeb 50%, @color-border 75%);
+  background-size: 600rpx 100%;
+  animation: skeleton-shimmer 1.4s infinite linear;
+}
+
+.skeleton-list { background: @color-white; }
+
+.skeleton-cell {
+  display: flex;
+  align-items: flex-start;
+  padding: 24rpx @page-padding;
+  border-bottom: 1rpx solid @color-border;
+  &:last-child { border-bottom: none; }
+}
+
+.skeleton-cell-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.skeleton-cell-title { height: 28rpx; width: 50%; border-radius: 6rpx; .skeleton-shimmer(); }
+.skeleton-cell-tag-row { display: flex; gap: 12rpx; }
+.skeleton-cell-tag { height: 36rpx; width: 96rpx; border-radius: 6rpx; .skeleton-shimmer(); }
+.skeleton-cell-line { height: 22rpx; width: 40%; border-radius: 6rpx; .skeleton-shimmer(); }
+
+// ===== 状态 Tab =====
+.status-tabs {
+  background: @color-white;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
+}
+
+// ===== 列表 =====
+.item-group {
+  background: @color-white;
+  padding-bottom: @page-padding;
+}
+
+// ===== 列表项 =====
+.attraction-item {
+  border-bottom: 1rpx solid @color-border;
+  transition: background @transition-base;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &--hover {
+    background: @color-bg;
+  }
+}
+
+.attraction-item-body {
+  display: flex;
+  align-items: flex-start;
+  padding: 24rpx @page-padding;
+  gap: 24rpx;
+}
+
+.attraction-item-right {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.attraction-item-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.attraction-item-name {
+  flex: 1;
+  font-size: @font-size-subtitle;
+  font-weight: @font-weight-bold;
+  color: @color-text-1;
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+.attraction-item-tags {
+  flex-shrink: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6rpx;
+  justify-content: flex-end;
+  max-width: 200rpx;
+}
+
+.attraction-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.attraction-item-meta-text {
+  font-size: @font-size-caption;
+  color: @color-text-2;
+}
+
+.attraction-item-desc {
+  font-size: @font-size-body;
+  color: @color-text-2;
+  line-height: 1.6;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+// ===== 操作行 =====
+.attraction-item-actions {
+  padding: 16rpx @page-padding;
+  border-top: 1rpx solid @color-border;
+}
+
+.action-col {
+  display: flex;
+  align-items: center;
+  height: 52rpx;
+}
+
+.action-col-inspector {
+  gap: 8rpx;
+  justify-content: center;
+}
+
+.action-inspector-text {
+  font-size: @font-size-body;
+  color: @color-text-hint;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.action-col-btn {
+  justify-content: center;
+  gap: 6rpx;
+  border-left: 1rpx solid @color-border;
+}
+
+.action-btn-text { font-size: @font-size-body; }
+.action-edit-text { color: @color-brand; }
+.action-normal-text { color: #00a870; }
+.action-abnormal-text { color: #e8a000; }
+.action-delete-text { color: @color-error; }
+
+.load-more-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 32rpx 0;
+}
+
 .page-body {
   display: flex;
   flex-direction: column;

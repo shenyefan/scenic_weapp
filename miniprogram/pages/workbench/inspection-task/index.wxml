@@ -1,6 +1,209 @@
 <view class="page-container">
-  <t-navbar title="巡查任务" leftArrow/>
-  <view class="page-body">
-    <view>功能开发中…</view>
-  </view>
+  <t-navbar title="{{isEdit ? '编辑巡查任务' : '新建巡查任务'}}" leftArrow placeholder z-index="100" />
+
+  <!-- 骨架屏 -->
+  <block wx:if="{{initLoading}}">
+    <view class="skeleton-section-header"></view>
+    <view class="form-group">
+      <view class="skeleton-cell-row" wx:for="{{[1,2,3]}}" wx:key="*this">
+        <view class="skeleton-block skeleton-cell-label"></view>
+        <view class="skeleton-block skeleton-cell-value"></view>
+      </view>
+    </view>
+    <view class="skeleton-section-header" style="margin-top:24rpx;"></view>
+    <view class="form-group">
+      <view class="skeleton-cell-row" wx:for="{{[1,2]}}" wx:key="*this">
+        <view class="skeleton-block skeleton-cell-label"></view>
+        <view class="skeleton-block skeleton-cell-value"></view>
+      </view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <!-- 基本信息（仅 admin可全编） -->
+    <view class="section-header">基本信息</view>
+    <view class="form-group">
+      <!-- 景点：admin 可编辑，其他只读 -->
+      <t-cell
+        wx:if="{{role == 'admin'}}"
+        title="景点"
+        note="{{form.attractionsName || '请选择景点'}}"
+        arrow
+        hover
+        bind:click="onAttractionsPickerTap"
+        t-class-note="{{form.attractionsName ? '' : 'cell-note-placeholder'}}"
+      />
+      <t-cell
+        wx:else
+        title="景点"
+        note="{{form.attractionsName || '-'}}"
+      />
+      <!-- 巡查员：admin 可编辑 -->
+      <t-cell
+        wx:if="{{role == 'admin'}}"
+        title="巡查员"
+        note="{{form.inspectorName || '请选择巡查员'}}"
+        arrow
+        hover
+        bind:click="onInspectorPickerTap"
+        t-class-note="{{form.inspectorName ? '' : 'cell-note-placeholder'}}"
+      />
+      <t-cell
+        wx:else
+        title="巡查员"
+        note="{{form.inspectorName || '-'}}"
+      />
+      <!-- 任务日期：admin 可编辑 -->
+      <t-cell
+        wx:if="{{role == 'admin'}}"
+        title="任务日期"
+        note="{{form.taskDate || '请选择日期'}}"
+        arrow
+        hover
+        bind:click="onDatePickerTap"
+        t-class-note="{{form.taskDate ? '' : 'cell-note-placeholder'}}"
+      />
+      <t-cell
+        wx:else
+        title="任务日期"
+        note="{{form.taskDate || '-'}}"
+      />
+    </view>
+
+    <!-- 任务状态（编辑时可修改） -->
+    <view class="section-header">任务状态</view>
+    <view class="form-group">
+      <!-- 任务进度 -->
+      <t-cell
+        wx:if="{{isEdit}}"
+        title="任务进度"
+        note="{{form.taskStatusLabel}}"
+        arrow
+        hover
+        bind:click="onTaskStatusPickerTap"
+      />
+      <t-cell
+        wx:else
+        title="任务进度"
+        note="巡查中（创建后默认）"
+      />
+      <!-- 异常状态 -->
+      <t-cell
+        title="异常状态"
+        note="{{form.abnormalStatusLabel}}"
+        arrow
+        hover
+        bind:click="onAbnormalStatusPickerTap"
+      />
+    </view>
+
+    <!-- 巡查记录 -->
+    <view class="section-header">巡查记录</view>
+    <view class="form-group">
+      <t-textarea
+        value="{{form.inspectionDescription}}"
+        placeholder="请输入巡查描述/异常说明（可选）"
+        maxlength="1000"
+        indicator
+        autosize
+        bind:change="onDescChange"
+        class="desc-textarea"
+      />
+    </view>
+
+    <!-- 巡查图片 -->
+    <view class="section-header">巡查图片</view>
+    <view class="form-group media-section">
+      <media-uploader
+        src="{{form.inspectionImages}}"
+        folder="inspection"
+        mediaType="image"
+        hint="支持 JPG/PNG，建议大小不超过 5MB"
+        emptyText="点击上传巡查凭证图"
+        bind:change="onImageChange"
+      />
+    </view>
+
+    <!-- 提交 -->
+    <view class="form-footer">
+      <t-button
+        theme="primary"
+        size="large"
+        style="width:100%;"
+        loading="{{submitting}}"
+        bind:tap="onSubmit"
+      >{{isEdit ? '保存修改' : '创建任务'}}</t-button>
+    </view>
+  </block>
+
+  <!-- 景点 picker -->
+  <t-picker
+    visible="{{showAttractionsPicker}}"
+    value="{{attractionsPickerValue}}"
+    title="选择景点"
+    cancelBtn="取消"
+    confirmBtn="确认"
+    usingCustomNavbar
+    bindchange="onAttractionsPickerConfirm"
+    bindcancel="onAttractionsPickerCancel"
+  >
+    <t-picker-item options="{{attractionsPickerOptions}}" />
+  </t-picker>
+
+  <!-- 巡查员 picker -->
+  <t-picker
+    visible="{{showInspectorPicker}}"
+    value="{{inspectorPickerValue}}"
+    title="选择巡查员"
+    cancelBtn="取消"
+    confirmBtn="确认"
+    usingCustomNavbar
+    bindchange="onInspectorPickerConfirm"
+    bindcancel="onInspectorPickerCancel"
+  >
+    <t-picker-item options="{{inspectorPickerOptions}}" />
+  </t-picker>
+
+  <!-- 任务状态 picker -->
+  <t-picker
+    visible="{{showTaskStatusPicker}}"
+    value="{{taskStatusPickerValue}}"
+    title="选择任务进度"
+    cancelBtn="取消"
+    confirmBtn="确认"
+    usingCustomNavbar
+    bindchange="onTaskStatusPickerConfirm"
+    bindcancel="onTaskStatusPickerCancel"
+  >
+    <t-picker-item options="{{taskStatusPickerOptions}}" />
+  </t-picker>
+
+  <!-- 异常状态 picker -->
+  <t-picker
+    visible="{{showAbnormalStatusPicker}}"
+    value="{{abnormalStatusPickerValue}}"
+    title="选择异常状态"
+    cancelBtn="取消"
+    confirmBtn="确认"
+    usingCustomNavbar
+    bindchange="onAbnormalStatusPickerConfirm"
+    bindcancel="onAbnormalStatusPickerCancel"
+  >
+    <t-picker-item options="{{abnormalStatusPickerOptions}}" />
+  </t-picker>
+
+  <!-- 日期选择 -->
+  <t-date-time-picker
+    visible="{{showDatePicker}}"
+    title="选择任务日期"
+    mode="date"
+    value="{{datePickerValue}}"
+    cancelBtn="取消"
+    confirmBtn="确认"
+    usingCustomNavbar
+    bindchange="onDatePickerConfirm"
+    bindcancel="onDatePickerCancel"
+  />
+
+  <t-toast id="t-toast" />
 </view>

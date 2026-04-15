@@ -95,23 +95,15 @@
   <!-- 空状态 -->
   <t-empty wx:elif="{{!loading}}" description="暂无景点数据" />
 
-  <!-- 类型多选弹窗（picker 样式） -->
-  <t-popup visible="{{showTypeFilter}}" placement="bottom" bind:visible-change="onFilterVisibleChange">
-    <view class="multi-picker-popup">
-      <view class="multi-picker-header">
-        <text class="multi-picker-cancel" bind:tap="onFilterCancel">取消</text>
-        <text class="multi-picker-title">景点类型</text>
-        <text class="multi-picker-confirm" bind:tap="onFilterConfirm">确认</text>
-      </view>
-      <scroll-view scroll-y class="multi-picker-body">
-        <t-checkbox-group value="{{pendingTypeIds}}" bind:change="onTypeFilterChange">
-          <view wx:for="{{typeList}}" wx:key="id">
-            <t-checkbox value="{{item.id}}" label="{{item.typeName}}" />
-          </view>
-        </t-checkbox-group>
-      </scroll-view>
-    </view>
-  </t-popup>
+  <!-- 类型多选 picker -->
+  <multi-select-picker
+    visible="{{showTypeFilter}}"
+    title="景点类型"
+    options="{{typeOptions}}"
+    value="{{selectedTypeIds}}"
+    bind:confirm="onFilterConfirm"
+    bind:cancel="onFilterCancel"
+  />
 
   <!-- 删除确认弹窗 -->
   <t-dialog
