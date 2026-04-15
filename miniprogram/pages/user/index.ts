@@ -71,7 +71,7 @@ Page({
     const routeMap: Record<string, string> = {
       profile: '/pages/user/profile/index',
       account: '/pages/user/account/index',
-      orders: '/pages/user/orders/index',
+      orders: '/pages/workbench/orders/index',
       notifications: '/pages/user/notifications/index',
     };
     if (!this.data.isLoggedIn) {

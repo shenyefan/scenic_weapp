@@ -1,0 +1,184 @@
+@import '../../../variable.less';
+
+page {
+  background: @color-bg-gradient;
+}
+
+.page-container {
+  min-height: 100vh;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 32rpx);
+}
+
+// ===== 骨架屏 =====
+@keyframes skeleton-shine {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-block {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shine 1.4s infinite;
+  border-radius: @radius-sm;
+}
+
+.skeleton-hero {
+  width: 100%;
+  height: 480rpx;
+  .skeleton-block();
+  border-radius: 0;
+}
+
+.skeleton-section-header {
+  height: 60rpx;
+  margin: 0 @page-padding;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 12rpx;
+
+  &::after {
+    content: '';
+    display: block;
+    height: 24rpx;
+    width: 120rpx;
+    background: linear-gradient(90deg, #e8e8e8 25%, #d4d4d4 50%, #e8e8e8 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shine 1.4s infinite;
+    border-radius: @radius-sm;
+  }
+}
+
+.skeleton-cell-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx @page-padding;
+  border-bottom: 1rpx solid @color-border;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.skeleton-cell-label { height: 32rpx; width: 140rpx; }
+.skeleton-cell-value { height: 32rpx; width: 220rpx; }
+
+// ===== 状态横幅 + 二维码 =====
+.status-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40rpx @page-padding 36rpx;
+}
+
+.status-hero-top {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 32rpx;
+}
+
+.status-hero-label {
+  font-size: @font-size-title;
+  font-weight: @font-weight-bold;
+  line-height: 1.3;
+}
+
+.status-hero-qr {
+  background: @color-white;
+  padding: 24rpx;
+  border-radius: @radius-lg;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+}
+
+.status-hero-id {
+  margin-top: 20rpx;
+  font-size: @font-size-body;
+  color: @color-text-2;
+  font-family: monospace;
+  word-break: break-all;
+  text-align: center;
+  max-width: 440rpx;
+}
+
+// ===== 分区标题 =====
+.section-header {
+  font-size: @font-size-caption;
+  color: @color-text-hint;
+  padding: 24rpx @page-padding 12rpx;
+  text-transform: uppercase;
+  letter-spacing: 1rpx;
+}
+
+// ===== 白底分组卡片 =====
+.form-group {
+  background: @color-white;
+}
+
+// ===== 票务明细（只读） =====
+.ticket-item {
+  padding: 28rpx @page-padding;
+  border-bottom: 1rpx solid @color-border;
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.ticket-name {
+  font-size: @font-size-subtitle;
+  font-weight: @font-weight-bold;
+  color: @color-text-1;
+  line-height: 1.5;
+}
+
+.ticket-item-row2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ticket-meta {
+  font-size: @font-size-body;
+  color: @color-text-2;
+}
+
+.ticket-subtotal {
+  font-size: @font-size-subtitle;
+  font-weight: @font-weight-bold;
+  color: @color-text-1;
+}
+
+.ticket-total-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx @page-padding;
+}
+
+.ticket-total-label {
+  font-size: @font-size-subtitle;
+  color: @color-text-2;
+}
+
+.ticket-total-price {
+  font-size: @font-size-subtitle;
+  font-weight: @font-weight-bold;
+  color: @color-warning;
+}
+
+.empty-tickets {
+  font-size: @font-size-body;
+  color: @color-text-hint;
+  padding: 32rpx @page-padding;
+}
+
+// ===== t-cell note 金额高亮 =====
+.price-note {
+  font-weight: @font-weight-bold;
+  color: @color-warning;
+}
+
+// ===== 底部按钮 =====
+.detail-footer {
+  margin: 16rpx @page-padding 0;
+}

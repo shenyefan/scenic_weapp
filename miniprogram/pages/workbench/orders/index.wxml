@@ -1,6 +1,154 @@
 <view class="page-container">
-  <t-navbar title="我的订单" leftArrow/>
-  <view class="page-body">
-    <view>功能开发中…</view>
+  <t-navbar title="订单管理" leftArrow placeholder z-index="100"/>
+
+  <!-- 搜索栏 -->
+  <view class="search-bar-wrap">
+    <t-button icon="calendar" bind:tap="onDateFilterTap" class="filter-icon-btn{{selectedDate ? ' filter-btn-active' : ''}}" />
+    <t-search
+      class="search-input"
+      value="{{searchKeyword}}"
+      placeholder="搜索联系人/手机号"
+      shape="square"
+      action-text=""
+      bind:change="onSearchChange"
+      bind:clear="onSearchClear"
+    />
   </view>
+
+  <!-- 订单状态 Tab -->
+  <t-sticky offset-top="{{navBarHeight}}">
+    <t-tabs
+      value="{{activeTab}}"
+      bind:change="onTabChange"
+      class="status-tabs"
+    >
+      <t-tab-panel value="" label="全部" />
+      <t-tab-panel value="pending_payment" label="待支付" />
+      <t-tab-panel value="paid" label="已支付" />
+      <t-tab-panel value="completed" label="已完成" />
+      <t-tab-panel value="cancelled" label="已取消" />
+      <t-tab-panel value="refunded" label="已退款" />
+    </t-tabs>
+  </t-sticky>
+
+  <!-- 骨架屏 -->
+  <view class="skeleton-list" wx:if="{{skeleton}}">
+    <view class="skeleton-cell" wx:for="{{[1,2,3,4,5]}}" wx:key="*this">
+      <view class="skeleton-cell-body">
+        <view class="skeleton-cell-title"></view>
+        <view class="skeleton-cell-tag-row">
+          <view class="skeleton-cell-tag"></view>
+        </view>
+        <view class="skeleton-cell-line"></view>
+        <view class="skeleton-cell-line" style="width:60%;"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 列表 -->
+  <view wx:elif="{{list.length > 0}}" class="item-group">
+    <view
+      class="attraction-item"
+      wx:for="{{list}}"
+      wx:key="id"
+      hover-class="attraction-item--hover"
+      hover-stay-time="70"
+    >
+      <view class="attraction-item-body" bind:tap="onItemTap" data-id="{{item.id}}">
+        <view class="attraction-item-right">
+          <view class="attraction-item-top">
+            <text class="attraction-item-name">{{item.contactName}}</text>
+            <t-tag size="small" theme="{{item.statusType}}" variant="light">{{item.statusLabel}}</t-tag>
+          </view>
+          <view class="attraction-item-meta">
+            <t-icon name="call" size="14px" color="#999" />
+            <text class="attraction-item-meta-text">{{item.contactPhone}}</text>
+          </view>
+          <view class="attraction-item-meta" wx:if="{{item.ticketSummary}}">
+            <t-icon name="list" size="14px" color="#999" />
+            <text class="attraction-item-meta-text">{{item.ticketSummary}}</text>
+          </view>
+          <view class="attraction-item-meta">
+            <t-icon name="money-circle" size="14px" color="#999" />
+            <text class="attraction-item-meta-text">合计：￥{{item.totalPrice}}</text>
+          </view>
+          <view class="attraction-item-meta" wx:if="{{item.visitDate}}">
+            <t-icon name="calendar" size="14px" color="#999" />
+            <text class="attraction-item-meta-text">游览日期：{{item.visitDate}}</text>
+          </view>
+        </view>
+      </view>
+      <!-- 操作行 -->
+      <t-row class="attraction-item-actions" gutter="0" catchtap="stopPropagation">
+        <!-- 管理员：查看 + 编辑 + 删除 -->
+        <t-col wx:if="{{role == 'admin'}}" span="8">
+          <view class="action-col action-col-btn" style="border-left:none;" catchtap="onViewTap" data-id="{{item.id}}">
+            <t-icon name="browse" size="20px" color="#0052d9" />
+            <text class="action-btn-text action-view-text">查看</text>
+          </view>
+        </t-col>
+        <t-col wx:if="{{role == 'admin'}}" span="8">
+          <view class="action-col action-col-btn" catchtap="onEditTap" data-id="{{item.id}}">
+            <t-icon name="edit" size="20px" color="#0052d9" />
+            <text class="action-btn-text action-edit-text">编辑</text>
+          </view>
+        </t-col>
+        <t-col wx:if="{{role == 'admin'}}" span="8">
+          <view class="action-col action-col-btn" catchtap="onDeleteTap" data-id="{{item.id}}" data-name="{{item.contactName}}">
+            <t-icon name="delete" size="20px" color="#e34d59" />
+            <text class="action-btn-text action-delete-text">删除</text>
+          </view>
+        </t-col>
+        <!-- 普通用户：查看 + 删除 -->
+        <t-col wx:if="{{role != 'admin'}}" span="12">
+          <view class="action-col action-col-btn" style="border-left:none;" catchtap="onViewTap" data-id="{{item.id}}">
+            <t-icon name="browse" size="20px" color="#0052d9" />
+            <text class="action-btn-text action-view-text">查看</text>
+          </view>
+        </t-col>
+        <t-col wx:if="{{role != 'admin'}}" span="12">
+          <view class="action-col action-col-btn" catchtap="onDeleteTap" data-id="{{item.id}}" data-name="{{item.contactName}}">
+            <t-icon name="delete" size="20px" color="#e34d59" />
+            <text class="action-btn-text action-delete-text">删除</text>
+          </view>
+        </t-col>
+      </t-row>
+    </view>
+    <t-divider content="已加载全部" wx:if="{{!hasMore}}" />
+    <view class="load-more-wrap" wx:if="{{loadingMore}}">
+      <t-loading theme="circular" size="28px" text="加载更多..." />
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <t-empty wx:elif="{{!skeleton}}" description="暂无订单" />
+
+  <!-- 日期 picker -->
+  <t-picker
+    visible="{{showDatePicker}}"
+    value="{{datePickerValue}}"
+    title="选择日期"
+    cancelBtn="取消"
+    confirmBtn="确认"
+    usingCustomNavbar
+    bindchange="onDatePickerConfirm"
+    bindcancel="onDatePickerCancel"
+  >
+    <t-picker-item options="{{dateYearOptions}}" />
+    <t-picker-item options="{{dateMonthOptions}}" />
+    <t-picker-item options="{{dateDayOptions}}" />
+  </t-picker>
+
+  <!-- 删除确认 -->
+  <t-dialog
+    visible="{{showDeleteDialog}}"
+    title="确认删除"
+    content="确定要删除「{{deleteTargetName}}」的订单吗？此操作不可恢复。"
+    confirm-btn="删除"
+    cancel-btn="取消"
+    bind:confirm="onDeleteConfirm"
+    bind:cancel="onDeleteCancel"
+  />
+
+  <t-toast id="t-toast" />
 </view>

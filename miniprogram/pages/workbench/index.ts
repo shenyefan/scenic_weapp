@@ -31,7 +31,7 @@ function buildSections(role: string): GridSection[] {
       title: '票务管理',
       items: [
         { text: '门票购买', image: '/assets/workbench/ticket.svg', url: '/pages/workbench/ticket/index' },
-        { text: '订单管理', image: '/assets/workbench/order.svg', url: '/pages/workbench/order-manage/index' },
+        { text: '订单管理', image: '/assets/workbench/order.svg', url: '/pages/workbench/orders/index' },
         { text: '扫码检票', image: '/assets/workbench/scan.svg', url: '/pages/workbench/scan/index' },
       ],
     })
