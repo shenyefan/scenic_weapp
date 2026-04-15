@@ -32,12 +32,11 @@
     "pages/workbench/directory/index",
     "pages/workbench/inspection-task/index",
     "pages/workbench/inspection/index",
-    "pages/workbench/inspection-record/index",
     "pages/workbench/disposal/index",
     "pages/workbench/track/index",
     "pages/workbench/disposal-task/index",
     "pages/workbench/checkin-record/index",
-    "pages/workbench/user-manage/index"
+    "pages/workbench/users/index"
   ],
   "window": {
     "navigationStyle": "custom",

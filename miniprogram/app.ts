@@ -6,7 +6,7 @@ App<IAppOption>({
   onLaunch() {
     // 计算导航栏高度 = 状态栏高度 + 胶囊按钮区域，供全局使用
     try {
-      const { statusBarHeight = 0 } = wx.getSystemInfoSync()
+      const { statusBarHeight = 0 } = wx.getWindowInfo()
       const menuButton = wx.getMenuButtonBoundingClientRect()
       this.globalData.navBarHeight = menuButton.bottom + (menuButton.top - statusBarHeight)
     } catch {}
