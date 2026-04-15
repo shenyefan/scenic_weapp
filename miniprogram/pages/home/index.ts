@@ -33,6 +33,7 @@ Page({
     skeletonNews: true,
     // 导航栏
     showNavBar: false,
+    navBarHeight: 0,
     // 景点
     attractionList: [] as any[],
     attractionListLeft: [] as any[],
@@ -53,6 +54,12 @@ Page({
   },
 
   onLoad() {
+    // 计算导航栏高度 = 状态栏高度 + 胶囊按钮区域高度
+    const { statusBarHeight = 0 } = wx.getSystemInfoSync()
+    const menuButton = wx.getMenuButtonBoundingClientRect()
+    const navBarHeight = menuButton.bottom + (menuButton.top - statusBarHeight)
+    this.setData({ navBarHeight })
+
     this.fetchWeather()
     this.fetchAttractions(1)
     this.fetchVideos(1)
