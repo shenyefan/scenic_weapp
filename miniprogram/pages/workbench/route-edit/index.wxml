@@ -1,0 +1,172 @@
+<view class="page-container">
+  <t-navbar title="{{isEdit ? '编辑路线' : '新建路线'}}" leftArrow placeholder z-index="100"/>
+
+  <!-- 骨架屏 -->
+  <block wx:if="{{initLoading}}">
+    <view class="skeleton-section-header"></view>
+    <view class="form-group">
+      <view class="skeleton-cell-row" wx:for="{{[1,2,3]}}" wx:key="*this">
+        <view class="skeleton-block skeleton-cell-label"></view>
+        <view class="skeleton-block skeleton-cell-value"></view>
+      </view>
+    </view>
+    <view class="skeleton-section-header" style="margin-top:24rpx;"></view>
+    <view class="form-group skeleton-media-block"></view>
+  </block>
+
+  <block wx:else>
+    <!-- 基本信息 -->
+    <view class="section-header">基本信息</view>
+    <view class="form-group">
+      <t-input
+        label="路线名称"
+        align="right"
+        value="{{form.routeName}}"
+        placeholder="请输入路线名称（必填）"
+        maxlength="100"
+        bind:change="onNameChange"
+      />
+      <t-input
+        label="预计时长"
+        align="right"
+        value="{{form.durationStr}}"
+        placeholder="分钟数，如 90"
+        type="number"
+        bind:change="onDurationChange"
+      />
+    </view>
+
+    <!-- 路线描述 -->
+    <view class="section-header">路线描述</view>
+    <view class="form-group">
+      <t-textarea
+        value="{{form.routeDescription}}"
+        placeholder="请输入路线描述（可选）"
+        maxlength="2000"
+        indicator
+        autosize
+        bind:change="onDescChange"
+        class="desc-textarea"
+      />
+    </view>
+
+    <!-- 路线图片 -->
+    <view class="section-header">路线图片</view>
+    <view class="form-group media-section">
+      <media-uploader
+        src="{{form.routeImage}}"
+        folder="route"
+        mediaType="image"
+        hint="支持 JPG/PNG，建议比例 16:9"
+        emptyText="点击上传图片"
+        bind:change="onImageChange"
+      />
+    </view>
+
+    <!-- 路线视频 -->
+    <view class="section-header">路线视频</view>
+    <view class="form-group media-section">
+      <media-uploader
+        src="{{form.routeVideo}}"
+        folder="route"
+        mediaType="video"
+        hint="支持 MP4，建议不超过 3 分钟"
+        emptyText="点击上传视频"
+        bind:change="onVideoChange"
+      />
+    </view>
+
+    <!-- 景点展示 -->
+    <view class="section-header route-items-header">
+      <text>包含景点</text>
+      <view class="add-item-btn" bind:tap="onAddItem">
+        <t-icon name="add-circle" size="32rpx" color="#0052d9" />
+        <text class="add-item-text">添加景点</text>
+      </view>
+    </view>
+
+    <!-- 路线展示列表 -->
+    <block wx:if="{{form.routeItems.length > 0}}">
+      <view
+        class="route-item-card"
+        wx:for="{{form.routeItems}}"
+        wx:key="_key"
+      >
+        <view class="route-item-header">
+          <view class="route-item-index">第 {{index + 1}} 站</view>
+          <view class="route-item-actions">
+            <view class="route-item-action-btn" catchtap="onMoveItemUp" data-index="{{index}}" wx:if="{{index > 0}}">
+              <t-icon name="chevron-up" size="28rpx" color="#666" />
+            </view>
+            <view class="route-item-action-btn" catchtap="onMoveItemDown" data-index="{{index}}" wx:if="{{index < form.routeItems.length - 1}}">
+              <t-icon name="chevron-down" size="28rpx" color="#666" />
+            </view>
+            <view class="route-item-action-btn route-item-delete-btn" catchtap="onRemoveItem" data-index="{{index}}">
+              <t-icon name="delete" size="28rpx" color="#e34d59" />
+            </view>
+          </view>
+        </view>
+        <view class="form-group">
+          <t-cell
+            title="景点"
+            note="{{item.attractionName || '请选择景点'}}"
+            arrow
+            hover
+            catchtap="onAttractionPickerTap"
+            data-index="{{index}}"
+            t-class-note="{{item.attractionName ? '' : 'cell-note-placeholder'}}"
+          />
+          <t-input
+            label="停留时长"
+            align="right"
+            value="{{item.stayStr}}"
+            placeholder="分钟，如 30"
+            type="number"
+            data-index="{{index}}"
+            bind:change="onStayChange"
+          />
+          <t-input
+            label="站点备注"
+            align="right"
+            value="{{item.stopNote}}"
+            placeholder="游玩建议、提醒事项（可选）"
+            maxlength="512"
+            data-index="{{index}}"
+            bind:change="onStopNoteChange"
+          />
+        </view>
+      </view>
+    </block>
+    <view class="empty-items-tip" wx:else>
+      <t-icon name="map" size="48rpx" color="#ccc" />
+      <text class="empty-items-text">暂无景点，点击上方“添加景点”</text>
+    </view>
+
+    <!-- 提交按鈕 -->
+    <view class="form-footer">
+      <t-button
+        theme="primary"
+        size="large"
+        style="width:100%;"
+        loading="{{submitting}}"
+        bind:tap="onSubmit"
+      >{{isEdit ? '保存修改' : '提交'}}</t-button>
+    </view>
+  </block>
+
+  <!-- 景点选择 picker -->
+  <t-picker
+    visible="{{showAttractionPicker}}"
+    value="{{attractionPickerValue}}"
+    title="选择景点"
+    cancelBtn="取消"
+    confirmBtn="确认"
+    usingCustomNavbar
+    bindchange="onAttractionPickerConfirm"
+    bindcancel="onAttractionPickerCancel"
+  >
+    <t-picker-item options="{{attractionPickerOptions}}" />
+  </t-picker>
+
+  <t-toast id="t-toast" />
+</view>

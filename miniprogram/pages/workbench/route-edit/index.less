@@ -1,0 +1,182 @@
+@import '../../../variable.less';
+
+page {
+  background: @color-bg;
+}
+
+.page-container {
+  min-height: 100vh;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 48rpx);
+}
+
+// ===== 骨架屏 =====
+@keyframes skeleton-shine {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-block {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shine 1.4s infinite;
+  border-radius: @radius-sm;
+}
+
+.skeleton-section-header {
+  height: 60rpx;
+  margin: 0 @page-padding;
+  padding: 24rpx 0 12rpx;
+  display: flex;
+  align-items: center;
+
+  &::after {
+    content: '';
+    display: block;
+    height: 24rpx;
+    width: 120rpx;
+    background: linear-gradient(90deg, #e8e8e8 25%, #d4d4d4 50%, #e8e8e8 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shine 1.4s infinite;
+    border-radius: @radius-sm;
+  }
+}
+
+.skeleton-cell-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx @page-padding;
+  border-bottom: 1rpx solid @color-border;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.skeleton-cell-label {
+  height: 32rpx;
+  width: 140rpx;
+}
+
+.skeleton-cell-value {
+  height: 32rpx;
+  width: 220rpx;
+}
+
+.skeleton-media-block {
+  height: 240rpx;
+  margin-top: 0;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shine 1.4s infinite;
+}
+
+// ===== 分区标题 =====
+.section-header {
+  font-size: @font-size-caption;
+  color: @color-text-hint;
+  padding: 24rpx @page-padding 12rpx;
+  text-transform: uppercase;
+  letter-spacing: 1rpx;
+
+  &.route-items-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.add-item-btn {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 4rpx 0;
+}
+
+.add-item-text {
+  font-size: @font-size-body;
+  color: @color-brand;
+  font-weight: normal;
+  letter-spacing: 0;
+}
+
+// ===== 表单组 =====
+.form-group {
+  background: @color-white;
+}
+
+.desc-textarea {
+  padding: 24rpx @page-padding;
+}
+
+// ===== cell note placeholder =====
+.cell-note-placeholder {
+  color: @color-text-hint !important;
+}
+
+// ===== 媒体区域 =====
+.media-section {
+  padding: @page-padding;
+}
+
+// ===== 路线站点卡片 =====
+.route-item-card {
+  margin: 0 @page-padding 16rpx;
+  border-radius: @radius-md;
+  overflow: hidden;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
+}
+
+.route-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16rpx 24rpx;
+  background: @color-bg-gradient;
+}
+
+.route-item-index {
+  font-size: @font-size-body;
+  font-weight: @font-weight-bold;
+  color: @color-brand;
+}
+
+.route-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.route-item-action-btn {
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: @radius-sm;
+  background: @color-white;
+
+  &.route-item-delete-btn {
+    background: #fff0f0;
+  }
+}
+
+// ===== 空状态提示 =====
+.empty-items-tip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+  padding: 48rpx @page-padding;
+}
+
+.empty-items-text {
+  font-size: @font-size-body;
+  color: @color-text-hint;
+}
+
+// ===== 提交按钮 =====
+.form-footer {
+  margin: 48rpx @page-padding 0;
+}
+
