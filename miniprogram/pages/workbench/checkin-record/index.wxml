@@ -1,6 +1,121 @@
 <view class="page-container">
-  <t-navbar title="签到记录" leftArrow/>
-  <view class="page-body">
-    <view>功能开发中…</view>
+  <t-navbar title="签到记录" leftArrow placeholder z-index="100"/>
+
+  <!-- 搜索栏 -->
+  <view class="search-bar-wrap">
+    <t-button icon="calendar" bind:tap="onDateFilterTap" class="filter-icon-btn{{selectedDate ? ' filter-btn-active' : ''}}" />
+    <t-button wx:if="{{role == 'admin'}}" icon="usergroup" bind:tap="onUserFilterTap" class="filter-icon-btn{{filterUserId ? ' filter-btn-active' : ''}}" />
+    <t-search
+      class="search-input"
+      value="{{searchKeyword}}"
+      placeholder="搜索用户名称/地址"
+      shape="square"
+      action-text=""
+      bind:change="onSearchChange"
+      bind:clear="onSearchClear"
+    />
   </view>
+
+  <!-- 骨架屏 -->
+  <view class="skeleton-list" wx:if="{{skeleton}}">
+    <view class="skeleton-cell" wx:for="{{[1,2,3,4,5]}}" wx:key="*this">
+      <view class="skeleton-cell-body">
+        <view class="skeleton-cell-title"></view>
+        <view class="skeleton-cell-line"></view>
+        <view class="skeleton-cell-line" style="width:60%;"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 列表 -->
+  <view wx:elif="{{list.length > 0}}" class="item-group">
+    <view
+      class="attraction-item"
+      wx:for="{{list}}"
+      wx:key="id"
+      hover-class="attraction-item--hover"
+      hover-stay-time="70"
+    >
+      <view class="attraction-item-body">
+        <view class="attraction-item-right">
+          <view class="attraction-item-top">
+            <text class="attraction-item-name">{{item.userName}}</text>
+          </view>
+          <view class="attraction-item-meta" wx:if="{{item.address}}">
+            <t-icon name="location" size="14px" color="#999" />
+            <text class="attraction-item-meta-text">{{item.address}}</text>
+          </view>
+          <view class="attraction-item-meta">
+            <t-icon name="time" size="14px" color="#999" />
+            <text class="attraction-item-meta-text">{{item.checkinTime}}</text>
+          </view>
+        </view>
+      </view>
+      <!-- 管理员操作行 -->
+      <t-row wx:if="{{role == 'admin'}}" class="attraction-item-actions" gutter="0" catchtap="stopPropagation">
+        <t-col span="12">
+          <view class="action-col action-col-btn" style="border-left:none;" catchtap="onViewTap" data-id="{{item.id}}">
+            <t-icon name="browse" size="20px" color="#0052d9" />
+            <text class="action-btn-text action-view-text">查看</text>
+          </view>
+        </t-col>
+        <t-col span="12">
+          <view class="action-col action-col-btn" catchtap="onDeleteTap" data-id="{{item.id}}" data-name="{{item.userName}}">
+            <t-icon name="delete" size="20px" color="#e34d59" />
+            <text class="action-btn-text action-delete-text">删除</text>
+          </view>
+        </t-col>
+      </t-row>
+    </view>
+    <t-divider content="已加载全部" wx:if="{{!hasMore}}" />
+    <view class="load-more-wrap" wx:if="{{loadingMore}}">
+      <t-loading theme="circular" size="28px" text="加载更多..." />
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <t-empty wx:elif="{{!skeleton}}" description="暂无签到记录" />
+
+  <!-- 日期 picker -->
+  <t-picker
+    visible="{{showDatePicker}}"
+    value="{{datePickerValue}}"
+    title="选择日期"
+    cancelBtn="取消"
+    confirmBtn="确认"
+    usingCustomNavbar
+    bindchange="onDatePickerConfirm"
+    bindcancel="onDatePickerCancel"
+  >
+    <t-picker-item options="{{dateYearOptions}}" />
+    <t-picker-item options="{{dateMonthOptions}}" />
+    <t-picker-item options="{{dateDayOptions}}" />
+  </t-picker>
+
+  <!-- 删除确认 -->
+  <t-dialog
+    visible="{{showDeleteDialog}}"
+    title="确认删除"
+    content="确定要删除「{{deleteTargetName}}」的签到记录吗？"
+    confirm-btn="删除"
+    cancel-btn="取消"
+    bind:confirm="onDeleteConfirm"
+    bind:cancel="onDeleteCancel"
+  />
+
+  <!-- 用户筛选 picker -->
+  <t-picker
+    visible="{{showUserPicker}}"
+    value="{{userPickerValue}}"
+    title="按人筛选"
+    cancelBtn="取消"
+    confirmBtn="确认"
+    usingCustomNavbar
+    bindchange="onUserPickerConfirm"
+    bindcancel="onUserPickerCancel"
+  >
+    <t-picker-item options="{{userOptions}}" />
+  </t-picker>
+
+  <t-toast id="t-toast" />
 </view>
