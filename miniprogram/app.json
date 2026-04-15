@@ -18,6 +18,8 @@
     "pages/user/privacy/index",
     "pages/user/about/index",
     "pages/workbench/attraction/index",
+    "pages/workbench/attraction-detail/index",
+    "pages/workbench/attraction-edit/index",
     "pages/workbench/route/index",
     "pages/workbench/weather/index",
     "pages/workbench/disaster/index",
