@@ -1,6 +1,97 @@
 <view class="page-container">
-  <t-navbar title="游览路线" leftArrow/>
-  <view class="page-body">
-    <view>功能开发中…</view>
+  <t-navbar title="游览路线" leftArrow placeholder/>
+
+  <!-- 搜索栏 -->
+  <t-sticky offset-top="{{navBarHeight}}">
+    <view class="search-bar-wrap">
+      <t-search
+        class="search-input"
+        value="{{searchKeyword}}"
+        placeholder="搜索路线名称"
+        shape="square"
+        action-text=""
+        bind:change="onSearchChange"
+        bind:clear="onSearchClear"
+      />
+      <view wx:if="{{role == 'admin'}}" class="action-btn-wrap">
+        <t-button theme="primary" bind:tap="onAddTap" icon="add">新建</t-button>
+      </view>
+    </view>
+  </t-sticky>
+
+  <!-- 骨架屏 -->
+  <view class="skeleton-list" wx:if="{{skeleton}}">
+    <view class="skeleton-cell" wx:for="{{[1,2,3,4,5]}}" wx:key="*this">
+      <view class="skeleton-cell-img"></view>
+      <view class="skeleton-cell-body">
+        <view class="skeleton-cell-title"></view>
+        <view class="skeleton-cell-line"></view>
+        <view class="skeleton-cell-line" style="width:40%;"></view>
+      </view>
+    </view>
   </view>
+
+  <!-- 列表 -->
+  <view wx:elif="{{list.length > 0}}" class="item-group">
+    <view
+      class="attraction-item"
+      wx:for="{{list}}"
+      wx:key="id"
+      hover-class="attraction-item--hover"
+      hover-stay-time="70"
+    >
+      <view class="attraction-item-body" bind:tap="onItemTap" data-id="{{item.id}}">
+        <!-- 左图 -->
+        <t-image class="attraction-item-img" src="{{item.image}}" mode="aspectFill" />
+        <!-- 右侧内容 -->
+        <view class="attraction-item-right">
+          <view class="attraction-item-top">
+            <text class="attraction-item-name">{{item.name}}</text>
+          </view>
+          <text class="attraction-item-desc" wx:if="{{item.description}}">{{item.description}}</text>
+          <view class="attraction-item-meta">
+            <t-icon name="time" size="24rpx" color="#999" />
+            <text class="attraction-item-meta-text">{{item.duration}} 分钟</text>
+            <t-icon name="location" size="24rpx" color="#999" style="margin-left:16rpx;" />
+            <text class="attraction-item-meta-text">{{item.itemCount}} 个景点</text>
+          </view>
+        </view>
+      </view>
+      <!-- 操作行 -->
+      <t-row wx:if="{{role == 'admin'}}" class="attraction-item-actions" gutter="{{0}}">
+        <t-col span="12">
+          <view class="action-col action-col-btn" style="border-left:none;" catchtap="onEditTap" data-id="{{item.id}}">
+            <t-icon name="edit" size="20px" color="#0052d9" />
+            <text class="action-btn-text action-edit-text">编辑</text>
+          </view>
+        </t-col>
+        <t-col span="12">
+          <view class="action-col action-col-btn action-col-delete" catchtap="onDeleteTap" data-id="{{item.id}}" data-name="{{item.name}}">
+            <t-icon name="delete" size="20px" color="#e34d59" />
+            <text class="action-btn-text action-delete-text">删除</text>
+          </view>
+        </t-col>
+      </t-row>
+    </view>
+    <t-divider content="已加载全部" wx:if="{{!hasMore}}" />
+    <view class="load-more-wrap" wx:if="{{loadingMore}}">
+      <t-loading theme="circular" size="28px" text="加载更多..." />
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <t-empty wx:elif="{{!skeleton}}" description="暂无路线数据" />
+
+  <!-- 删除确认弹窗 -->
+  <t-dialog
+    visible="{{showDeleteDialog}}"
+    title="确认删除"
+    content="确定要删除「{{deleteTargetName}}」吗？此操作不可恢复。"
+    confirm-btn="删除"
+    cancel-btn="取消"
+    bind:confirm="onDeleteConfirm"
+    bind:cancel="onDeleteCancel"
+  />
+
+  <t-toast id="t-toast" />
 </view>

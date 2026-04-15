@@ -21,6 +21,7 @@
     "pages/workbench/attraction-detail/index",
     "pages/workbench/attraction-edit/index",
     "pages/workbench/route/index",
+    "pages/workbench/route-edit/index",
     "pages/workbench/weather/index",
     "pages/workbench/disaster/index",
     "pages/workbench/ticket/index",

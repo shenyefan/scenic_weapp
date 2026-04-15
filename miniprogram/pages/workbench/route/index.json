@@ -1,7 +1,21 @@
 {
   "navigationStyle": "custom",
   "styleIsolation": "shared",
+  "enablePullDownRefresh": true,
   "usingComponents": {
-    "t-navbar": "tdesign-miniprogram/navbar/navbar"
+    "t-navbar": "tdesign-miniprogram/navbar/navbar",
+    "t-sticky": "tdesign-miniprogram/sticky/sticky",
+    "t-search": "tdesign-miniprogram/search/search",
+    "t-row": "tdesign-miniprogram/row/row",
+    "t-col": "tdesign-miniprogram/col/col",
+    "t-dialog": "tdesign-miniprogram/dialog/dialog",
+    "t-image": "tdesign-miniprogram/image/image",
+    "t-tag": "tdesign-miniprogram/tag/tag",
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-empty": "tdesign-miniprogram/empty/empty",
+    "t-loading": "tdesign-miniprogram/loading/loading",
+    "t-divider": "tdesign-miniprogram/divider/divider",
+    "t-toast": "tdesign-miniprogram/toast/toast"
   }
 }
