@@ -1,0 +1,110 @@
+<view class="page-container">
+  <t-navbar title="用户管理" leftArrow placeholder z-index="100"/>
+
+  <!-- 搜索栏 -->
+  <view class="search-bar-wrap">
+    <t-button icon="filter-2" bind:tap="onRoleFilterTap" class="filter-icon-btn{{selectedRole ? ' filter-btn-active' : ''}}" />
+    <t-search
+      class="search-input"
+      value="{{searchKeyword}}"
+      placeholder="搜索用户账号/昵称"
+      shape="square"
+      action-text=""
+      bind:change="onSearchChange"
+      bind:clear="onSearchClear"
+    />
+  </view>
+
+  <!-- 骨架屏 -->
+  <view class="skeleton-list" wx:if="{{skeleton}}">
+    <view class="skeleton-cell" wx:for="{{[1,2,3,4,5]}}" wx:key="*this">
+      <view class="skeleton-cell-avatar"></view>
+      <view class="skeleton-cell-body">
+        <view class="skeleton-cell-title"></view>
+        <view class="skeleton-cell-tag-row"><view class="skeleton-cell-tag"></view></view>
+        <view class="skeleton-cell-line"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 列表 -->
+  <view wx:elif="{{list.length > 0}}" class="item-group">
+    <view
+      class="attraction-item"
+      wx:for="{{list}}"
+      wx:key="id"
+      hover-class="attraction-item--hover"
+      hover-stay-time="70"
+    >
+      <view class="attraction-item-body">
+        <!-- 头像 -->
+        <view class="user-avatar-wrap">
+          <t-image wx:if="{{item.avatar}}" class="user-avatar" src="{{item.avatar}}" mode="aspectFill" />
+          <view wx:else class="user-avatar user-avatar-placeholder">
+            <t-icon name="user-1" size="40rpx" color="#bbb" />
+          </view>
+        </view>
+        <view class="attraction-item-right">
+          <view class="attraction-item-top">
+            <text class="attraction-item-name">{{item.nickname}}</text>
+            <t-tag size="small" theme="{{item.roleType}}" variant="light">{{item.roleLabel}}</t-tag>
+          </view>
+          <text class="attraction-item-account">@{{item.account}}</text>
+          <view class="attraction-item-meta" wx:if="{{item.phone}}">
+            <t-icon name="call" size="14px" color="#999" />
+            <text class="attraction-item-meta-text">{{item.phone}}</text>
+          </view>
+        </view>
+      </view>
+      <!-- 编辑+删除操作行 -->
+      <t-row class="attraction-item-actions" gutter="0" catchtap="stopPropagation">
+        <t-col span="12">
+          <view class="action-col action-col-btn" style="border-left:none;" catchtap="onEditTap" data-id="{{item.id}}">
+            <t-icon name="edit" size="20px" color="#0052d9" />
+            <text class="action-btn-text action-edit-text">编辑</text>
+          </view>
+        </t-col>
+        <t-col span="12">
+          <view class="action-col action-col-btn" catchtap="onDeleteTap" data-id="{{item.id}}" data-name="{{item.nickname}}">
+            <t-icon name="delete" size="20px" color="#e34d59" />
+            <text class="action-btn-text action-delete-text">删除</text>
+          </view>
+        </t-col>
+      </t-row>
+    </view>
+    <t-divider content="已加载全部" wx:if="{{!hasMore}}" />
+    <view class="load-more-wrap" wx:if="{{loadingMore}}">
+      <t-loading theme="circular" size="28px" text="加载更多..." />
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <t-empty wx:elif="{{!skeleton}}" description="暂无用户数据" />
+
+  <!-- 角色筛选 picker -->
+  <t-picker
+    visible="{{showRolePicker}}"
+    value="{{rolePickerValue}}"
+    title="用户角色"
+    cancelBtn="取消"
+    confirmBtn="确认"
+    usingCustomNavbar
+    bindchange="onRolePickerConfirm"
+    bindcancel="onRolePickerCancel"
+  >
+    <t-picker-item options="{{roleOptions}}" />
+  </t-picker>
+
+  <!-- 删除确认 -->
+  <t-dialog
+    visible="{{showDeleteDialog}}"
+    title="确认删除"
+    content="确定要删除用户「{{deleteTargetName}}」吗？此操作不可恢复。"
+    confirm-btn="删除"
+    cancel-btn="取消"
+    bind:confirm="onDeleteConfirm"
+    bind:cancel="onDeleteCancel"
+  />
+
+  <t-toast id="t-toast" />
+</view>
