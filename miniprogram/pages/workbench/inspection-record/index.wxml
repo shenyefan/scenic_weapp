@@ -1,6 +1,0 @@
-<view class="page-container">
-  <t-navbar title="巡查记录" leftArrow/>
-  <view class="page-body">
-    <view>功能开发中…</view>
-  </view>
-</view>
