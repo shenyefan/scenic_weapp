@@ -13,18 +13,12 @@ Page({
     isLoggedIn: false,
     avatarSize: '120rpx',
     showLogoutDialog: false,
-    statusBarHeight: 20,
     userInfo: {
       avatar: '',
       nickname: '',
       account: '',
       roleName: '',
     },
-  },
-
-  onLoad() {
-    const sysInfo = wx.getSystemInfoSync();
-    this.setData({ statusBarHeight: sysInfo.statusBarHeight || 20 });
   },
 
   onShow() {
