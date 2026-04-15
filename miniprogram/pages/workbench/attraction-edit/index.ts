@@ -14,7 +14,8 @@ Page({
     submitting: false,
     showTypePicker: false,
     showInspectorPicker: false,
-    typeOptions: [] as { id: string; label: string }s { label: string; value: string }[],
+    typeOptions: [] as { id: string; label: string }[],
+    inspectorPickerOptions: [] as { label: string; value: string }[],
     inspectorPickerValue: [''] as string[],
     form: {
       attractionsName: '',
@@ -78,7 +79,7 @@ Page({
       const res = await listAllTypes()
       this.setData({
         typeOptions: (res?.data ?? []).map((t: any) => ({ id: t.id, label: t.typeName || '' })),
-      })Options: (res?.data ?? []).map((t: any) => ({ id: t.id, label
+      })
     } catch {}
   },
 
@@ -106,13 +107,18 @@ Page({
 
   // 景点类型多选
   onTypePickerTap() { this.setData({ showTypePicker: true }) },
-  onTypePickerCancel( this.setData({ showTypePicker: true }) },
   onTypePickerCancel() { this.setData({ showTypePicker: false }) },
   onTypePickerConfirm(e: any) {
     const value: string[] = e?.detail?.value ?? []
     const { typeOptions } = this.data
     const typeNames = value.map((id) => typeOptions.find((t) => t.id === id)?.label ?? '').filter(Boolean)
-    this.setData({ 'form.typeIds': value
+    this.setData({ 'form.typeIds': value, 'form.typeNames': typeNames, showTypePicker: false })
+  },
+
+  // 巡查员 picker
+  onInspectorPickerTap() { this.setData({ showInspectorPicker: true }) },
+  onInspectorPickerCancel() { this.setData({ showInspectorPicker: false }) },
+  onInspectorPickerConfirm(e: any) {
     const value: string = e.detail.value?.[0] ?? ''
     const label: string = e.detail.label?.[0] ?? ''
     this.setData({
