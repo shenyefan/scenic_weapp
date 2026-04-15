@@ -54,10 +54,8 @@ Page({
   },
 
   onLoad() {
-    // 计算导航栏高度 = 状态栏高度 + 胶囊按钮区域高度
-    const { statusBarHeight = 0 } = wx.getSystemInfoSync()
-    const menuButton = wx.getMenuButtonBoundingClientRect()
-    const navBarHeight = menuButton.bottom + (menuButton.top - statusBarHeight)
+    // 从全局读取导航栏高度
+    const navBarHeight = getApp<IAppOption>().globalData?.navBarHeight ?? 0
     this.setData({ navBarHeight })
 
     this.fetchWeather()
@@ -105,18 +103,32 @@ Page({
     const index = e?.detail?.index ?? e?.currentTarget?.dataset?.index
     const shortcut = SHORTCUTS[index]
     if (!shortcut) return
-    if (shortcut.text === '周边交通') {
+    if (shortcut.text === '周边门票') {
+      wx.navigateToMiniProgram({
+        shortLink: '#小程序://携程旅行订酒店机票火车汽车门票/CfOfYOteSpzGRAc',
+        fail: () => {
+          Toast({ context: this, selector: '#t-toast', message: '跳转失败', theme: 'error' })
+        },
+      })
+    } else if (shortcut.text === '一日游') {
+      wx.navigateToMiniProgram({
+        shortLink: '#小程序://携程旅行订酒店机票火车汽车门票/NvLX9q74cPQSkiJ',
+        fail: () => {
+          Toast({ context: this, selector: '#t-toast', message: '跳转失败', theme: 'error' })
+        },
+      })
+    } else if (shortcut.text === '酒店') {
+      wx.navigateToMiniProgram({
+        shortLink: '#小程序://携程旅行订酒店机票火车汽车门票/5aYJ4dug8H3Rsqt',
+        fail: () => {
+          Toast({ context: this, selector: '#t-toast', message: '跳转失败', theme: 'error' })
+        },
+      })
+    } else if (shortcut.text === '周边交通') {
       wx.navigateToMiniProgram({
         appId: 'wx7643d5f831302ab0',
         fail: () => {
-          Toast({ context: this, selector: '#t-toast', message: '跳转腾讯地图失败', theme: 'error' })
-        },
-      })
-    } else {
-      wx.navigateToMiniProgram({
-        appId: 'wx0e6ed4f51db9d078',
-        fail: () => {
-          Toast({ context: this, selector: '#t-toast', message: '跳转携程失败', theme: 'error' })
+          Toast({ context: this, selector: '#t-toast', message: '跳转失败', theme: 'error' })
         },
       })
     }
@@ -228,6 +240,11 @@ Page({
       this.setData({ skeletonNews: false, newsLoadingMore: false })
       if (page === 1) Toast({ context: this, selector: '#t-toast', message: '新闻数据加载失败', theme: 'error' })
     }
+  },
+
+  onAttractionTap(e: any) {
+    const id = e.currentTarget.dataset.id
+    if (id) wx.navigateTo({ url: '/pages/workbench/attraction-detail/index?id=' + id })
   },
 
   onNewsTap(e: any) {

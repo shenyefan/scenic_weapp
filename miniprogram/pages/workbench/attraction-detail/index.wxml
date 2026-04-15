@@ -1,0 +1,77 @@
+<view class="page-container">
+  <t-navbar title="景点详情" leftArrow placeholder z-index="100"/>
+
+  <!-- 加载中 -->
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <t-loading theme="circular" size="40px" text="加载中..." />
+  </view>
+
+  <block wx:elif="{{detail}}">
+    <!-- 头部图片 -->
+    <t-image
+      class="detail-hero"
+      src="{{detail.image}}"
+      mode="aspectFill"
+      wx:if="{{detail.image}}"
+    />
+    <view class="detail-hero detail-hero-placeholder" wx:else>
+      <t-icon name="image" size="48px" color="#ccc" />
+    </view>
+
+    <!-- 主信息 -->
+    <view class="detail-section">
+      <view class="detail-name-row">
+        <text class="detail-name">{{detail.name}}</text>
+        <view class="detail-tags" wx:if="{{detail.types.length > 0}}">
+          <t-tag
+            wx:for="{{detail.types}}"
+            wx:key="*this"
+            wx:for-item="tag"
+            size="small"
+            theme="primary"
+            variant="light"
+          >{{tag}}</t-tag>
+        </view>
+      </view>
+
+      <!-- 地理坐标 -->
+      <view class="detail-meta-row" wx:if="{{detail.lng}}">
+        <t-icon name="location" size="15px" color="#0052d9" />
+        <text class="detail-meta-label">坐标</text>
+        <text class="detail-meta-value">{{detail.lng}}, {{detail.lat}}</text>
+      </view>
+
+      <!-- 巡查员 -->
+      <view class="detail-meta-row" wx:if="{{role !== 'user'}}">
+        <t-icon name="user-1" size="15px" color="#0052d9" />
+        <text class="detail-meta-label">巡查员</text>
+        <text class="detail-meta-value">{{detail.inspectorName || '暂无巡查员'}}</text>
+      </view>
+    </view>
+
+    <!-- 描述 -->
+    <view class="detail-section" wx:if="{{detail.description}}">
+      <view class="detail-section-title">景点介绍</view>
+      <text class="detail-desc">{{detail.description}}</text>
+    </view>
+
+    <!-- 视频 -->
+    <view class="detail-section" wx:if="{{detail.video}}">
+      <view class="detail-section-title">景点视频</view>
+      <video
+        class="detail-video"
+        src="{{detail.video}}"
+        controls
+        show-center-play-btn
+        show-play-btn
+      />
+    </view>
+
+    <!-- 编辑按鈕 -->
+    <view class="detail-footer" wx:if="{{role == 'admin'}}">
+      <t-button theme="primary" size="large" icon="edit" bind:tap="onEditTap" style="width:100%;">编辑景点</t-button>
+    </view>
+  </block>
+
+  <t-toast id="t-toast" />
+</view>

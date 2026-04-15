@@ -1,0 +1,257 @@
+@import '../../../variable.less';
+
+page {
+  background: @color-bg;
+}
+
+.page-container {
+  min-height: 100vh;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 48rpx);
+}
+
+// ===== 加载 =====
+.loading-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+// ===== 分区标题 =====
+.section-header {
+  font-size: @font-size-caption;
+  color: @color-text-hint;
+  padding: 24rpx @page-padding 12rpx;
+  text-transform: uppercase;
+  letter-spacing: 1rpx;
+}
+
+// ===== 表单组（白底卡片） =====
+.form-group {
+  background: @color-white;
+}
+
+// ===== 描述多行文本 =====
+.desc-textarea {
+  padding: 24rpx @page-padding;
+}
+
+// ===== t-cell note 中的 tags =====
+.cell-note {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.cell-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+  justify-content: flex-end;
+}
+
+.cell-placeholder {
+  color: @color-text-hint;
+  font-size: @font-size-body;
+}
+
+// ===== 媒体区域 =====
+.media-section {
+  padding: @page-padding;
+}
+
+.media-preview-wrap {
+  position: relative;
+  width: 100%;
+  height: 360rpx;
+  border-radius: @radius-md;
+  overflow: hidden;
+  margin-bottom: 20rpx;
+}
+
+.media-preview-img {
+  width: 100%;
+  height: 100%;
+}
+
+.media-preview-video {
+  width: 100%;
+  height: 360rpx;
+  border-radius: @radius-md;
+  display: block;
+  margin-bottom: 0;
+}
+
+.media-delete-btn {
+  position: absolute;
+  top: 12rpx;
+  right: 12rpx;
+  z-index: 10;
+  width: 52rpx;
+  height: 52rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 50%;
+}
+
+.media-change-btn {
+  position: absolute;
+  bottom: 16rpx;
+  right: 16rpx;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: @radius-sm;
+  padding: 10rpx 18rpx;
+}
+
+.media-change-text {
+  font-size: @font-size-caption;
+  color: #fff;
+  line-height: 1;
+}
+
+.media-empty {
+  width: 100%;
+  height: 300rpx;
+  background: @color-bg;
+  border-radius: @radius-md;
+  border: 2rpx dashed @color-border;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  margin-bottom: 20rpx;
+  transition: border-color @transition-base;
+
+  &:active {
+    border-color: @color-brand;
+  }
+}
+
+.media-empty-text {
+  font-size: @font-size-caption;
+  color: @color-text-hint;
+}
+
+.media-hint {
+  font-size: @font-size-caption;
+  color: @color-text-hint;
+  line-height: 1.6;
+  display: block;
+}
+
+// ===== 提交按钮 =====
+.form-footer {
+  margin: 48rpx @page-padding 0;
+}
+
+// ===== 弹窗 =====
+.picker-popup {
+  padding: @page-padding;
+  padding-bottom: ~"calc(@{page-padding} + env(safe-area-inset-bottom))";
+  background: @color-white;
+  min-height: 240rpx;
+}
+
+.picker-popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32rpx;
+}
+
+.picker-popup-title {
+  font-size: @font-size-subtitle;
+  font-weight: @font-weight-bold;
+  color: @color-text-1;
+}
+
+.picker-checkbox-list {
+  padding: 0 0 24rpx;
+}
+
+.picker-checkbox-item {
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid @color-border;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.picker-popup-actions {
+  margin-top: 32rpx;
+}
+
+// ===== 巡查员列表 =====
+.inspector-list {
+  max-height: 600rpx;
+  overflow-y: auto;
+  margin-bottom: 24rpx;
+}
+
+.inspector-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 0;
+  border-bottom: 1rpx solid @color-border;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &--active .inspector-item-name {
+    color: @color-brand;
+    font-weight: @font-weight-bold;
+  }
+}
+
+.inspector-item-name {
+  font-size: @font-size-body;
+  color: @color-text-1;
+}
+
+// ===== picker 样式多选弹窗 =====
+.multi-picker-popup {
+  background: @color-white;
+  border-radius: @radius-lg @radius-lg 0 0;
+  overflow: hidden;
+}
+
+.multi-picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 @page-padding;
+  height: 96rpx;
+  border-bottom: 1rpx solid @color-border;
+}
+
+.multi-picker-cancel {
+  font-size: @font-size-subtitle;
+  color: @color-text-3;
+  padding: 16rpx 0;
+}
+
+.multi-picker-title {
+  font-size: @font-size-subtitle;
+  color: @color-text-1;
+  font-weight: @font-weight-bold;
+}
+
+.multi-picker-confirm {
+  font-size: @font-size-subtitle;
+  color: @color-brand;
+  padding: 16rpx 0;
+}
+
+.multi-picker-body {
+  max-height: 560rpx;
+  padding: 8rpx 0;
+}

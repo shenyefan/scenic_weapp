@@ -82,7 +82,7 @@
       <view class="tab-panel-body" wx:elif="{{attractionList.length > 0}}">
         <view class="attractions-waterfall">
           <view class="waterfall-col">
-            <view class="attraction-waterfall-item" wx:for="{{attractionListLeft}}" wx:key="id">
+            <view class="attraction-waterfall-item" wx:for="{{attractionListLeft}}" wx:key="id" bind:tap="onAttractionTap" data-id="{{item.id}}">
               <t-image wx:if="{{item.image}}" class="attraction-image" src="{{item.image}}" mode="aspectFill" />
               <view class="attraction-body">
                 <view class="attraction-name">{{item.name}}</view>
@@ -94,7 +94,7 @@
             </view>
           </view>
           <view class="waterfall-col">
-            <view class="attraction-waterfall-item" wx:for="{{attractionListRight}}" wx:key="id">
+            <view class="attraction-waterfall-item" wx:for="{{attractionListRight}}" wx:key="id" bind:tap="onAttractionTap" data-id="{{item.id}}">
               <t-image wx:if="{{item.image}}" class="attraction-image" src="{{item.image}}" mode="aspectFill" />
               <view class="attraction-body">
                 <view class="attraction-name">{{item.name}}</view>

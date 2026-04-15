@@ -1,6 +1,128 @@
 <view class="page-container">
-  <t-navbar title="景点信息" leftArrow/>
-  <view class="page-body">
-    <view>功能开发中…</view>
+  <t-navbar title="景点信息" leftArrow placeholder/>
+
+  <!-- 搜索栏 -->
+  <t-sticky offset-top="{{navBarHeight}}">
+    <view class="search-bar-wrap">
+      <t-button icon="filter-2" bind:tap="onFilterTap" class="filter-btn{{selectedTypeIds.length > 0 ? ' filter-btn-active' : ''}}">筛选<view class="filter-badge" wx:if="{{selectedTypeIds.length > 0}}">{{selectedTypeIds.length}}</view></t-button>
+      <t-search
+        class="search-input"
+        value="{{searchKeyword}}"
+        placeholder="搜索景点名称"
+        shape="square"
+        action-text=""
+        bind:change="onSearchChange"
+        bind:clear="onSearchClear"
+      />
+    </view>
+  </t-sticky>
+
+  <!-- 骨架屏 -->
+  <view class="skeleton-list" wx:if="{{skeleton}}">
+    <view class="skeleton-cell" wx:for="{{[1,2,3,4,5,6]}}" wx:key="*this">
+      <view class="skeleton-cell-img"></view>
+      <view class="skeleton-cell-body">
+        <view class="skeleton-cell-title"></view>
+        <view class="skeleton-cell-tag-row">
+          <view class="skeleton-cell-tag"></view>
+          <view class="skeleton-cell-tag"></view>
+        </view>
+        <view class="skeleton-cell-line"></view>
+      </view>
+    </view>
   </view>
+
+  <!-- 列表 -->
+  <view wx:elif="{{list.length > 0}}" class="item-group">
+    <view
+      class="attraction-item"
+      wx:for="{{list}}"
+      wx:key="id"
+      hover-class="attraction-item--hover"
+      hover-stay-time="70"
+    >
+      <view class="attraction-item-body" bind:tap="onItemTap" data-id="{{item.id}}">
+        <!-- 左图 -->
+        <t-image class="attraction-item-img" src="{{item.image}}" mode="aspectFill" />
+        <!-- 右侧内容 -->
+        <view class="attraction-item-right">
+          <!-- 名称 + 类型标签 -->
+          <view class="attraction-item-top">
+            <text class="attraction-item-name">{{item.name}}</text>
+            <view class="attraction-item-tags" wx:if="{{item.types.length > 0}}">
+              <t-tag
+                wx:for="{{item.types}}"
+                wx:key="*this"
+                wx:for-item="tag"
+                size="medium"
+                theme="primary"
+                variant="light"
+              >{{tag}}</t-tag>
+            </view>
+          </view>
+          <!-- 描述 -->
+          <text class="attraction-item-desc" wx:if="{{item.description}}">{{item.description}}</text>
+        </view>
+      </view>
+      <!-- 操作行 -->
+      <t-row wx:if="{{role == 'admin' && role}}" class="attraction-item-actions" gutter="{{0}}">
+        <t-col span="10">
+          <view class="action-col action-col-inspector">
+            <t-icon name="user-1" size="20px" color="#999" />
+            <text class="action-inspector-text">{{item.inspectorName || '暂无巡查员'}}</text>
+          </view>
+        </t-col>
+        <t-col span="7">
+          <view class="action-col action-col-btn" catchtap="onEditTap" data-id="{{item.id}}">
+            <t-icon name="edit" size="20px" color="#0052d9" />
+            <text class="action-btn-text action-edit-text">编辑</text>
+          </view>
+        </t-col>
+        <t-col span="7">
+          <view class="action-col action-col-btn action-col-delete" catchtap="onDeleteTap" data-id="{{item.id}}" data-name="{{item.name}}">
+            <t-icon name="delete" size="20px" color="#e34d59" />
+            <text class="action-btn-text action-delete-text">删除</text>
+          </view>
+        </t-col>
+      </t-row>
+    </view>
+    <t-divider content="已加载全部" wx:if="{{!hasMore}}" />
+    <view class="load-more-wrap" wx:if="{{loadingMore}}">
+      <t-loading theme="circular" size="28px" text="加载更多..." />
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <t-empty wx:elif="{{!loading}}" description="暂无景点数据" />
+
+  <!-- 类型多选弹窗（picker 样式） -->
+  <t-popup visible="{{showTypeFilter}}" placement="bottom" bind:visible-change="onFilterVisibleChange">
+    <view class="multi-picker-popup">
+      <view class="multi-picker-header">
+        <text class="multi-picker-cancel" bind:tap="onFilterCancel">取消</text>
+        <text class="multi-picker-title">景点类型</text>
+        <text class="multi-picker-confirm" bind:tap="onFilterConfirm">确认</text>
+      </view>
+      <scroll-view scroll-y class="multi-picker-body">
+        <t-checkbox-group value="{{pendingTypeIds}}" bind:change="onTypeFilterChange">
+          <view wx:for="{{typeList}}" wx:key="id">
+            <t-checkbox value="{{item.id}}" label="{{item.typeName}}" />
+          </view>
+        </t-checkbox-group>
+      </scroll-view>
+    </view>
+  </t-popup>
+
+  <!-- 删除确认弹窗 -->
+  <t-dialog
+    visible="{{showDeleteDialog}}"
+    title="确认删除"
+    content="确定要删除「{{deleteTargetName}}」吗？此操作不可恢复。"
+    confirm-btn="删除"
+    cancel-btn="取消"
+    bind:confirm="onDeleteConfirm"
+    bind:cancel="onDeleteCancel"
+  />
+
+  <t-toast id="t-toast" />
 </view>

@@ -1,0 +1,174 @@
+<view class="page-container">
+  <t-navbar title="{{isEdit ? '编辑景点' : '新建景点'}}" leftArrow placeholder z-index="100"/>
+
+  <!-- 加载中 -->
+  <view class="loading-wrap" wx:if="{{initLoading}}">
+    <t-loading theme="circular" size="40px" text="加载中..." />
+  </view>
+
+  <block wx:else>
+    <!-- 基本信息 -->
+    <view class="section-header">基本信息</view>
+    <view class="form-group">
+      <t-input
+        label="景点名称"
+        align="right"
+        value="{{form.attractionsName}}"
+        placeholder="请输入景点名称（必填）"
+        maxlength="50"
+        bind:change="onNameChange"
+      />
+      <t-cell title="景点类型" arrow hover bind:click="onTypePickerTap">
+        <view slot="note" class="cell-note">
+          <view wx:if="{{form.typeNames.length > 0}}" class="cell-tags">
+            <t-tag
+              wx:for="{{form.typeNames}}"
+              wx:key="*this"
+              wx:for-item="tag"
+              size="small"
+              theme="primary"
+              variant="light"
+            >{{tag}}</t-tag>
+          </view>
+          <text wx:else class="cell-placeholder">请选择类型</text>
+        </view>
+      </t-cell>
+      <t-cell
+        title="巡查员"
+        note="{{form.inspectorName || '请选择巡查员'}}"
+        arrow
+        hover
+        bind:click="onInspectorPickerTap"
+        t-class-note="{{form.inspectorName ? '' : 'cell-note-placeholder'}}"
+      />
+    </view>
+
+    <!-- 景点描述 -->
+    <view class="section-header">景点描述</view>
+    <view class="form-group">
+      <t-textarea
+        value="{{form.attractionsDescription}}"
+        placeholder="请输入景点描述（可选）"
+        maxlength="2000"
+        indicator
+        autosize
+        bind:change="onDescChange"
+        class="desc-textarea"
+      />
+    </view>
+
+    <!-- 地理坐标 -->
+    <view class="section-header">地理坐标</view>
+    <view class="form-group">
+      <t-input
+        label="经度"
+        align="right"
+        value="{{form.lngStr}}"
+        placeholder="如：113.94"
+        type="digit"
+        bind:change="onLngChange"
+      />
+      <t-input
+        label="纬度"
+        align="right"
+        value="{{form.latStr}}"
+        placeholder="如：22.52"
+        type="digit"
+        bind:change="onLatChange"
+      />
+    </view>
+
+    <!-- 景点图片 -->
+    <view class="section-header">景点图片</view>
+    <view class="form-group media-section">
+      <view wx:if="{{form.attractionsImage}}" class="media-preview-wrap">
+        <t-image src="{{form.attractionsImage}}" mode="aspectFill" class="media-preview-img" />
+        <view class="media-delete-btn" catchtap="onClearImage">
+          <t-icon name="close-circle-filled" size="44rpx" color="#fff" />
+        </view>
+        <view class="media-change-btn" bind:tap="onPickImage">
+          <t-icon wx:if="{{!imageUploading}}" name="camera" size="32rpx" color="#fff" />
+          <t-loading wx:else size="32px" theme="circular" />
+          <text class="media-change-text">{{imageUploading ? '上传中' : '更换'}}</text>
+        </view>
+      </view>
+      <view wx:else class="media-empty" bind:tap="onPickImage">
+        <t-loading wx:if="{{imageUploading}}" size="48px" theme="circular" />
+        <block wx:else>
+          <t-icon name="upload" size="48px" color="#c0c0c0" />
+          <text class="media-empty-text">点击上传图片</text>
+        </block>
+      </view>
+      <text class="media-hint">支持 JPG/PNG，建议比例 16:9，大小不超过 5MB</text>
+    </view>
+
+    <!-- 景点视频 -->
+    <view class="section-header">景点视频</view>
+    <view class="form-group media-section">
+      <view wx:if="{{form.attractionsVideo}}" class="media-preview-wrap">
+        <video src="{{form.attractionsVideo}}" class="media-preview-video" controls />
+        <view class="media-delete-btn" catchtap="onClearVideo">
+          <t-icon name="close-circle-filled" size="44rpx" color="#fff" />
+        </view>
+        <view class="media-change-btn" bind:tap="onPickVideo">
+          <t-icon wx:if="{{!videoUploading}}" name="refresh" size="32rpx" color="#fff" />
+          <t-loading wx:else size="32px" theme="circular" />
+          <text class="media-change-text">{{videoUploading ? '上传中' : '更换'}}</text>
+        </view>
+      </view>
+      <view wx:else class="media-empty" bind:tap="onPickVideo">
+        <t-loading wx:if="{{videoUploading}}" size="48px" theme="circular" />
+        <block wx:else>
+          <t-icon name="upload" size="48px" color="#c0c0c0" />
+          <text class="media-empty-text">点击上传视频</text>
+        </block>
+      </view>
+      <text class="media-hint">支持 MP4，时长建议不超过 3 分钟，大小不超过 50MB</text>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="form-footer">
+      <t-button
+        theme="primary"
+        size="large"
+        style="width:100%;"
+        loading="{{submitting}}"
+        bind:tap="onSubmit"
+      >{{isEdit ? '保存修改' : '提交'}}</t-button>
+    </view>
+  </block>
+
+  <!-- 景点类型多选弹窗（picker 样式） -->
+  <t-popup visible="{{showTypePicker}}" placement="bottom" bind:visible-change="onTypePickerVisibleChange">
+    <view class="multi-picker-popup">
+      <view class="multi-picker-header">
+        <text class="multi-picker-cancel" bind:tap="onTypePickerCancel">取消</text>
+        <text class="multi-picker-title">选择景点类型</text>
+        <text class="multi-picker-confirm" bind:tap="onTypePickerConfirm">确认</text>
+      </view>
+      <scroll-view scroll-y class="multi-picker-body">
+        <t-checkbox-group value="{{pendingTypeIds}}" bind:change="onPendingTypeChange">
+          <view wx:for="{{typeList}}" wx:key="id">
+            <t-checkbox value="{{item.id}}" label="{{item.typeName}}" />
+          </view>
+        </t-checkbox-group>
+      </scroll-view>
+    </view>
+  </t-popup>
+
+  <!-- 巡查员 picker -->
+  <t-picker
+    visible="{{showInspectorPicker}}"
+    value="{{inspectorPickerValue}}"
+    title="选择巡查员"
+    cancelBtn="取消"
+    confirmBtn="确认"
+    usingCustomNavbar
+    bindchange="onInspectorPickerConfirm"
+    bindcancel="onInspectorPickerCancel"
+  >
+    <t-picker-item options="{{inspectorPickerOptions}}" />
+  </t-picker>
+
+  <t-toast id="t-toast" />
+</view>
