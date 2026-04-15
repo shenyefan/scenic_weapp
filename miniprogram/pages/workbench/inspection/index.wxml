@@ -179,5 +179,16 @@
     bind:cancel="onDeleteCancel"
   />
 
+  <!-- 标记正常确认弹窗 -->
+  <t-dialog
+    visible="{{showNormalDialog}}"
+    title="确认操作"
+    content="确认将此巡查任务标记为正常完成吗？"
+    confirm-btn="确认"
+    cancel-btn="取消"
+    bind:confirm="onNormalConfirm"
+    bind:cancel="onNormalCancel"
+  />
+
   <t-toast id="t-toast" />
 </view>

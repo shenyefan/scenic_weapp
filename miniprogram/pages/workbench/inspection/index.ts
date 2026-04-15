@@ -40,6 +40,8 @@ Page({
     deleteTargetId: '',
     deleteTargetName: '',
     deleteLoading: false,
+    showNormalDialog: false,
+    normalTargetId: '',
   },
 
   _searchTimer: null as ReturnType<typeof setTimeout> | null,
@@ -250,20 +252,31 @@ Page({
     if (id) wx.navigateTo({ url: `../inspection-task/index?id=${id}&preset=abnormal` })
   },
 
-  async onNormalTap(e: any) {
+  onNormalTap(e: any) {
     const id = e.currentTarget.dataset.id
     if (!id) return
+    this.setData({ showNormalDialog: true, normalTargetId: id })
+  },
+
+  onNormalCancel() {
+    this.setData({ showNormalDialog: false, normalTargetId: '' })
+  },
+
+  async onNormalConfirm() {
+    const { normalTargetId } = this.data
+    this.setData({ showNormalDialog: false })
     Toast({ context: this, selector: '#t-toast', message: '提交中...', theme: 'loading', duration: 0 })
     try {
-      await updateInspectionTask({ id, taskStatus: 'completed' as any, abnormalStatus: 'normal' as any })
+      await updateInspectionTask({ id: normalTargetId, taskStatus: 'completed' as any, abnormalStatus: 'normal' as any })
       const list = this.data.list.map((item: any) =>
-        item.id === id
+        item.id === normalTargetId
           ? { ...item, taskStatus: 'completed', taskStatusLabel: '已完成', taskStatusType: 'success', abnormalStatus: 'normal', abnormalStatusLabel: '正常', abnormalStatusType: 'success' }
           : item
       )
-      this.setData({ list })
+      this.setData({ list, normalTargetId: '' })
       Toast({ context: this, selector: '#t-toast', message: '已标记为正常完成', theme: 'success' })
     } catch {
+      this.setData({ normalTargetId: '' })
       Toast({ context: this, selector: '#t-toast', message: '提交失败', theme: 'error' })
     }
   },
