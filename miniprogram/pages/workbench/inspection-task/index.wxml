@@ -1,5 +1,5 @@
 <view class="page-container">
-  <t-navbar title="{{isEdit ? '编辑巡查任务' : '新建巡查任务'}}" leftArrow placeholder z-index="100" />
+  <t-navbar title="{{(isEdit ? '编辑巡查任务' : '新建巡查任务') + (isInspectionRunning ? ' · 巡查中' : '')}}" leftArrow placeholder z-index="100" />
 
   <!-- 骨架屏 -->
   <block wx:if="{{initLoading}}">
@@ -207,5 +207,4 @@
   />
 
   <t-toast id="t-toast" />
-  <inspection-fab />
 </view>

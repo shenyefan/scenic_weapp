@@ -1,9 +1,10 @@
+import { withInspectionStatus } from '../../../utils/inspection-status'
 import Toast from 'tdesign-miniprogram/toast/index'
 import { listRoutesByPage, deleteRoute } from '../../../api/controller/attractions-route-controller/attractions-route-controller'
 
 const PAGE_SIZE = 10
 
-Page({
+Page(withInspectionStatus({
   data: {
     role: 'user',
     navBarHeight: 0,
@@ -132,4 +133,4 @@ Page({
       Toast({ context: this, selector: '#t-toast', message: '删除失败', theme: 'error' })
     }
   },
-})
+}))

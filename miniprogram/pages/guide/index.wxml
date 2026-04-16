@@ -1,6 +1,6 @@
 <view class="chat-page">
   <image class="page-bg" src="/assets/bg.png" mode="aspectFill" />
-  <t-navbar title="智慧导览" fixed placeholder style="--td-navbar-bg-color: transparent;">
+  <t-navbar title="智慧导览{{isInspectionRunning ? ' · 巡查中' : ''}}" fixed placeholder style="--td-navbar-bg-color: transparent;">
     <view slot="left" class="navbar-left" bindtap="openDrawer">
       <t-icon name="history" size="44rpx" />
     </view>
@@ -59,4 +59,3 @@
 </t-popup>
 
 <t-toast id="t-toast" />
-<inspection-fab />

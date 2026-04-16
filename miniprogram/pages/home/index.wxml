@@ -1,6 +1,6 @@
 <view class="home-page">
   <!-- 滚动后出现的顶部导航栏 -->
-  <t-navbar wx:if="{{showNavBar}}" title="锦州北普陀山景区" z-index="100"/>
+  <t-navbar wx:if="{{showNavBar}}" title="锦州北普陀山景区{{isInspectionRunning ? ' · 巡查中' : ''}}" z-index="100"/>
 
   <!-- 顶部沉浸大图 -->
   <view class="hero-wrap">
@@ -167,5 +167,4 @@
   </t-tabs>
 
   <t-toast id="t-toast" />
-  <inspection-fab />
 </view>

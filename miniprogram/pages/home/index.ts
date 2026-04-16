@@ -1,3 +1,4 @@
+import { withInspectionStatus } from '../../utils/inspection-status'
 import Toast from 'tdesign-miniprogram/toast/index'
 import { listAttractionsByPage } from '../../api/controller/attractions-controller/attractions-controller'
 import { listWeatherByPage } from '../../api/controller/natural-weather-controller/natural-weather-controller'
@@ -19,7 +20,7 @@ function getCurrentDateStr() {
   return formatDateTime(d).split(' ')[0]
 }
 
-Page({
+Page(withInspectionStatus({
   data: {
     shortcuts: SHORTCUTS,
     currentDate: getCurrentDateStr(),
@@ -278,4 +279,4 @@ Page({
       path: '/pages/home/index'
     };
   },
-})
+}))

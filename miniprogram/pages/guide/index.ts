@@ -1,4 +1,4 @@
-// pages/guide/index.ts
+import { withInspectionStatus } from '../../utils/inspection-status'
 import { streamAiChatMp } from '../../api/sse'
 import { listSessions, listMessages, deleteSession } from '../../api/controller/ai-chat-controller/ai-chat-controller'
 import { AiChatMessageRole } from '../../api/models/aiChatMessageRole'
@@ -29,7 +29,7 @@ function makeWelcomeMessage() {
   }
 }
 
-Page({
+Page(withInspectionStatus({
   data: {
     contentHeight: '100vh',
     navHeight: 0,
@@ -288,4 +288,4 @@ Page({
       path: '/pages/guide/index'
     };
   },
-})
+}))

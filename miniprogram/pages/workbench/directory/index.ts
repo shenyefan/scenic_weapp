@@ -1,3 +1,4 @@
+import { withInspectionStatus } from '../../../utils/inspection-status'
 import Toast from 'tdesign-miniprogram/toast/index'
 import { listUserByPage } from '../../../api/controller/user-controller/user-controller'
 
@@ -17,7 +18,7 @@ const ROLE_TYPE_MAP: Record<string, string> = {
   user: 'default', inspector: 'primary', disposer: 'warning', admin: 'success', ban: 'danger'
 }
 
-Page({
+Page(withInspectionStatus({
   data: {
     skeleton: true,
     loadingMore: false,
@@ -121,4 +122,4 @@ Page({
   },
 
   stopPropagation() {},
-})
+}))

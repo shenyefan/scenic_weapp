@@ -1,5 +1,5 @@
 <view class="page-container">
-  <t-navbar title="门票购买" leftArrow placeholder z-index="100"/>
+  <t-navbar title="门票购买{{isInspectionRunning ? ' · 巡查中' : ''}}" leftArrow placeholder z-index="100"/>
 
   <view class="search-bar-wrap">
     <t-search
@@ -64,5 +64,4 @@
   </view>
 
   <t-toast id="t-toast" />
-  <inspection-fab />
 </view>

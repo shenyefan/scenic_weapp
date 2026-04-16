@@ -1,3 +1,4 @@
+import { withInspectionStatus } from '../../../utils/inspection-status'
 import Toast from 'tdesign-miniprogram/toast/index'
 import {
   listInspectionTasksByPage,
@@ -14,7 +15,7 @@ const ABNORMAL_STATUS_OPTIONS = [
   { label: '待确认', value: 'unknown' },
 ]
 
-Page({
+Page(withInspectionStatus({
   data: {
     role: 'user',
     userId: '',
@@ -283,4 +284,4 @@ Page({
       Toast({ context: this, selector: '#t-toast', message: '删除失败', theme: 'error' })
     }
   },
-})
+}))

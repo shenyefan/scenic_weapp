@@ -1,10 +1,11 @@
+import { withInspectionStatus } from '../../../utils/inspection-status'
 import Toast from 'tdesign-miniprogram/toast/index'
 import { listAttractionsByPage, deleteAttractions } from '../../../api/controller/attractions-controller/attractions-controller'
 import { listAllTypes } from '../../../api/controller/attractions-type-controller/attractions-type-controller'
 
 const PAGE_SIZE = 10
 
-Page({
+Page(withInspectionStatus({
   data: {
     role: 'user',
     navBarHeight: 0,
@@ -197,4 +198,4 @@ Page({
   onMapTap() {
     wx.navigateTo({ url: '/pages/map/index?type=attraction' })
   },
-})
+}))

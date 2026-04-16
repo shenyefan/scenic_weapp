@@ -1,3 +1,4 @@
+import { withInspectionStatus } from '../../utils/inspection-status'
 import Toast from 'tdesign-miniprogram/toast/index'
 import { listTaskCheckinsByPage } from '../../api/controller/task-checkin-controller/task-checkin-controller'
 import { listAttractionsByPage } from '../../api/controller/attractions-controller/attractions-controller'
@@ -77,7 +78,7 @@ const buildTrackMarkers = (points: Array<{ latitude: number; longitude: number }
   return markers
 }
 
-Page({
+Page(withInspectionStatus({
   _mapCtx: null as any,
   _clusterMarkerIds: [] as number[],
   _clusterMarkers: [] as any[],
@@ -597,4 +598,4 @@ Page({
   onRouteTap() {
     wx.navigateTo({ url: '/pages/workbench/route/index' })
   },
-})
+}))

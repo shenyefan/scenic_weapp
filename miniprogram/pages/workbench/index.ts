@@ -1,4 +1,5 @@
 // pages/workbench/index.ts
+import { withInspectionStatus } from '../../utils/inspection-status'
 
 interface GridItem {
   text: string
@@ -88,7 +89,7 @@ function buildSections(role: string): GridSection[] {
   return sections
 }
 
-Page({
+Page(withInspectionStatus({
   data: {
     sections: [] as GridSection[],
     showNavBar: false,
@@ -129,4 +130,4 @@ Page({
       wx.navigateTo({ url })
     }
   },
-})
+}))

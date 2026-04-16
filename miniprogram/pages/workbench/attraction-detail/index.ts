@@ -1,8 +1,9 @@
+import { withInspectionStatus } from '../../../utils/inspection-status'
 import Toast from 'tdesign-miniprogram/toast/index'
 import { getAttractionsById } from '../../../api/controller/attractions-controller/attractions-controller'
 import { formatDateTime } from '../../../utils/util'
 
-Page({
+Page(withInspectionStatus({
   data: {
     loading: true,
     role: 'user',
@@ -56,4 +57,4 @@ Page({
     if (!detail) return
     wx.navigateTo({ url: `../attraction-edit/index?id=${detail.id}` })
   },
-})
+}))

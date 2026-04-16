@@ -1,5 +1,5 @@
 <view class="page-container">
-  <t-navbar title="天气信息" leftArrow placeholder z-index="100"/>
+  <t-navbar title="天气信息{{isInspectionRunning ? ' · 巡查中' : ''}}" leftArrow placeholder z-index="100"/>
 
   <view class="search-bar-wrap">
     <t-button icon="calendar" bind:tap="onDateFilterTap" class="filter-icon-btn{{selectedDate ? ' filter-btn-active' : ''}}" />
@@ -83,5 +83,4 @@
   />
 
   <t-toast id="t-toast" />
-  <inspection-fab />
 </view>

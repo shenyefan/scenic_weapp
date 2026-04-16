@@ -1,3 +1,4 @@
+import { withInspectionStatus } from '../../../utils/inspection-status'
 import Toast from 'tdesign-miniprogram/toast/index'
 import { getOrderById } from '../../../api/controller/order-controller/order-controller'
 import { formatDateTime } from '../../../utils/util'
@@ -24,7 +25,7 @@ const STATUS_STYLE_MAP: Record<string, { bgColor: string; color: string; qrColor
   refunded:        { bgColor: '#FEECEE', color: '#E34D59', qrColor: '#E34D59', navBgColor: '#FEECEE', icon: 'refresh' },
 }
 
-Page({
+Page(withInspectionStatus({
   data: {
     loading: true,
     role: 'user',
@@ -102,4 +103,4 @@ Page({
     if (!detail) return
     wx.navigateTo({ url: `../order-edit/index?id=${detail.id}` })
   },
-})
+}))

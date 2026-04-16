@@ -1,3 +1,4 @@
+import { withInspectionStatus } from '../../utils/inspection-status'
 import { logout } from "../../api/controller/user-controller/user-controller";
 import Toast from 'tdesign-miniprogram/toast/index';
 
@@ -8,7 +9,7 @@ const roleMap: Record<string, string> = {
   user: '普通用户',
 };
 
-Page({
+Page(withInspectionStatus({
   data: {
     isLoggedIn: false,
     avatarSize: '120rpx',
@@ -124,4 +125,4 @@ Page({
   onLogoutCancel() {
     this.setData({ showLogoutDialog: false });
   },
-});
+}))

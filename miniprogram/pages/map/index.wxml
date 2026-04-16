@@ -15,7 +15,7 @@
     bindtap="onMapTap"
   />
 
-  <t-navbar title="{{pageTitle}}" leftArrow placeholder class="map-navbar" />
+  <t-navbar title="{{pageTitle + (isInspectionRunning ? ' · 巡查中' : '')}}" leftArrow placeholder class="map-navbar" />
 
   <view class="search-bar-layer" wx:if="{{type !== 'track'}}">
     <view class="search-bar-wrap">
@@ -108,5 +108,4 @@
   </view>
 
   <t-toast id="t-toast" />
-  <inspection-fab />
 </view>

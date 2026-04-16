@@ -1,10 +1,11 @@
+import { withInspectionStatus } from '../../../utils/inspection-status'
 import Toast from 'tdesign-miniprogram/toast/index'
 import { addTaskCheckin } from '../../../api/controller/task-checkin-controller/task-checkin-controller'
 import { formatDateTime } from '../../../utils/util'
 
 const TENCENT_MAP_KEY = 'KDLBZ-XX7EV-BCMPK-5IHBO-3JVUF-EVBLH'
 
-Page({
+Page(withInspectionStatus({
   data: {
     latitude: 41.1731307,
     longitude: 121.0499674,
@@ -137,5 +138,4 @@ Page({
   onHistoryTap() {
     wx.navigateTo({ url: '../checkin-record/index' })
   },
-})
-
+}))

@@ -14,7 +14,7 @@
 		show-scale="{{false}}"
 	/>
 
-	<t-navbar title="巡查检查" leftArrow placeholder class="inspection-navbar" />
+	<t-navbar title="巡查检查{{isInspectionRunning ? ' · 巡查中' : ''}}" leftArrow placeholder class="inspection-navbar" />
 
 	<view class="map-wrap">
 		<view class="loading-overlay" wx:if="{{loading}}">
@@ -90,5 +90,4 @@
 	</view>
 
 	<t-toast id="t-toast" />
-  <inspection-fab />
 </view>

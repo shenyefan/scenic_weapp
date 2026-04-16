@@ -13,7 +13,7 @@
     show-scale="{{false}}"
   />
 
-  <t-navbar title="签到" leftArrow placeholder class="checkin-navbar"/>
+  <t-navbar title="签到{{isInspectionRunning ? ' · 巡查中' : ''}}" leftArrow placeholder class="checkin-navbar"/>
 
   <view class="overlay-address-card">
     <view class="address-icon-wrap">
@@ -69,6 +69,5 @@
   </view>
 
   <t-toast id="t-toast" />
-  <inspection-fab />
 </view>
 

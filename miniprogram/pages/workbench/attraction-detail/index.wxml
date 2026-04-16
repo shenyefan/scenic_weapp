@@ -1,5 +1,5 @@
 <view class="page-container">
-  <t-navbar title="景点详情" leftArrow placeholder z-index="100"/>
+  <t-navbar title="景点详情{{isInspectionRunning ? ' · 巡查中' : ''}}" leftArrow placeholder z-index="100"/>
 
   <!-- 骨架屏 -->
   <block wx:if="{{loading}}">
@@ -88,5 +88,4 @@
   </block>
 
   <t-toast id="t-toast" />
-  <inspection-fab />
 </view>

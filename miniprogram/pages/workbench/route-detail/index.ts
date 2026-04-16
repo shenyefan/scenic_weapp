@@ -1,3 +1,4 @@
+import { withInspectionStatus } from '../../../utils/inspection-status'
 import Toast from 'tdesign-miniprogram/toast/index'
 import { getRouteById } from '../../../api/controller/attractions-route-controller/attractions-route-controller'
 
@@ -23,7 +24,7 @@ const buildRouteCallout = (content: string) => ({
   textAlign: 'center' as const,
 })
 
-Page({
+Page(withInspectionStatus({
   data: {
     loading: true,
     role: 'user',
@@ -138,4 +139,4 @@ Page({
     if (!detail) return
     wx.navigateTo({ url: `../route-edit/index?id=${detail.id}` })
   },
-})
+}))

@@ -1,5 +1,5 @@
 <view class="page-container">
-  <t-navbar title="巡查轨迹" leftArrow placeholder z-index="100"/>
+  <t-navbar title="巡查轨迹{{isInspectionRunning ? ' · 巡查中' : ''}}" leftArrow placeholder z-index="100"/>
 
   <!-- 搜索栏 -->
   <view class="search-bar-wrap">
@@ -117,5 +117,4 @@
   </t-picker>
 
   <t-toast id="t-toast" />
-  <inspection-fab />
 </view>

@@ -1,6 +1,6 @@
 <view class="workbench-page">
   <image class="page-bg" src="/assets/bg.png" mode="aspectFill" />
-  <t-navbar title="工作台" fixed placeholder style="{{showNavBar ? '' : '--td-navbar-bg-color: transparent;'}}" />
+  <t-navbar title="工作台{{isInspectionRunning ? ' · 巡查中' : ''}}" fixed placeholder style="{{showNavBar ? '' : '--td-navbar-bg-color: transparent;'}}" />
 
   <!-- Banner -->
   <view class="wb-banner">
@@ -29,5 +29,4 @@
       </view>
     </view>
   </view>
-  <inspection-fab />
 </view>

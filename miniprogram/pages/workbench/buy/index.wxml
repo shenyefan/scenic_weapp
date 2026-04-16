@@ -1,5 +1,5 @@
 <view class="page-container">
-  <t-navbar title="确认订单" leftArrow placeholder z-index="100"/>
+  <t-navbar title="确认订单{{isInspectionRunning ? ' · 巡查中' : ''}}" leftArrow placeholder z-index="100"/>
 
   <view class="section-header">联系人信息</view>
   <view class="form-group">
@@ -82,5 +82,4 @@
   />
 
   <t-toast id="t-toast" />
-  <inspection-fab />
 </view>

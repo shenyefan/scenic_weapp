@@ -1,3 +1,4 @@
+import { withInspectionStatus } from '../../../utils/inspection-status'
 import Toast from 'tdesign-miniprogram/toast/index'
 import { listOrdersByPage, deleteOrder } from '../../../api/controller/order-controller/order-controller'
 import { formatDateTime } from '../../../utils/util'
@@ -19,7 +20,7 @@ const STATUS_TYPE_MAP: Record<string, string> = {
   refunded: 'danger',
 }
 
-Page({
+Page(withInspectionStatus({
   data: {
     role: 'user',
     userId: '',
@@ -195,4 +196,4 @@ Page({
   },
 
   stopPropagation() {},
-})
+}))

@@ -1,3 +1,4 @@
+import { withInspectionStatus } from '../../../utils/inspection-status'
 import Toast from 'tdesign-miniprogram/toast/index'
 import { listWeatherByPage } from '../../../api/controller/natural-weather-controller/natural-weather-controller'
 import { formatDateTime } from '../../../utils/util'
@@ -9,7 +10,7 @@ const formatMetric = (value: number | null | undefined, unit: string) => {
   return `${value}${unit}`
 }
 
-Page({
+Page(withInspectionStatus({
   data: {
     skeleton: true,
     loadingMore: false,
@@ -131,4 +132,4 @@ Page({
     })
     this.fetchList(1)
   },
-})
+}))

@@ -1,3 +1,4 @@
+import { withInspectionStatus } from '../../../utils/inspection-status'
 // pages/workbench/inspection/index.ts
 import Toast from 'tdesign-miniprogram/toast/index'
 import { formatDateTime } from '../../../utils/util'
@@ -78,7 +79,7 @@ const getErrorMessage = (error: any, fallback: string) => {
   }
 }
 
-Page({
+Page(withInspectionStatus({
   _mapCtx: null as any,
   _unsubscribe: null as null | (() => void),
   _durationTimer: null as null | ReturnType<typeof setInterval>,
@@ -377,4 +378,4 @@ Page({
   onToggleSatellite() {
     this.setData({ satellite: !this.data.satellite })
   },
-})
+}))

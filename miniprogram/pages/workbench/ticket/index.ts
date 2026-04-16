@@ -1,3 +1,4 @@
+import { withInspectionStatus } from '../../../utils/inspection-status'
 import Toast from 'tdesign-miniprogram/toast/index'
 import { listTicketsByPage } from '../../../api/controller/ticket-controller/ticket-controller'
 
@@ -15,7 +16,7 @@ type CartItem = {
   quantity: number
 }
 
-Page({
+Page(withInspectionStatus({
   data: {
     skeleton: true,
     loadingMore: false,
@@ -167,4 +168,4 @@ Page({
     }
     wx.navigateTo({ url: '../buy/index' })
   },
-})
+}))

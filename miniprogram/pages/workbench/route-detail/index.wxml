@@ -1,5 +1,5 @@
 <view class="page-container">
-  <t-navbar title="路线详情" leftArrow placeholder z-index="100"/>
+  <t-navbar title="路线详情{{isInspectionRunning ? ' · 巡查中' : ''}}" leftArrow placeholder z-index="100"/>
 
   <block wx:if="{{loading}}">
     <view class="skeleton-hero"></view>
@@ -102,5 +102,4 @@
   </block>
 
   <t-toast id="t-toast" />
-  <inspection-fab />
 </view>

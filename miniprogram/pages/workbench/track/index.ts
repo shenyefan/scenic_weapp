@@ -1,3 +1,4 @@
+import { withInspectionStatus } from '../../../utils/inspection-status'
 import Toast from 'tdesign-miniprogram/toast/index'
 import { listTrackRecordsByPage, deleteTrack } from '../../../api/controller/task-track-controller/task-track-controller'
 import { listUserByPage } from '../../../api/controller/user-controller/user-controller'
@@ -5,7 +6,7 @@ import { formatDateTime } from '../../../utils/util'
 
 const PAGE_SIZE = 10
 
-Page({
+Page(withInspectionStatus({
   data: {
     role: 'user',
     userId: '',
@@ -183,4 +184,4 @@ Page({
   },
 
   stopPropagation() {},
-})
+}))

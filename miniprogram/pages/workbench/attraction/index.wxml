@@ -1,5 +1,5 @@
 <view class="page-container">
-  <t-navbar title="景点信息" leftArrow placeholder/>
+  <t-navbar title="景点信息{{isInspectionRunning ? ' · 巡查中' : ''}}" leftArrow placeholder/>
 
   <!-- 搜索栏 -->
   <t-sticky offset-top="{{navBarHeight}}">
@@ -121,5 +121,4 @@
   />
 
   <t-toast id="t-toast" />
-  <inspection-fab />
 </view>

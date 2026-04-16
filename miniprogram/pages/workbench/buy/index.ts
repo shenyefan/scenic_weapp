@@ -1,3 +1,4 @@
+import { withInspectionStatus } from '../../../utils/inspection-status'
 import Toast from 'tdesign-miniprogram/toast/index'
 import { addOrder } from '../../../api/controller/order-controller/order-controller'
 
@@ -15,7 +16,7 @@ type CartItem = {
   lineTotal?: string
 }
 
-Page({
+Page(withInspectionStatus({
   data: {
     cart: [] as CartItem[],
     totalQty: 0,
@@ -151,4 +152,4 @@ Page({
       Toast({ context: this, selector: '#t-toast', message: '下单失败', theme: 'error' })
     }
   },
-})
+}))
