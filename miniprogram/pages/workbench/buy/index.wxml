@@ -1,0 +1,85 @@
+<view class="page-container">
+  <t-navbar title="确认订单" leftArrow placeholder z-index="100"/>
+
+  <view class="section-header">联系人信息</view>
+  <view class="form-group">
+    <t-input
+      label="联系人姓名"
+      align="right"
+      value="{{form.contactName}}"
+      placeholder="请输入联系人姓名"
+      maxlength="32"
+      bind:change="onContactNameChange"
+    />
+    <t-input
+      label="联系人电话"
+      align="right"
+      value="{{form.contactPhone}}"
+      placeholder="请输入手机号"
+      type="number"
+      maxlength="11"
+      bind:change="onContactPhoneChange"
+    />
+  </view>
+
+  <view class="section-header">订单信息</view>
+  <view class="form-group">
+    <t-cell
+      title="游览日期"
+      note="{{form.visitDate || '请选择游览日期'}}"
+      arrow
+      hover
+      bind:click="onDatePickerTap"
+      t-class-note="{{form.visitDate ? '' : 'cell-note-placeholder'}}"
+    />
+  </view>
+
+  <view class="section-header">票务明细</view>
+  <view class="form-group">
+    <view wx:if="{{cart.length > 0}}">
+      <view class="ticket-item" wx:for="{{cart}}" wx:key="ticketId">
+        <text class="ticket-name">{{item.ticketName}}</text>
+        <view class="ticket-item-row2">
+          <text class="ticket-meta">¥{{item.ticketPrice}} × {{item.quantity}}</text>
+          <text class="ticket-subtotal">¥{{item.lineTotal}}</text>
+        </view>
+        <text class="ticket-desc" wx:if="{{item.ticketDescription}}">{{item.ticketDescription}}</text>
+      </view>
+      <view class="ticket-total-row">
+        <text class="ticket-total-label">共 {{totalQty}} 张</text>
+        <text class="ticket-total-price">合计 ¥{{totalAmount}}</text>
+      </view>
+    </view>
+    <view wx:else class="empty-tickets">
+      <text>暂无已选门票</text>
+    </view>
+  </view>
+
+  <view class="form-footer">
+    <t-button
+      theme="primary"
+      size="large"
+      style="width:100%;"
+      loading="{{submitting}}"
+      bind:tap="onSubmit"
+      disabled="{{cart.length <= 0}}"
+    >确认下单</t-button>
+  </view>
+
+  <t-date-time-picker
+    visible="{{showDatePicker}}"
+    value="{{datePickerValue}}"
+    title="选择游览日期"
+    mode="date"
+    format="YYYY-MM-DD"
+    start="{{minVisitDate}}"
+    end="{{maxVisitDate}}"
+    cancelBtn="取消"
+    confirmBtn="确认"
+    usingCustomNavbar
+    bind:confirm="onDatePickerConfirm"
+    bindcancel="onDatePickerCancel"
+  />
+
+  <t-toast id="t-toast" />
+</view>
