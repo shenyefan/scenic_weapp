@@ -35,7 +35,7 @@ function buildSections(role: string): GridSection[] {
         { text: '扫码检票', image: '/assets/workbench/scan.svg', url: '/pages/workbench/scan/index' },
       ],
     })
-  } else {
+  } else if (role){
     sections.push({
       title: '票务管理',
       items: [
@@ -58,9 +58,9 @@ function buildSections(role: string): GridSection[] {
         title: '工作台',
         items: [
           ...common,
-          { text: '巡查任务', image: '/assets/workbench/task.svg', url: '/pages/workbench/inspection/index' },
+          { text: '巡查任务', image: '/assets/workbench/task.svg', url: '/pages/workbench/inspection-record/index' },
           { text: '巡查检查', image: '/assets/workbench/inspect.svg', url: '/pages/workbench/inspection/index' },
-          { text: '巡查记录', image: '/assets/workbench/track.svg', url: '/pages/workbench/inspection-record/index' },
+          { text: '巡查轨迹', image: '/assets/workbench/track.svg', url: '/pages/workbench/track/index' },
         ],
       })
     } else if (role === 'disposer') {
@@ -76,7 +76,7 @@ function buildSections(role: string): GridSection[] {
         title: '工作台',
         items: [
           ...common,
-          { text: '巡查任务', image: '/assets/workbench/task.svg', url: '/pages/workbench/inspection/index' },
+          { text: '巡查任务', image: '/assets/workbench/task.svg', url: '/pages/workbench/inspection-record/index' },
           { text: '巡查轨迹', image: '/assets/workbench/track.svg', url: '/pages/workbench/track/index' },
           { text: '处置任务', image: '/assets/workbench/disposal.svg', url: '/pages/workbench/disposal/index' },
           { text: '用户管理', image: '/assets/workbench/users.svg', url: '/pages/workbench/users/index' },
