@@ -1,6 +1,154 @@
 <view class="page-container">
-  <t-navbar title="扫码检票" leftArrow/>
+  <t-navbar title="扫码检票" leftArrow placeholder z-index="100"/>
+
   <view class="page-body">
-    <view>功能开发中…</view>
+    <view class="scan-stage">
+      <camera
+        wx:if="{{supportCamera && cameraAuthorized}}"
+        class="scan-camera"
+        mode="scanCode"
+        device-position="back"
+        flash="{{flash}}"
+        binderror="onCameraError"
+        bindstop="onCameraStop"
+        bindinitdone="onCameraInitDone"
+        bindscancode="onScanCode"
+      />
+
+      <view class="scan-stage-fallback" wx:if="{{!supportCamera || !cameraAuthorized}}"></view>
+
+      <view class="scan-mask scan-mask-top"></view>
+      <view class="scan-mask scan-mask-left"></view>
+      <view class="scan-mask scan-mask-right"></view>
+      <view class="scan-mask scan-mask-bottom"></view>
+
+      <view class="scan-window">
+        <view class="scan-corner scan-corner-tl"></view>
+        <view class="scan-corner scan-corner-tr"></view>
+        <view class="scan-corner scan-corner-bl"></view>
+        <view class="scan-corner scan-corner-br"></view>
+        <view class="scan-line" wx:if="{{!resolving && supportCamera && cameraAuthorized}}"></view>
+      </view>
+
+      <view class="scan-stage-topbar">
+        <view class="flash-toggle" bind:tap="onToggleFlashTap" wx:if="{{supportCamera && cameraAuthorized}}">
+          <t-icon name="lightbulb" size="18px" color="#ffffff" />
+          <text class="flash-toggle-text">{{flash === 'torch' ? '关闭补光' : '打开补光'}}</text>
+        </view>
+      </view>
+
+      <view class="scan-stage-center" wx:if="{{permissionDenied}}">
+        <t-icon name="error-circle" size="28px" color="#ffffff" />
+        <text class="scan-stage-title">相机权限未开启</text>
+        <text class="scan-stage-desc">请打开相机权限后继续扫码，或者使用系统扫码。</text>
+        <view class="scan-stage-actions">
+          <t-button theme="default" size="small" bind:tap="onOpenSettingTap">打开设置</t-button>
+          <t-button theme="primary" size="small" bind:tap="onManualScanTap">系统扫码</t-button>
+        </view>
+      </view>
+
+      <view class="scan-stage-center" wx:elif="{{!supportCamera}}">
+        <t-icon name="scan" size="28px" color="#ffffff" />
+        <text class="scan-stage-title">当前环境不支持页面内扫码</text>
+        <text class="scan-stage-desc">已自动降级为系统扫码模式。</text>
+        <view class="scan-stage-actions">
+          <t-button theme="primary" size="small" bind:tap="onManualScanTap">开始扫码</t-button>
+        </view>
+      </view>
+
+      <view class="overlay-result-panel">
+        <view class="overlay-result-skeleton" wx:if="{{resolving}}">
+          <t-skeleton
+            loading="{{resolving}}"
+            animation="gradient"
+            rowCol="{{resultSkeleton}}"
+            t-class="overlay-result-skeleton-inner"
+            t-class-row="overlay-result-skeleton-row"
+            t-class-col="overlay-result-skeleton-col"
+          />
+        </view>
+
+        <view class="overlay-result-placeholder" wx:elif="{{!result && !permissionDenied && supportCamera}}">
+          <t-icon name="scan" size="20px" color="#E5E7EB" />
+          <text class="overlay-result-placeholder-text">扫码后在此显示订单状态和门票信息</text>
+        </view>
+
+        <block wx:elif="{{result}}">
+          <view class="overlay-result-header">
+            <view class="overlay-result-status">
+              <t-icon name="{{result.statusIcon}}" size="18px" color="#FFFFFF" />
+              <text class="overlay-result-title">{{result.valid ? '订单状态' : '识别结果'}}</text>
+            </view>
+            <view class="overlay-result-header-right">
+              <t-tag theme="{{result.statusTheme}}" shape="round">{{result.statusLabel}}</t-tag>
+              <view class="overlay-close-btn" bind:tap="onCloseResultTap">
+                <t-icon name="close" size="14px" color="#FFFFFF" />
+              </view>
+            </view>
+          </view>
+
+          <text class="overlay-result-message">{{result.message}}</text>
+
+          <view class="overlay-alert-card" wx:if="{{result.dateMismatch}}">
+            <view class="overlay-alert-header">
+              <t-icon name="error-circle-filled" size="16px" color="#F59E0B" />
+              <text class="overlay-alert-title">{{result.dateMismatchTitle}}</text>
+            </view>
+            <text class="overlay-alert-message">{{result.dateMismatchMessage}}</text>
+          </view>
+
+          <view class="overlay-summary" wx:if="{{result.valid}}">
+            <view class="overlay-summary-row">
+              <text class="overlay-summary-label">订单号</text>
+              <text class="overlay-summary-value overlay-summary-value-id">{{result.id}}</text>
+            </view>
+            <view class="overlay-summary-row">
+              <text class="overlay-summary-label">联系人</text>
+              <text class="overlay-summary-value">{{result.contactName}}</text>
+            </view>
+            <view class="overlay-summary-row" wx:if="{{result.visitDate}}">
+              <text class="overlay-summary-label">游览日期</text>
+              <text class="overlay-summary-value">{{result.visitDate}}</text>
+            </view>
+          </view>
+
+          <view class="overlay-ticket-section" wx:if="{{result.valid && result.orderItems.length}}">
+            <view class="overlay-ticket-header">
+              <text class="overlay-ticket-title">门票详情</text>
+              <text class="overlay-ticket-total">{{result.totalQty}} 张 · ¥{{result.totalPrice}}</text>
+            </view>
+            <view class="overlay-ticket-item" wx:for="{{result.orderItems}}" wx:key="ticketName">
+              <text class="overlay-ticket-name">{{item.ticketName}}</text>
+              <view class="overlay-ticket-row2">
+                <text class="overlay-ticket-meta">¥{{item.unitPrice}} × {{item.quantity}}</text>
+                <text class="overlay-ticket-subtotal">¥{{item.subtotal}}</text>
+              </view>
+            </view>
+          </view>
+
+          <view class="overlay-result-actions">
+            <view
+              wx:if="{{result.valid}}"
+              class="overlay-action-btn overlay-action-btn--secondary {{result.primaryText ? 'overlay-action-btn--half' : 'overlay-action-btn--full'}}"
+              bind:tap="onViewOrderTap"
+            >
+              <t-icon name="browse" size="16px" color="#ffffff" />
+              <text class="overlay-action-btn-text">查看订单</text>
+            </view>
+            <view
+              wx:if="{{result.primaryText}}"
+              class="overlay-action-btn overlay-action-btn--primary {{result.valid ? 'overlay-action-btn--half' : 'overlay-action-btn--full'}} {{result.primaryDisabled ? 'overlay-action-btn--disabled' : ''}} overlay-action-btn--{{result.primaryTheme}}"
+              bind:tap="onPrimaryActionTap"
+            >
+              <t-icon wx:if="{{!verifying}}" name="check-circle" size="16px" color="#ffffff" />
+              <t-loading wx:if="{{verifying}}" theme="spinner" size="16px" />
+              <text class="overlay-action-btn-text">{{verifying ? '处理中' : result.primaryText}}</text>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
   </view>
+
+  <t-toast id="t-toast" />
 </view>
