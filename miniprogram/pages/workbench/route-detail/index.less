@@ -1,0 +1,269 @@
+@import '../../../variable.less';
+
+page {
+  background: @color-bg-gradient;
+}
+
+.page-container {
+  min-height: 100vh;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 32rpx);
+}
+
+@keyframes skeleton-shine {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-block {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shine 1.4s infinite;
+  border-radius: @radius-sm;
+}
+
+.skeleton-hero {
+  width: 100%;
+  height: 480rpx;
+  .skeleton-block();
+  border-radius: 0;
+}
+
+.skeleton-section {
+  background: @color-white;
+  margin-top: 0;
+  padding: 32rpx @page-padding;
+}
+
+.skeleton-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24rpx;
+  margin-bottom: 24rpx;
+}
+
+.skeleton-name {
+  height: 44rpx;
+  width: 300rpx;
+}
+
+.skeleton-tag {
+  height: 36rpx;
+  width: 100rpx;
+  border-radius: 100rpx;
+}
+
+.skeleton-meta-row {
+  height: 32rpx;
+  width: 60%;
+  margin-bottom: 20rpx;
+}
+
+.skeleton-section-title {
+  height: 36rpx;
+  width: 160rpx;
+  margin-bottom: 24rpx;
+}
+
+.skeleton-line {
+  height: 28rpx;
+  width: 100%;
+  margin-bottom: 16rpx;
+
+  &--short {
+    width: 65%;
+  }
+}
+
+.detail-hero {
+  width: 100%;
+  height: 480rpx;
+  display: block;
+
+  &-placeholder {
+    background: @color-bg;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.detail-section {
+  background: @color-white;
+  margin-top: 16rpx;
+  padding: 32rpx @page-padding;
+}
+
+.detail-name-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24rpx;
+}
+
+.detail-name {
+  flex: 1;
+  font-size: @font-size-title;
+  font-weight: @font-weight-bold;
+  color: @color-text-1;
+  line-height: 1.4;
+}
+
+.detail-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 14rpx 0;
+  border-bottom: 1rpx solid @color-border;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.detail-meta-label {
+  font-size: @font-size-body;
+  color: @color-text-2;
+  width: 120rpx;
+  flex-shrink: 0;
+}
+
+.detail-meta-value {
+  flex: 1;
+  font-size: @font-size-body;
+  color: @color-text-1;
+}
+
+.detail-section-title {
+  font-size: @font-size-subtitle;
+  font-weight: @font-weight-bold;
+  color: @color-text-1;
+  margin-bottom: 20rpx;
+}
+
+.detail-desc {
+  font-size: @font-size-body;
+  color: @color-text-2;
+  line-height: 1.8;
+}
+
+.route-station {
+  position: relative;
+  display: flex;
+  gap: 24rpx;
+  padding: 0 0 28rpx;
+
+  &:last-child {
+    padding-bottom: 0;
+
+    .route-station-line {
+      display: none;
+    }
+  }
+}
+
+.route-station-line {
+  position: absolute;
+  left: 28rpx;
+  top: 60rpx;
+  bottom: 0;
+  width: 2rpx;
+  background: @color-border;
+}
+
+.route-station-dot {
+  position: relative;
+  z-index: 1;
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background: @color-brand;
+  color: @color-white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: @font-size-caption;
+  font-weight: @font-weight-bold;
+  flex-shrink: 0;
+}
+
+.route-station-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.route-station-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.route-station-name {
+  flex: 1;
+  font-size: @font-size-subtitle;
+  font-weight: @font-weight-bold;
+  color: @color-text-1;
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+.route-station-stay {
+  font-size: @font-size-caption;
+  color: @color-brand;
+  background: @color-brand-light;
+  border-radius: 999rpx;
+  padding: 6rpx 16rpx;
+  flex-shrink: 0;
+}
+
+.route-station-media {
+  width: 100%;
+}
+
+.route-station-image {
+  width: 100%;
+  height: 240rpx;
+  border-radius: @radius-md;
+  overflow: hidden;
+}
+
+.route-station-desc {
+  font-size: @font-size-body;
+  color: @color-text-2;
+  line-height: 1.7;
+}
+
+.route-station-note {
+  background: @color-bg;
+  border-radius: @radius-md;
+  padding: 18rpx 20rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.route-station-note-label {
+  font-size: @font-size-caption;
+  color: @color-text-hint;
+}
+
+.route-station-note-text {
+  font-size: @font-size-body;
+  color: @color-text-1;
+  line-height: 1.7;
+  word-break: break-all;
+}
+
+.detail-video {
+  width: 100%;
+  border-radius: @radius-md;
+  max-height: 420rpx;
+}
+
+.detail-footer {
+  margin: 16rpx @page-padding 0;
+}

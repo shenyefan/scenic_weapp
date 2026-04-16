@@ -1,0 +1,95 @@
+<view class="page-container">
+  <t-navbar title="路线详情" leftArrow placeholder z-index="100"/>
+
+  <block wx:if="{{loading}}">
+    <view class="skeleton-hero"></view>
+    <view class="skeleton-section">
+      <view class="skeleton-row">
+        <view class="skeleton-block skeleton-name"></view>
+        <view class="skeleton-block skeleton-tag"></view>
+      </view>
+      <view class="skeleton-block skeleton-meta-row"></view>
+      <view class="skeleton-block skeleton-meta-row"></view>
+    </view>
+    <view class="skeleton-section" style="margin-top:16rpx;">
+      <view class="skeleton-block skeleton-section-title"></view>
+      <view class="skeleton-block skeleton-line"></view>
+      <view class="skeleton-block skeleton-line skeleton-line--short"></view>
+      <view class="skeleton-block skeleton-line"></view>
+    </view>
+  </block>
+
+  <block wx:elif="{{detail}}">
+    <t-image
+      class="detail-hero"
+      src="{{detail.image}}"
+      mode="aspectFill"
+      wx:if="{{detail.image}}"
+    />
+    <view class="detail-hero detail-hero-placeholder" wx:else>
+      <t-icon name="map-information-1" size="48px" color="#ccc" />
+    </view>
+
+    <view class="detail-section">
+      <view class="detail-name-row">
+        <text class="detail-name">{{detail.name}}</text>
+      </view>
+
+      <view class="detail-meta-row">
+        <t-icon name="time" size="15px" color="#0052d9" />
+        <text class="detail-meta-label">预计时长</text>
+        <text class="detail-meta-value">{{detail.duration != null ? detail.duration + ' 分钟' : '未设置'}}</text>
+      </view>
+
+      <view class="detail-meta-row">
+        <t-icon name="location" size="15px" color="#0052d9" />
+        <text class="detail-meta-label">包含景点</text>
+        <text class="detail-meta-value">{{detail.itemCount}} 个</text>
+      </view>
+    </view>
+
+    <view class="detail-section" wx:if="{{detail.description}}">
+      <view class="detail-section-title">路线介绍</view>
+      <text class="detail-desc">{{detail.description}}</text>
+    </view>
+
+    <view class="detail-section" wx:if="{{detail.routeItems.length > 0}}">
+      <view class="detail-section-title">路线站点</view>
+      <view class="route-station" wx:for="{{detail.routeItems}}" wx:key="id">
+        <view class="route-station-line"></view>
+        <view class="route-station-dot">{{item.order}}</view>
+        <view class="route-station-body">
+          <view class="route-station-top">
+            <text class="route-station-name">{{item.attractionName}}</text>
+            <text class="route-station-stay" wx:if="{{item.stayMinutes != null}}">停留 {{item.stayMinutes}} 分钟</text>
+          </view>
+          <view class="route-station-media" wx:if="{{item.attractionImage}}">
+            <t-image class="route-station-image" src="{{item.attractionImage}}" mode="aspectFill" />
+          </view>
+          <text class="route-station-desc" wx:if="{{item.attractionDescription}}">{{item.attractionDescription}}</text>
+          <view class="route-station-note" wx:if="{{item.stopNote}}">
+            <text class="route-station-note-label">站点备注</text>
+            <text class="route-station-note-text">{{item.stopNote}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="detail-section" wx:if="{{detail.video}}">
+      <view class="detail-section-title">路线视频</view>
+      <video
+        class="detail-video"
+        src="{{detail.video}}"
+        controls
+        show-center-play-btn
+        show-play-btn
+      />
+    </view>
+
+    <view class="detail-footer" wx:if="{{role == 'admin'}}">
+      <t-button theme="primary" size="large" icon="edit" bind:tap="onEditTap" style="width:100%;">编辑路线</t-button>
+    </view>
+  </block>
+
+  <t-toast id="t-toast" />
+</view>
