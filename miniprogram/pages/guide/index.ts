@@ -281,4 +281,11 @@ Page({
     if (role !== 'user') return
     this.setData({ activePopoverId: id, longPressPosition })
   },
+
+    onShareAppMessage() {
+    return {
+      title: '锦州北普陀山景区 - 智慧导览',
+      path: '/pages/guide/index'
+    };
+  },
 })

@@ -264,4 +264,10 @@ Page({
     this.setData({ newsLoadingMore: true })
     this.fetchNews(newsPage + 1)
   },
+  onShareAppMessage() {
+    return {
+      title: '锦州北普陀山景区',
+      path: '/pages/home/index'
+    };
+  },
 })
