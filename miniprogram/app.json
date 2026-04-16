@@ -1,7 +1,6 @@
 {
   "usingComponents": {
-    "t-navbar": "tdesign-miniprogram/navbar/navbar",
-    "inspection-fab": "components/inspection-fab/index"
+    "t-navbar": "tdesign-miniprogram/navbar/navbar"
   },
   "pages": [
     "pages/home/index",
