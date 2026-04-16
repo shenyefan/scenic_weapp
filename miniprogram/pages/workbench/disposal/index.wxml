@@ -48,34 +48,34 @@
   <!-- 列表 -->
   <view wx:elif="{{list.length > 0}}" class="item-group">
     <view
-      class="attraction-item"
+      class="disposal-item"
       wx:for="{{list}}"
       wx:key="id"
-      hover-class="attraction-item--hover"
+      hover-class="disposal-item--hover"
       hover-stay-time="70"
     >
-      <view class="attraction-item-body" bind:tap="onItemTap" data-id="{{item.id}}">
-        <view class="attraction-item-right">
-          <view class="attraction-item-top">
-            <text class="attraction-item-name">{{item.attractionsName}}</text>
-            <view class="attraction-item-tags">
+      <view class="disposal-item-body" bind:tap="onItemTap" data-id="{{item.id}}">
+        <view class="disposal-item-right">
+          <view class="disposal-item-top">
+            <text class="disposal-item-name">{{item.attractionsName}}</text>
+            <view class="disposal-item-tags">
               <t-tag size="small" theme="{{item.disposalStatusType}}" variant="light">{{item.disposalStatusLabel}}</t-tag>
             </view>
           </view>
-          <text class="attraction-item-desc" wx:if="{{item.inspectionDescription}}">异常：{{item.inspectionDescription}}</text>
-          <text class="attraction-item-desc" wx:if="{{item.disposalDescription}}">处置：{{item.disposalDescription}}</text>
-          <view class="attraction-item-meta">
+          <text class="disposal-item-desc" wx:if="{{item.inspectionDescription}}">异常：{{item.inspectionDescription}}</text>
+          <text class="disposal-item-desc" wx:if="{{item.disposalDescription}}">处置：{{item.disposalDescription}}</text>
+          <view class="disposal-item-meta">
             <t-icon name="time" size="14px" color="#999" />
-            <text class="attraction-item-meta-text">{{item.taskDate || '日期未定'}}</text>
+            <text class="disposal-item-meta-text">{{item.taskDate || '日期未定'}}</text>
           </view>
         </view>
       </view>
       <!-- 管理员：处置员名称 + 编辑 + 删除 -->
-      <t-row wx:if="{{role == 'admin'}}" class="attraction-item-actions" gutter="0" catchtap="stopPropagation">
+      <t-row wx:if="{{role == 'admin'}}" class="disposal-item-actions" gutter="0" catchtap="stopPropagation">
         <t-col span="10">
-          <view class="action-col action-col-inspector">
+          <view class="action-col action-col-disposer">
             <t-icon name="user-1" size="20px" color="#999" />
-            <text class="action-inspector-text">{{item.disposerName || '未分配'}}</text>
+            <text class="action-disposer-text">{{item.disposerName || '未分配'}}</text>
           </view>
         </t-col>
         <t-col span="7">

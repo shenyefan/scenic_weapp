@@ -6,8 +6,8 @@ const TENCENT_MAP_KEY = 'KDLBZ-XX7EV-BCMPK-5IHBO-3JVUF-EVBLH'
 
 Page({
   data: {
-    latitude: 39.9042,
-    longitude: 116.4074,
+    latitude: 41.1731307,
+    longitude: 121.0499674,
     scale: 16,
     minScale: 5,
     maxScale: 18,

@@ -49,30 +49,30 @@
   <!-- 列表 -->
   <view wx:elif="{{list.length > 0}}" class="item-group">
     <view
-      class="attraction-item"
+      class="inspection-task-item"
       wx:for="{{list}}"
       wx:key="id"
-      hover-class="attraction-item--hover"
+      hover-class="inspection-task-item--hover"
       hover-stay-time="70"
     >
-      <view class="attraction-item-body" bind:tap="onItemTap" data-id="{{item.id}}">
-        <view class="attraction-item-right">
-          <view class="attraction-item-top">
-            <text class="attraction-item-name">{{item.attractionsName}}</text>
-            <view class="attraction-item-tags">
+      <view class="inspection-task-item-body" bind:tap="onItemTap" data-id="{{item.id}}">
+        <view class="inspection-task-item-right">
+          <view class="inspection-task-item-top">
+            <text class="inspection-task-item-name">{{item.attractionsName}}</text>
+            <view class="inspection-task-item-tags">
               <t-tag size="small" theme="{{item.taskStatusType}}" variant="light">{{item.taskStatusLabel}}</t-tag>
               <t-tag size="small" theme="{{item.abnormalStatusType}}" variant="light">{{item.abnormalStatusLabel}}</t-tag>
             </view>
           </view>
-          <text class="attraction-item-desc" wx:if="{{item.inspectionDescription}}">{{item.inspectionDescription}}</text>
-          <view class="attraction-item-meta">
+          <text class="inspection-task-item-desc" wx:if="{{item.inspectionDescription}}">{{item.inspectionDescription}}</text>
+          <view class="inspection-task-item-meta">
             <t-icon name="time" size="14px" color="#999" />
-            <text class="attraction-item-meta-text">{{item.taskDate || '日期未定'}}</text>
+            <text class="inspection-task-item-meta-text">{{item.taskDate || '日期未定'}}</text>
           </view>
         </view>
       </view>
       <!-- 管理员：巡查员名称 + 编辑 + 删除 -->
-      <t-row wx:if="{{role == 'admin'}}" class="attraction-item-actions" gutter="0" catchtap="stopPropagation">
+      <t-row wx:if="{{role == 'admin'}}" class="inspection-task-item-actions" gutter="0" catchtap="stopPropagation">
         <t-col span="10">
           <view class="action-col action-col-inspector">
             <t-icon name="user-1" size="20px" color="#999" />
@@ -93,7 +93,7 @@
         </t-col>
       </t-row>
       <!-- 巡查员 + 巡查中：正常 / 异常 / 编辑 -->
-      <t-row wx:elif="{{role == 'inspector' && item.taskStatus == 'in_progress'}}" class="attraction-item-actions" gutter="0" catchtap="stopPropagation">
+      <t-row wx:elif="{{role == 'inspector' && item.taskStatus == 'in_progress'}}" class="inspection-task-item-actions" gutter="0" catchtap="stopPropagation">
         <t-col span="8">
           <view class="action-col action-col-btn" style="border-left:none;" catchtap="onNormalTap" data-id="{{item.id}}">
             <t-icon name="check-circle" size="20px" color="#00a870" />
@@ -114,7 +114,7 @@
         </t-col>
       </t-row>
       <!-- 巡查员 + 其他状态：编辑 + 删除 -->
-      <t-row wx:elif="{{role == 'inspector'}}" class="attraction-item-actions" gutter="0" catchtap="stopPropagation">
+      <t-row wx:elif="{{role == 'inspector'}}" class="inspection-task-item-actions" gutter="0" catchtap="stopPropagation">
         <t-col span="12">
           <view class="action-col action-col-btn" style="border-left:none;" catchtap="onEditTap" data-id="{{item.id}}">
             <t-icon name="edit" size="20px" color="#0052d9" />
@@ -189,4 +189,5 @@
   />
 
   <t-toast id="t-toast" />
+  <inspection-fab />
 </view>

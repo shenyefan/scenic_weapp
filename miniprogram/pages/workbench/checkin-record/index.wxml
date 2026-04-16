@@ -30,28 +30,28 @@
   <!-- 列表 -->
   <view wx:elif="{{list.length > 0}}" class="item-group">
     <view
-      class="attraction-item"
+      class="checkin-record-item"
       wx:for="{{list}}"
       wx:key="id"
-      hover-class="attraction-item--hover"
+      hover-class="checkin-record-item--hover"
       hover-stay-time="70"
     >
-      <view class="attraction-item-body">
-        <view class="attraction-item-right">
-          <view class="attraction-item-top">
-            <text class="attraction-item-name">{{item.userName}}</text>
+      <view class="checkin-record-item-body">
+        <view class="checkin-record-item-right">
+          <view class="checkin-record-item-top">
+            <text class="checkin-record-item-name">{{item.userName}}</text>
           </view>
-          <view class="attraction-item-meta" wx:if="{{item.address}}">
+          <view class="checkin-record-item-meta" wx:if="{{item.address}}">
             <t-icon name="location" size="14px" color="#999" />
-            <text class="attraction-item-meta-text">{{item.address}}</text>
+            <text class="checkin-record-item-meta-text">{{item.address}}</text>
           </view>
-          <view class="attraction-item-meta">
+          <view class="checkin-record-item-meta">
             <t-icon name="time" size="14px" color="#999" />
-            <text class="attraction-item-meta-text">{{item.checkinTime}}</text>
+            <text class="checkin-record-item-meta-text">{{item.checkinTime}}</text>
           </view>
         </view>
       </view>
-      <t-row class="attraction-item-actions" gutter="0" catchtap="stopPropagation">
+      <t-row class="checkin-record-item-actions" gutter="0" catchtap="stopPropagation">
         <t-col span="{{role == 'admin' ? 12 : 24}}">
           <view class="action-col action-col-btn" style="border-left:none;" catchtap="onViewTap" data-id="{{item.id}}">
             <t-icon name="map-information-1" size="20px" color="#0052d9" />
@@ -115,4 +115,5 @@
   </t-picker>
 
   <t-toast id="t-toast" />
+  <inspection-fab />
 </view>

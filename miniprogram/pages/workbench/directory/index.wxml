@@ -30,36 +30,36 @@
   <!-- 列表 -->
   <view wx:elif="{{list.length > 0}}" class="item-group">
     <view
-      class="attraction-item"
+      class="directory-item"
       wx:for="{{list}}"
       wx:key="id"
-      hover-class="attraction-item--hover"
+      hover-class="directory-item--hover"
       hover-stay-time="70"
     >
-      <view class="attraction-item-body">
-        <view class="user-avatar-wrap">
-          <t-image wx:if="{{item.avatar}}" class="user-avatar" src="{{item.avatar}}" mode="aspectFill" />
-          <view wx:else class="user-avatar user-avatar-placeholder">
+      <view class="directory-item-body">
+        <view class="directory-avatar-wrap">
+          <t-image wx:if="{{item.avatar}}" class="directory-avatar" src="{{item.avatar}}" mode="aspectFill" />
+          <view wx:else class="directory-avatar directory-avatar-placeholder">
             <t-icon name="user-1" size="40rpx" color="#bbb" />
           </view>
         </view>
-        <view class="attraction-item-right">
-          <view class="attraction-item-top">
-            <text class="attraction-item-name">{{item.name}}</text>
+        <view class="directory-item-right">
+          <view class="directory-item-top">
+            <text class="directory-item-name">{{item.name}}</text>
             <t-tag size="small" theme="{{item.roleType}}" variant="light">{{item.roleLabel}}</t-tag>
           </view>
-          <view class="attraction-item-meta">
+          <view class="directory-item-meta">
             <t-icon name="call" size="14px" color="#999" />
-            <text class="attraction-item-meta-text">{{item.phone || '暂无手机号'}}</text>
+            <text class="directory-item-meta-text">{{item.phone || '暂无手机号'}}</text>
           </view>
-          <view class="attraction-item-meta">
+          <view class="directory-item-meta">
             <t-icon name="mail" size="14px" color="#999" />
-            <text class="attraction-item-meta-text">{{item.email || '暂无邮箱'}}</text>
+            <text class="directory-item-meta-text">{{item.email || '暂无邮箱'}}</text>
           </view>
         </view>
       </view>
       <!-- 手机 + 邮箱操作行 -->
-      <t-row class="attraction-item-actions" gutter="0" catchtap="stopPropagation">
+      <t-row class="directory-item-actions" gutter="0" catchtap="stopPropagation">
         <t-col span="12">
           <view
             class="action-col action-col-btn {{item.phone ? '' : 'action-col-disabled'}}" style="border-left:none;"
@@ -106,4 +106,5 @@
   </t-picker>
 
   <t-toast id="t-toast" />
+  <inspection-fab />
 </view>

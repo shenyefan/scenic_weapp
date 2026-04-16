@@ -193,4 +193,8 @@ Page({
       Toast({ context: this, selector: '#t-toast', message: '删除失败', theme: 'error' })
     }
   },
+
+  onMapTap() {
+    wx.navigateTo({ url: '/pages/map/index?type=attraction' })
+  },
 })

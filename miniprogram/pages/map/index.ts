@@ -16,8 +16,8 @@ interface PanelInfo {
 }
 
 const DEFAULT_CENTER = {
-  latitude: 41.119,
-  longitude: 121.123,
+  latitude: 41.1731307,
+  longitude: 121.0499674,
 }
 
 const DEFAULT_SCALE = 14
@@ -47,6 +47,36 @@ const formatMaybeDateTime = (value: any) => {
   return formatDateTime(value)
 }
 
+const buildTrackMarkers = (points: Array<{ latitude: number; longitude: number }>, isFinished: boolean) => {
+  if (!points.length) return []
+
+  const start = points[0]
+  const end = points[points.length - 1]
+  const markers = [{
+    id: 1,
+    latitude: start.latitude,
+    longitude: start.longitude,
+    width: 30,
+    height: 38,
+    callout: buildCallout('起点', '#0052d9'),
+  }]
+
+  const isSamePoint = Math.abs(start.latitude - end.latitude) < 0.000001
+    && Math.abs(start.longitude - end.longitude) < 0.000001
+  if (isFinished && !isSamePoint) {
+    markers.push({
+      id: 2,
+      latitude: end.latitude,
+      longitude: end.longitude,
+      width: 30,
+      height: 38,
+      callout: buildCallout('终点', '#19b67a'),
+    })
+  }
+
+  return markers
+}
+
 Page({
   _mapCtx: null as any,
   _clusterMarkerIds: [] as number[],
@@ -64,6 +94,8 @@ Page({
     trackId: '',
     pageTitle: '景点地图',
     loading: true,
+    navBarHeight: 0,
+    toolStackTop: '120px',
     markers: [] as any[],
     polyline: [] as any[],
     latitude: DEFAULT_CENTER.latitude,
@@ -91,10 +123,13 @@ Page({
     const trackId = options?.id || ''
     this._targetCheckinId = type === 'checkin' ? String(options?.id || '') : ''
     const pageTitle = type === 'checkin' ? '签到地图' : type === 'track' ? '轨迹地图' : '景点地图'
+    const navBarHeight = getApp<IAppOption>().globalData?.navBarHeight ?? 0
     this.setData({
       type,
       trackId,
       pageTitle,
+      navBarHeight,
+      toolStackTop: `${navBarHeight + 24}px`,
       showCluster: type === 'attraction',
       showTrackPoints: false,
       showTrackLine: true,
@@ -105,7 +140,25 @@ Page({
   onReady() {
     this._mapCtx = wx.createMapContext('map-view', this)
     this._initMarkerCluster()
+    this._syncToolStackTop()
     this._rebuildMapDisplay(true)
+  },
+
+  _syncToolStackTop() {
+    const fallbackTop = `${(this.data.navBarHeight || 0) + 24}px`
+    const overlaySelector = this.data.type === 'track' ? '.track-summary' : '.search-bar-layer'
+    wx.createSelectorQuery()
+      .in(this)
+      .select(overlaySelector)
+      .boundingClientRect()
+      .exec((result) => {
+        const rect = result?.[0]
+        if (!rect) {
+          this.setData({ toolStackTop: fallbackTop })
+          return
+        }
+        this.setData({ toolStackTop: `${Math.round(rect.bottom + 16)}px` })
+      })
   },
 
   onUnload() {
@@ -315,9 +368,10 @@ Page({
     const startText = formatMaybeDateTime(detail?.trackStartTime)
     const endText = detail?.trackEndTime ? formatMaybeDateTime(detail?.trackEndTime) : '未结束'
     const trackSummary = `${startText} - ${endText}`
+    const isFinished = detail?.trackStatus === 'finished' || !!detail?.trackEndTime
 
     this.setData({
-      markers: [],
+      markers: buildTrackMarkers(linePoints, isFinished),
       polyline: this.data.showTrackLine && linePoints.length > 1
         ? [{
             points: linePoints,
@@ -334,6 +388,7 @@ Page({
       trackSummary,
       showPanel: false,
     }, () => {
+      this._syncToolStackTop()
       if (autoFit) this._fitToCurrentData()
     })
   },
@@ -537,5 +592,9 @@ Page({
 
   onToggleOverlooking() {
     this.setData({ overlooking: !this.data.overlooking })
+  },
+
+  onRouteTap() {
+    wx.navigateTo({ url: '/pages/workbench/route/index' })
   },
 })

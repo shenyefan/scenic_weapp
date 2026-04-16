@@ -20,11 +20,16 @@
   </block>
 
   <block wx:elif="{{detail}}">
-    <t-image
-      class="detail-hero"
-      src="{{detail.image}}"
-      mode="aspectFill"
-      wx:if="{{detail.image}}"
+    <map
+      id="route-detail-map"
+      class="detail-hero detail-map"
+      latitude="{{mapLatitude}}"
+      longitude="{{mapLongitude}}"
+      scale="{{mapScale}}"
+      markers="{{mapMarkers}}"
+      polyline="{{mapPolyline}}"
+      show-location="{{false}}"
+      wx:if="{{mapMarkers.length > 0}}"
     />
     <view class="detail-hero detail-hero-placeholder" wx:else>
       <t-icon name="map-information-1" size="48px" color="#ccc" />
@@ -51,6 +56,11 @@
     <view class="detail-section" wx:if="{{detail.description}}">
       <view class="detail-section-title">路线介绍</view>
       <text class="detail-desc">{{detail.description}}</text>
+    </view>
+
+    <view class="detail-section" wx:if="{{detail.image}}">
+      <view class="detail-section-title">路线封面</view>
+      <t-image class="detail-cover" src="{{detail.image}}" mode="aspectFill" />
     </view>
 
     <view class="detail-section" wx:if="{{detail.routeItems.length > 0}}">
@@ -92,4 +102,5 @@
   </block>
 
   <t-toast id="t-toast" />
+  <inspection-fab />
 </view>

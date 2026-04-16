@@ -32,7 +32,7 @@
         <text class="entry-btn-text">景区地图</text>
         <image class="entry-btn-icon" src="/assets/home/map.svg" mode="aspectFit" />
       </view>
-      <view class="entry-btn ticket-btn">
+      <view class="entry-btn ticket-btn" bind:tap="onTicketBtnTap">
         <text class="entry-btn-text">预约购票</text>
         <image class="entry-btn-icon" src="/assets/home/ticket.svg" mode="aspectFit" />
       </view>
@@ -167,4 +167,5 @@
   </t-tabs>
 
   <t-toast id="t-toast" />
+  <inspection-fab />
 </view>

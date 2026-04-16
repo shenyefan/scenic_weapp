@@ -30,13 +30,13 @@
   <!-- 列表 -->
   <view wx:elif="{{list.length > 0}}" class="item-group">
     <view
-      class="attraction-item"
+      class="user-item"
       wx:for="{{list}}"
       wx:key="id"
-      hover-class="attraction-item--hover"
+      hover-class="user-item--hover"
       hover-stay-time="70"
     >
-      <view class="attraction-item-body">
+      <view class="user-item-body">
         <!-- 头像 -->
         <view class="user-avatar-wrap">
           <t-image wx:if="{{item.avatar}}" class="user-avatar" src="{{item.avatar}}" mode="aspectFill" />
@@ -44,20 +44,20 @@
             <t-icon name="user-1" size="40rpx" color="#bbb" />
           </view>
         </view>
-        <view class="attraction-item-right">
-          <view class="attraction-item-top">
-            <text class="attraction-item-name">{{item.nickname}}</text>
+        <view class="user-item-right">
+          <view class="user-item-top">
+            <text class="user-item-name">{{item.nickname}}</text>
             <t-tag size="small" theme="{{item.roleType}}" variant="light">{{item.roleLabel}}</t-tag>
           </view>
-          <text class="attraction-item-account">@{{item.account}}</text>
-          <view class="attraction-item-meta" wx:if="{{item.phone}}">
+          <text class="user-item-account">@{{item.account}}</text>
+          <view class="user-item-meta" wx:if="{{item.phone}}">
             <t-icon name="call" size="14px" color="#999" />
-            <text class="attraction-item-meta-text">{{item.phone}}</text>
+            <text class="user-item-meta-text">{{item.phone}}</text>
           </view>
         </view>
       </view>
       <!-- 编辑+删除操作行 -->
-      <t-row class="attraction-item-actions" gutter="0" catchtap="stopPropagation">
+      <t-row class="user-item-actions" gutter="0" catchtap="stopPropagation">
         <t-col span="12">
           <view class="action-col action-col-btn" style="border-left:none;" catchtap="onEditTap" data-id="{{item.id}}">
             <t-icon name="edit" size="20px" color="#0052d9" />

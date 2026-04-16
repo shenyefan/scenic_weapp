@@ -108,6 +108,14 @@ page {
   min-width: 0;
 }
 
+.route-btn {
+  flex-shrink: 0;
+  margin-left: 16rpx;
+  --td-button-default-color: @color-text-2;
+  --td-button-default-bg-color: @color-bg;
+  --td-button-default-border-color: @color-bg;
+}
+
 /* 加载遮罩 */
 .loading-overlay {
   position: absolute;
@@ -193,7 +201,6 @@ page {
 
 .tool-stack--left {
   left: @block-padding;
-  bottom: calc(env(safe-area-inset-bottom) + 300rpx);
 }
 
 .tool-btn {

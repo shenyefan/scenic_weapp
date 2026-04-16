@@ -72,39 +72,39 @@ page {
   padding-bottom: @page-padding;
 }
 
-.attraction-item {
+.directory-item {
   border-bottom: 1rpx solid @color-border;
   transition: background @transition-base;
   &:last-child { border-bottom: none; }
   &--hover { background: @color-bg; }
 }
 
-.attraction-item-body {
+.directory-item-body {
   display: flex;
   align-items: center;
   padding: 24rpx @page-padding;
   gap: 24rpx;
 }
 
-.user-avatar-wrap {
+.directory-avatar-wrap {
   flex-shrink: 0;
 }
 
-.user-avatar {
+.directory-avatar {
   width: 80rpx;
   height: 80rpx;
   border-radius: 50%;
   overflow: hidden;
 }
 
-.user-avatar-placeholder {
+.directory-avatar-placeholder {
   background: @color-bg;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.attraction-item-right {
+.directory-item-right {
   flex: 1;
   min-width: 0;
   display: flex;
@@ -112,14 +112,14 @@ page {
   gap: 8rpx;
 }
 
-.attraction-item-top {
+.directory-item-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16rpx;
 }
 
-.attraction-item-name {
+.directory-item-name {
   flex: 1;
   font-size: @font-size-subtitle;
   font-weight: @font-weight-bold;
@@ -128,13 +128,13 @@ page {
   word-break: break-all;
 }
 
-.attraction-item-meta {
+.directory-item-meta {
   display: flex;
   align-items: center;
   gap: 8rpx;
 }
 
-.attraction-item-meta-text {
+.directory-item-meta-text {
   font-size: @font-size-caption;
   color: @color-text-2;
 }
@@ -146,7 +146,7 @@ page {
   max-width: 400rpx;
 }
 
-.attraction-item-actions {
+.directory-item-actions {
   padding: 16rpx @page-padding;
   border-top: 1rpx solid @color-border;
 }

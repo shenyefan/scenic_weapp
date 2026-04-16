@@ -4,6 +4,7 @@
   <!-- 搜索栏 -->
   <t-sticky offset-top="{{navBarHeight}}">
     <view class="search-bar-wrap">
+      <t-button icon="map" bind:tap="onMapTap" class="map-btn" />
       <t-button icon="filter-2" bind:tap="onFilterTap" class="filter-btn{{selectedTypeIds.length > 0 ? ' filter-btn-active' : ''}}"><view class="filter-badge" wx:if="{{selectedTypeIds.length > 0}}">{{selectedTypeIds.length}}</view></t-button>
       <t-search
         class="search-input"
@@ -120,4 +121,5 @@
   />
 
   <t-toast id="t-toast" />
+  <inspection-fab />
 </view>

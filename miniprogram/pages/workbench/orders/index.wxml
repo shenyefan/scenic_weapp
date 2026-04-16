@@ -48,38 +48,38 @@
   <!-- 列表 -->
   <view wx:elif="{{list.length > 0}}" class="item-group">
     <view
-      class="attraction-item"
+      class="order-item"
       wx:for="{{list}}"
       wx:key="id"
-      hover-class="attraction-item--hover"
+      hover-class="order-item--hover"
       hover-stay-time="70"
     >
-      <view class="attraction-item-body" bind:tap="onItemTap" data-id="{{item.id}}">
-        <view class="attraction-item-right">
-          <view class="attraction-item-top">
-            <text class="attraction-item-name">{{item.contactName}}</text>
+      <view class="order-item-body" bind:tap="onItemTap" data-id="{{item.id}}">
+        <view class="order-item-right">
+          <view class="order-item-top">
+            <text class="order-item-name">{{item.contactName}}</text>
             <t-tag size="small" theme="{{item.statusType}}" variant="light">{{item.statusLabel}}</t-tag>
           </view>
-          <view class="attraction-item-meta">
+          <view class="order-item-meta">
             <t-icon name="call" size="14px" color="#999" />
-            <text class="attraction-item-meta-text">{{item.contactPhone}}</text>
+            <text class="order-item-meta-text">{{item.contactPhone}}</text>
           </view>
-          <view class="attraction-item-meta" wx:if="{{item.ticketSummary}}">
+          <view class="order-item-meta" wx:if="{{item.ticketSummary}}">
             <t-icon name="list" size="14px" color="#999" />
-            <text class="attraction-item-meta-text">{{item.ticketSummary}}</text>
+            <text class="order-item-meta-text">{{item.ticketSummary}}</text>
           </view>
-          <view class="attraction-item-meta">
+          <view class="order-item-meta">
             <t-icon name="money-circle" size="14px" color="#999" />
-            <text class="attraction-item-meta-text">合计：￥{{item.totalPrice}}</text>
+            <text class="order-item-meta-text">合计：￥{{item.totalPrice}}</text>
           </view>
-          <view class="attraction-item-meta" wx:if="{{item.visitDate}}">
+          <view class="order-item-meta" wx:if="{{item.visitDate}}">
             <t-icon name="calendar" size="14px" color="#999" />
-            <text class="attraction-item-meta-text">游览日期：{{item.visitDate}}</text>
+            <text class="order-item-meta-text">游览日期：{{item.visitDate}}</text>
           </view>
         </view>
       </view>
       <!-- 操作行 -->
-      <t-row class="attraction-item-actions" gutter="0" catchtap="stopPropagation">
+      <t-row class="order-item-actions" gutter="0" catchtap="stopPropagation">
         <!-- 管理员：查看 + 编辑 + 删除 -->
         <t-col wx:if="{{role == 'admin'}}" span="8">
           <view class="action-col action-col-btn" style="border-left:none;" catchtap="onViewTap" data-id="{{item.id}}">
@@ -149,4 +149,5 @@
   />
 
   <t-toast id="t-toast" />
+  <inspection-fab />
 </view>

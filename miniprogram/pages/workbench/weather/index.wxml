@@ -83,4 +83,5 @@
   />
 
   <t-toast id="t-toast" />
+  <inspection-fab />
 </view>

@@ -1,286 +1,380 @@
+// pages/workbench/inspection/index.ts
 import Toast from 'tdesign-miniprogram/toast/index'
+import { formatDateTime } from '../../../utils/util'
 import {
-  listInspectionTasksByPage,
-  updateInspectionTask,
-  deleteInspectionTask,
-} from '../../../api/controller/task-inspection-controller/task-inspection-controller'
+  inspectionTracker,
+  type InspectionTrackerPoint,
+  type InspectionTrackerSnapshot,
+} from '../../../utils/inspection-tracker'
 
-const PAGE_SIZE = 10
+const DEFAULT_CENTER = {
+  latitude: 41.1731307,
+  longitude: 121.0499674,
+}
 
-const ABNORMAL_STATUS_OPTIONS = [
-  { label: '全部', value: '' },
-  { label: '正常', value: 'normal' },
-  { label: '异常', value: 'abnormal' },
-  { label: '待确认', value: 'unknown' },
-]
+const DEFAULT_SCALE = 15
+
+const buildCallout = (content: string, bgColor: string, color = '#ffffff') => ({
+  content,
+  color,
+  fontSize: 11,
+  borderRadius: 6,
+  bgColor,
+  padding: 5,
+  display: 'BYCLICK' as const,
+  textAlign: 'center' as const,
+})
+
+const formatDuration = (durationMs: number) => {
+  const totalSeconds = Math.max(0, Math.floor(durationMs / 1000))
+  const hours = Math.floor(totalSeconds / 3600)
+  const minutes = Math.floor((totalSeconds % 3600) / 60)
+  const seconds = totalSeconds % 60
+  return [hours, minutes, seconds].map((value) => String(value).padStart(2, '0')).join(':')
+}
+
+const formatDistance = (distance: number) => {
+  if (distance < 1000) return `${Math.round(distance)} 米`
+  return `${(distance / 1000).toFixed(2)} 公里`
+}
+
+const getStatusLabel = (status: InspectionTrackerSnapshot['status']) => {
+  if (status === 'starting') return '准备中'
+  if (status === 'running') return '巡查中'
+  if (status === 'ending') return '结束中'
+  if (status === 'finished') return '已结束'
+  return '未开始'
+}
+
+const getSyncText = (snapshot: InspectionTrackerSnapshot) => {
+  if (snapshot.locationError) return snapshot.locationError
+  if (snapshot.syncState === 'syncing') return `正在同步 ${snapshot.pendingCount} 个点位`
+  if (snapshot.syncState === 'pending') return `待同步 ${snapshot.pendingCount} 个点位`
+  if (snapshot.syncState === 'error') return snapshot.syncError || '点位同步失败'
+  if (snapshot.trackId) return '轨迹已同步'
+  return '开始后将自动记录并上传轨迹'
+}
+
+const getHintText = (status: InspectionTrackerSnapshot['status']) => {
+  if (status === 'running') return '离开当前页面后仍会继续巡查并记录轨迹'
+  if (status === 'ending') return '正在提交剩余轨迹点，请稍候'
+  if (status === 'finished') return '本次巡查已结束，可以重新开始新的巡查'
+  return '点击开始巡查后将自动记录时间、距离和行走路线'
+}
+
+const isSameCoordinate = (left: { latitude: number; longitude: number }, right: { latitude: number; longitude: number }) => {
+  return Math.abs(left.latitude - right.latitude) < 0.000001 && Math.abs(left.longitude - right.longitude) < 0.000001
+}
+
+const getErrorMessage = (error: any, fallback: string) => {
+  if (!error) return fallback
+  if (typeof error === 'string') return error
+  if (typeof error?.errMsg === 'string' && error.errMsg) return error.errMsg
+  if (typeof error?.message === 'string' && error.message) return error.message
+  try {
+    return JSON.stringify(error)
+  } catch {
+    return fallback
+  }
+}
 
 Page({
+  _mapCtx: null as any,
+  _unsubscribe: null as null | (() => void),
+  _durationTimer: null as null | ReturnType<typeof setInterval>,
+  _trackerSnapshot: null as InspectionTrackerSnapshot | null,
+
   data: {
-    role: 'user',
-    userId: '',
+    loading: true,
     navBarHeight: 0,
-    skeleton: true,
-    loadingMore: false,
-    list: [] as any[],
-    page: 1,
-    hasMore: true,
-    searchKeyword: '',
-    activeTab: '',
-    selectedAbnormalStatus: '',
-    showAbnormalPicker: false,
-    abnormalPickerValue: [''] as string[],
-    abnormalStatusOptions: ABNORMAL_STATUS_OPTIONS,
-    selectedDate: '',
-    showDatePicker: false,
-    datePickerValue: '',
-    showDeleteDialog: false,
-    deleteTargetId: '',
-    deleteTargetName: '',
-    deleteLoading: false,
-    showNormalDialog: false,
-    normalTargetId: '',
+    toolStackTop: '120px',
+    latitude: DEFAULT_CENTER.latitude,
+    longitude: DEFAULT_CENTER.longitude,
+    scale: DEFAULT_SCALE,
+    markers: [] as any[],
+    polyline: [] as any[],
+    satellite: false,
+    status: 'idle' as InspectionTrackerSnapshot['status'],
+    statusLabel: '未开始',
+    startedAtText: '未开始',
+    durationText: '00:00:00',
+    distanceText: '0 米',
+    pointCountText: '0 个轨迹点',
+    syncText: '开始后将自动记录并上传轨迹',
+    hintText: '点击开始巡查后将自动记录时间、距离和行走路线',
+    actionLabel: '开始巡查',
+    actionIcon: 'location',
+    actionLoading: false,
+    actionType: 'start',
   },
 
-  _searchTimer: null as ReturnType<typeof setTimeout> | null,
-
-  onLoad() {
+  async onLoad() {
     const navBarHeight = getApp<IAppOption>().globalData?.navBarHeight ?? 0
+    this.setData({
+      navBarHeight,
+      toolStackTop: `${navBarHeight + 24}px`,
+    })
+    this.startDurationTimer()
     try {
-      const raw = wx.getStorageSync('userInfo')
-      if (raw) {
-        const info = JSON.parse(raw)
-        this.setData({ role: info?.role || 'user', userId: info?.id || '', navBarHeight })
-      } else {
-        this.setData({ navBarHeight })
+      await inspectionTracker.bootstrap()
+      const snapshot = inspectionTracker.getSnapshot()
+      this._trackerSnapshot = snapshot
+      this.applySnapshot(snapshot, { autoFit: snapshot.points.length > 1, moveToCurrent: !snapshot.points.length })
+    } catch {
+      Toast({ context: this, selector: '#t-toast', message: '巡查状态恢复失败', theme: 'error' })
+    } finally {
+      this.setData({ loading: false })
+    }
+  },
+
+  onReady() {
+    this._mapCtx = wx.createMapContext('inspection-map', this)
+    const snapshot = this._trackerSnapshot || inspectionTracker.getSnapshot()
+    if (snapshot.points.length > 1) {
+      this.fitToCurrentData()
+      return
+    }
+    if (!snapshot.currentLatitude || !snapshot.currentLongitude) {
+      this.locateCurrentPosition(false)
+    }
+  },
+
+  onShow() {
+    this.subscribeTracker()
+    const snapshot = inspectionTracker.getSnapshot()
+    if (!snapshot.points.length && !snapshot.currentLatitude && !snapshot.currentLongitude) {
+      void this.locateCurrentPosition(false)
+    }
+  },
+
+  onHide() {
+    this.unsubscribeTracker()
+  },
+
+  onUnload() {
+    this.unsubscribeTracker()
+    if (this._durationTimer) clearInterval(this._durationTimer)
+  },
+
+  subscribeTracker() {
+    if (this._unsubscribe) return
+    this._unsubscribe = inspectionTracker.subscribe((snapshot) => {
+      const previousCount = this._trackerSnapshot?.points.length ?? 0
+      const nextCount = snapshot.points.length
+      this._trackerSnapshot = snapshot
+      this.applySnapshot(snapshot, {
+        autoFit: previousCount < 2 && nextCount >= 2,
+        moveToCurrent: previousCount === 0 && !!snapshot.currentLatitude && !!snapshot.currentLongitude,
+      })
+    })
+  },
+
+  unsubscribeTracker() {
+    if (!this._unsubscribe) return
+    this._unsubscribe()
+    this._unsubscribe = null
+  },
+
+  startDurationTimer() {
+    const tick = () => {
+      const snapshot = this._trackerSnapshot || inspectionTracker.getSnapshot()
+      this.updateRuntimeTexts(snapshot)
+    }
+    tick()
+    this._durationTimer = setInterval(tick, 1000)
+  },
+
+  updateRuntimeTexts(snapshot: InspectionTrackerSnapshot) {
+    const durationEndAt = snapshot.status === 'finished' && snapshot.endedAt ? snapshot.endedAt : Date.now()
+    const duration = snapshot.startedAt ? formatDuration(Math.max(durationEndAt - snapshot.startedAt, 0)) : '00:00:00'
+    const startedAtText = snapshot.startedAt ? formatDateTime(new Date(snapshot.startedAt)) : '未开始'
+    this.setData({
+      status: snapshot.status,
+      statusLabel: getStatusLabel(snapshot.status),
+      startedAtText,
+      durationText: duration,
+      distanceText: formatDistance(snapshot.totalDistance),
+      pointCountText: `${snapshot.points.length} 个轨迹点`,
+      syncText: getSyncText(snapshot),
+      hintText: getHintText(snapshot.status),
+      actionLabel: snapshot.status === 'running' ? '结束巡查' : snapshot.status === 'ending' ? '结束中' : '开始巡查',
+      actionIcon: snapshot.status === 'running' || snapshot.status === 'ending' ? 'close-circle' : 'location',
+      actionLoading: snapshot.status === 'starting' || snapshot.status === 'ending',
+      actionType: snapshot.status === 'running' || snapshot.status === 'ending' ? 'end' : 'start',
+    })
+  },
+
+  applySnapshot(snapshot: InspectionTrackerSnapshot, options: { autoFit?: boolean; moveToCurrent?: boolean } = {}) {
+    const points = snapshot.points.map((point) => ({ latitude: point.latitude, longitude: point.longitude }))
+    const markers = this.buildMarkers(snapshot.points, snapshot.status)
+    const nextData: Record<string, any> = {
+      markers,
+      polyline: points.length > 1
+        ? [{
+            points,
+            color: '#0052d9',
+            width: 8,
+            borderColor: '#ffffff',
+            borderWidth: 2,
+            arrowLine: true,
+            level: 'abovelabels',
+          }]
+        : [],
+    }
+
+    if (options.moveToCurrent) {
+      const lastPoint = points[points.length - 1]
+      if (lastPoint) {
+        nextData.latitude = lastPoint.latitude
+        nextData.longitude = lastPoint.longitude
+        nextData.scale = 16
+      } else if (snapshot.currentLatitude && snapshot.currentLongitude) {
+        nextData.latitude = snapshot.currentLatitude
+        nextData.longitude = snapshot.currentLongitude
+        nextData.scale = 16
+      }
+    }
+
+    this.setData(nextData, () => {
+      this.updateRuntimeTexts(snapshot)
+      if (options.autoFit) this.fitToCurrentData()
+    })
+  },
+
+  buildMarkers(points: InspectionTrackerPoint[], status: InspectionTrackerSnapshot['status']) {
+    if (!points.length) return []
+    const start = points[0]
+    const current = points[points.length - 1]
+    const markers = [{
+      id: 1,
+      latitude: start.latitude,
+      longitude: start.longitude,
+      width: 30,
+      height: 38,
+      callout: buildCallout(points.length === 1 ? '当前位置' : '起点', '#0052d9'),
+    }]
+    if (status === 'finished' && !isSameCoordinate(start, current)) {
+      markers.push({
+        id: 2,
+        latitude: current.latitude,
+        longitude: current.longitude,
+        width: 30,
+        height: 38,
+        callout: buildCallout(status === 'finished' ? '终点' : '当前位置', '#19b67a'),
+      })
+    }
+    return markers
+  },
+
+  fitToCurrentData() {
+    const ctx = this._mapCtx
+    const points: Array<{ latitude: number; longitude: number }> = []
+    this.data.markers.forEach((item: any) => {
+      points.push({ latitude: item.latitude, longitude: item.longitude })
+    })
+    this.data.polyline.forEach((item: any) => {
+      ;(item.points ?? []).forEach((point: any) => {
+        points.push({ latitude: point.latitude, longitude: point.longitude })
+      })
+    })
+
+    if (!points.length) {
+      if (this.data.latitude && this.data.longitude) return
+      this.setData({ latitude: DEFAULT_CENTER.latitude, longitude: DEFAULT_CENTER.longitude, scale: DEFAULT_SCALE })
+      return
+    }
+
+    if (points.length === 1 || !ctx || typeof ctx.includePoints !== 'function') {
+      this.setData({ latitude: points[points.length - 1].latitude, longitude: points[points.length - 1].longitude, scale: 16 })
+      return
+    }
+
+    ctx.includePoints({ padding: [120, 120, 340, 120], points })
+  },
+
+  async locateCurrentPosition(moveMap = true) {
+    try {
+      const result = await new Promise<WechatMiniprogram.GetLocationSuccessCallbackResult>((resolve, reject) => {
+        wx.getLocation({
+          type: 'gcj02',
+          success: resolve,
+          fail: reject,
+        })
+      })
+      const nextData: Record<string, any> = {
+        latitude: result.latitude,
+        longitude: result.longitude,
+      }
+      if (!this.data.scale || this.data.scale < 16) nextData.scale = 16
+      this.setData(nextData)
+      if (moveMap && this._mapCtx && typeof this._mapCtx.moveToLocation === 'function') {
+        this._mapCtx.moveToLocation({ latitude: result.latitude, longitude: result.longitude })
       }
     } catch {
-      this.setData({ navBarHeight })
+      Toast({ context: this, selector: '#t-toast', message: '定位失败，请检查定位权限', theme: 'error' })
     }
-    const now = new Date()
-    this.setData({
-      datePickerValue: `${String(now.getFullYear())}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`,
-    })
-    this.fetchList(1)
   },
 
-  onReachBottom() {
-    this.loadMore()
-  },
+  async onActionTap() {
+    const snapshot = this._trackerSnapshot || inspectionTracker.getSnapshot()
+    if (snapshot.status === 'starting' || snapshot.status === 'ending') return
 
-  onPullDownRefresh() {
-    this.setData({ list: [], page: 1, hasMore: true, skeleton: true })
-    this.fetchList(1).finally(() => wx.stopPullDownRefresh())
-  },
-
-  async fetchList(page: number) {
-    if (page !== 1) this.setData({ loadingMore: true })
-    const { searchKeyword, activeTab, selectedAbnormalStatus, selectedDate, role, userId } = this.data
-    try {
-      const query: any = {
-        current: page,
-        pageSize: PAGE_SIZE,
-        sortField: 'createTime',
-        sortOrder: 'descend',
-        search: searchKeyword || undefined,
-        taskStatus: activeTab || undefined,
-        abnormalStatus: selectedAbnormalStatus || undefined,
-        taskDate: selectedDate || undefined,
+    if (snapshot.status === 'running') {
+      try {
+        await inspectionTracker.end()
+        Toast({ context: this, selector: '#t-toast', message: '巡查已结束', theme: 'success' })
+      } catch {
+        Toast({ context: this, selector: '#t-toast', message: '结束巡查失败，请重试', theme: 'error' })
       }
-      // inspector 只能看自己的任务
-      if (role === 'inspector' && userId) query.inspectorId = userId
-      const res = await listInspectionTasksByPage(query)
-      const records = res?.data?.records ?? []
-      const total = res?.data?.total ?? 0
-      const newItems = records.map((item: any) => ({
-        id: item.id,
-        attractionsName: item.attractions?.attractionsName || '未知景点',
-        inspectorName: item.inspector?.userNickname || item.inspector?.userAccount || '未分配',
-        taskDate: item.taskDate || '',
-        taskStatus: item.taskStatus || '',
-        taskStatusLabel: this._getTaskStatusLabel(item.taskStatus),
-        taskStatusType: this._getTaskStatusType(item.taskStatus),
-        abnormalStatus: item.abnormalStatus || '',
-        abnormalStatusLabel: this._getAbnormalStatusLabel(item.abnormalStatus),
-        abnormalStatusType: this._getAbnormalStatusType(item.abnormalStatus),
-        inspectionDescription: item.inspectionDescription || '',
-      }))
-      const list = page === 1 ? newItems : [...this.data.list, ...newItems]
-      this.setData({ list, page, hasMore: list.length < total, skeleton: false, loadingMore: false })
-    } catch {
-      this.setData({ skeleton: false, loadingMore: false })
-      if (page === 1) Toast({ context: this, selector: '#t-toast', message: '数据加载失败', theme: 'error' })
+      return
     }
-  },
 
-  loadMore() {
-    const { hasMore, loadingMore, page } = this.data
-    if (!hasMore || loadingMore) return
-    this.fetchList(page + 1)
-  },
-
-  _getTaskStatusLabel(status: string) {
-    const map: Record<string, string> = {
-      in_progress: '巡查中',
-      waiting_disposal: '待处置',
-      completed: '已完成',
-      timeout: '已超时',
-    }
-    return map[status] || '未知'
-  },
-
-  _getTaskStatusType(status: string) {
-    const map: Record<string, string> = {
-      in_progress: 'primary',
-      waiting_disposal: 'warning',
-      completed: 'success',
-      timeout: 'danger',
-    }
-    return map[status] || 'default'
-  },
-
-  _getAbnormalStatusLabel(status: string) {
-    const map: Record<string, string> = { unknown: '待确认', normal: '正常', abnormal: '异常' }
-    return map[status] || '未知'
-  },
-
-  _getAbnormalStatusType(status: string) {
-    const map: Record<string, string> = { unknown: 'default', normal: 'success', abnormal: 'danger' }
-    return map[status] || 'default'
-  },
-
-  onSearchChange(e: any) {
-    const keyword = e?.detail?.value ?? ''
-    this.setData({ searchKeyword: keyword })
-    if (this._searchTimer) clearTimeout(this._searchTimer)
-    this._searchTimer = setTimeout(() => {
-      this.setData({ list: [], page: 1, hasMore: true, skeleton: true })
-      this.fetchList(1)
-    }, 500)
-  },
-
-  onSearchClear() {
-    if (this._searchTimer) clearTimeout(this._searchTimer)
-    this.setData({ searchKeyword: '', list: [], page: 1, hasMore: true, skeleton: true })
-    this.fetchList(1)
-  },
-
-  onTabChange(e: any) {
-    const value = e?.detail?.value ?? ''
-    this.setData({ activeTab: value, list: [], page: 1, hasMore: true, skeleton: true })
-    this.fetchList(1)
-  },
-
-  onDateFilterTap() {
-    if (this.data.selectedDate) {
-      this.setData({ selectedDate: '', datePickerValue: this.data.datePickerValue, list: [], page: 1, hasMore: true, skeleton: true })
-      this.fetchList(1)
-    } else {
-      this.setData({ showDatePicker: true })
-    }
-  },
-
-  onDatePickerCancel() {
-    this.setData({ showDatePicker: false })
-  },
-
-  onDatePickerConfirm(e: any) {
-    const date = String(e.detail?.value ?? '')
-    this.setData({ datePickerValue: date, selectedDate: date, showDatePicker: false, list: [], page: 1, hasMore: true, skeleton: true })
-    this.fetchList(1)
-  },
-
-  onAbnormalFilterTap() {
-    this.setData({ abnormalPickerValue: [this.data.selectedAbnormalStatus], showAbnormalPicker: true })
-  },
-
-  onAbnormalPickerCancel() {
-    this.setData({ showAbnormalPicker: false })
-  },
-
-  onAbnormalPickerConfirm(e: any) {
-    const value: string = e.detail.value?.[0] ?? ''
-    this.setData({
-      abnormalPickerValue: [value],
-      selectedAbnormalStatus: value,
-      showAbnormalPicker: false,
-      list: [],
-      page: 1,
-      hasMore: true,
-      skeleton: true,
-    })
-    this.fetchList(1)
-  },
-
-  onItemTap(e: any) {
-    const id = e.currentTarget.dataset.id
-    if (id) wx.navigateTo({ url: `../inspection-task/index?id=${id}` })
-  },
-
-  onEditTap(e: any) {
-    const id = e.currentTarget.dataset.id
-    if (id) wx.navigateTo({ url: `../inspection-task/index?id=${id}` })
-  },
-
-  onAbnormalTap(e: any) {
-    const id = e.currentTarget.dataset.id
-    if (id) wx.navigateTo({ url: `../inspection-task/index?id=${id}&preset=abnormal` })
-  },
-
-  onNormalTap(e: any) {
-    const id = e.currentTarget.dataset.id
-    if (!id) return
-    this.setData({ showNormalDialog: true, normalTargetId: id })
-  },
-
-  onNormalCancel() {
-    this.setData({ showNormalDialog: false, normalTargetId: '' })
-  },
-
-  async onNormalConfirm() {
-    const { normalTargetId } = this.data
-    this.setData({ showNormalDialog: false })
-    Toast({ context: this, selector: '#t-toast', message: '提交中...', theme: 'loading', duration: 0 })
     try {
-      await updateInspectionTask({ id: normalTargetId, taskStatus: 'completed' as any, abnormalStatus: 'normal' as any })
-      const list = this.data.list.map((item: any) =>
-        item.id === normalTargetId
-          ? { ...item, taskStatus: 'completed', taskStatusLabel: '已完成', taskStatusType: 'success', abnormalStatus: 'normal', abnormalStatusLabel: '正常', abnormalStatusType: 'success' }
-          : item
-      )
-      this.setData({ list, normalTargetId: '' })
-      Toast({ context: this, selector: '#t-toast', message: '已标记为正常完成', theme: 'success' })
-    } catch {
-      this.setData({ normalTargetId: '' })
-      Toast({ context: this, selector: '#t-toast', message: '提交失败', theme: 'error' })
+      console.log('[inspection-page] start inspection tapped')
+      await inspectionTracker.start()
+      Toast({ context: this, selector: '#t-toast', message: '巡查已开始', theme: 'success' })
+    } catch (error) {
+      const message = getErrorMessage(error, '开始巡查失败，请检查定位权限')
+      console.error('[inspection-page] start inspection failed', {
+        error,
+        message,
+        trackerSnapshot: inspectionTracker.getSnapshot(),
+      })
+      Toast({ context: this, selector: '#t-toast', message, theme: 'error' })
     }
   },
 
-  stopPropagation() {},
-
-  onAddTap() {
-    wx.navigateTo({ url: '../inspection-task/index' })
+  onTrackHistoryTap() {
+    wx.navigateTo({ url: '/pages/workbench/track/index' })
   },
 
-  onDeleteTap(e: any) {
-    const { id, name } = e.currentTarget.dataset
-    this.setData({ showDeleteDialog: true, deleteTargetId: id, deleteTargetName: name })
+  onFitTap() {
+    this.fitToCurrentData()
   },
 
-  onDeleteCancel() {
-    this.setData({ showDeleteDialog: false, deleteTargetId: '', deleteTargetName: '' })
+  onLocateTap() {
+    void this.locateCurrentPosition(true)
   },
 
-  async onDeleteConfirm() {
-    const { deleteTargetId, list } = this.data
-    this.setData({ deleteLoading: true })
-    try {
-      await deleteInspectionTask({ id: deleteTargetId })
-      const newList = list.filter((item: any) => item.id !== deleteTargetId)
-      this.setData({ list: newList, showDeleteDialog: false, deleteTargetId: '', deleteTargetName: '', deleteLoading: false })
-      Toast({ context: this, selector: '#t-toast', message: '删除成功', theme: 'success' })
-    } catch {
-      this.setData({ deleteLoading: false })
-      Toast({ context: this, selector: '#t-toast', message: '删除失败', theme: 'error' })
+  onZoomInTap() {
+    const ctx = this._mapCtx as any
+    if (ctx && typeof ctx.zoomIn === 'function') {
+      ctx.zoomIn()
+      return
     }
+    this.setData({ scale: Math.min(this.data.scale + 1, 18) })
+  },
+
+  onZoomOutTap() {
+    const ctx = this._mapCtx as any
+    if (ctx && typeof ctx.zoomOut === 'function') {
+      ctx.zoomOut()
+      return
+    }
+    this.setData({ scale: Math.max(this.data.scale - 1, 4) })
+  },
+
+  onToggleSatellite() {
+    this.setData({ satellite: !this.data.satellite })
   },
 })

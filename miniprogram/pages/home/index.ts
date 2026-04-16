@@ -103,6 +103,10 @@ Page({
     wx.navigateTo({ url: '/pages/map/index?type=attraction' })
   },
 
+  onTicketBtnTap() {
+    wx.navigateTo({ url: '/pages/workbench/ticket/index' })
+  },
+
   onShortcutTap(e: any) {
     const index = e?.detail?.index ?? e?.currentTarget?.dataset?.index
     const shortcut = SHORTCUTS[index]

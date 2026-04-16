@@ -34,31 +34,31 @@
   <!-- 列表 -->
   <view wx:elif="{{list.length > 0}}" class="item-group">
     <view
-      class="attraction-item"
+      class="route-item"
       wx:for="{{list}}"
       wx:key="id"
-      hover-class="attraction-item--hover"
+      hover-class="route-item--hover"
       hover-stay-time="70"
     >
-      <view class="attraction-item-body" bind:tap="onItemTap" data-id="{{item.id}}">
+      <view class="route-item-body" bind:tap="onItemTap" data-id="{{item.id}}">
         <!-- 左图 -->
-        <t-image class="attraction-item-img" src="{{item.image}}" mode="aspectFill" />
+        <t-image class="route-item-img" src="{{item.image}}" mode="aspectFill" />
         <!-- 右侧内容 -->
-        <view class="attraction-item-right">
-          <view class="attraction-item-top">
-            <text class="attraction-item-name">{{item.name}}</text>
+        <view class="route-item-right">
+          <view class="route-item-top">
+            <text class="route-item-name">{{item.name}}</text>
           </view>
-          <text class="attraction-item-desc" wx:if="{{item.description}}">{{item.description}}</text>
-          <view class="attraction-item-meta">
+          <text class="route-item-desc" wx:if="{{item.description}}">{{item.description}}</text>
+          <view class="route-item-meta">
             <t-icon name="time" size="24rpx" color="#999" />
-            <text class="attraction-item-meta-text">{{item.duration}} 分钟</text>
+            <text class="route-item-meta-text">{{item.duration}} 分钟</text>
             <t-icon name="location" size="24rpx" color="#999" style="margin-left:16rpx;" />
-            <text class="attraction-item-meta-text">{{item.itemCount}} 个景点</text>
+            <text class="route-item-meta-text">{{item.itemCount}} 个景点</text>
           </view>
         </view>
       </view>
       <!-- 操作行 -->
-      <t-row wx:if="{{role == 'admin'}}" class="attraction-item-actions" gutter="{{0}}">
+      <t-row wx:if="{{role == 'admin'}}" class="route-item-actions" gutter="{{0}}">
         <t-col span="12">
           <view class="action-col action-col-btn" style="border-left:none;" catchtap="onEditTap" data-id="{{item.id}}">
             <t-icon name="edit" size="20px" color="#0052d9" />
@@ -94,4 +94,5 @@
   />
 
   <t-toast id="t-toast" />
+  <inspection-fab />
 </view>

@@ -1,6 +1,7 @@
 {
   "usingComponents": {
-    "t-navbar": "tdesign-miniprogram/navbar/navbar"
+    "t-navbar": "tdesign-miniprogram/navbar/navbar",
+    "inspection-fab": "components/inspection-fab/index"
   },
   "pages": [
     "pages/home/index",
@@ -73,13 +74,19 @@
   "lazyCodeLoading": "requiredComponents",
   "permission": {
     "scope.userLocation": {
-      "desc": "请将小程序设置的[位置信息]改为[使用小程序时和离开后允许]"
+      "desc": "用于获取当前位置，支持巡检定位"
+    },
+    "scope.userLocationBackground": {
+      "desc": "用于巡检过程中持续记录轨迹，请将小程序设置的[位置信息]改为[使用小程序时和离开后允许]"
     }
   },
   "requiredBackgroundModes": [
     "location"
   ],
   "requiredPrivateInfos": [
-    "getLocation"
+    "getLocation",
+    "onLocationChange",
+    "startLocationUpdate",
+    "startLocationUpdateBackground"
   ]
 }
