@@ -179,7 +179,7 @@ Page({
 
   onViewTap(e: any) {
     const id = e.currentTarget.dataset.id
-    if (id) wx.navigateTo({ url: `../track/detail?id=${id}` })
+    if (id) wx.navigateTo({ url: `/pages/map/index?type=track&id=${id}` })
   },
 
   stopPropagation() {},

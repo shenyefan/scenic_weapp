@@ -99,6 +99,10 @@ Page({
     this.setData({ activeTab: e?.detail?.value || 'attractions' })
   },
 
+  onMapBtnTap() {
+    wx.navigateTo({ url: '/pages/map/index?type=attraction' })
+  },
+
   onShortcutTap(e: any) {
     const index = e?.detail?.index ?? e?.currentTarget?.dataset?.index
     const shortcut = SHORTCUTS[index]

@@ -56,8 +56,8 @@
       <t-row wx:if="{{role == 'admin'}}" class="attraction-item-actions" gutter="0" catchtap="stopPropagation">
         <t-col span="12">
           <view class="action-col action-col-btn" style="border-left:none;" catchtap="onViewTap" data-id="{{item.id}}">
-            <t-icon name="browse" size="20px" color="#0052d9" />
-            <text class="action-btn-text action-view-text">查看</text>
+            <t-icon name="map-information-1" size="20px" color="#0052d9" />
+            <text class="action-btn-text action-view-text">地图</text>
           </view>
         </t-col>
         <t-col span="12">

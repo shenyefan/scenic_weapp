@@ -28,7 +28,7 @@
       </view>
     </view>
     <view class="hero-card-entries">
-      <view class="entry-btn map-btn">
+      <view class="entry-btn map-btn" bind:tap="onMapBtnTap">
         <text class="entry-btn-text">景区地图</text>
         <image class="entry-btn-icon" src="/assets/home/map.svg" mode="aspectFit" />
       </view>

@@ -38,7 +38,8 @@
     "pages/workbench/track/index",
     "pages/workbench/disposal-task/index",
     "pages/workbench/checkin-record/index",
-    "pages/workbench/users/index"
+    "pages/workbench/users/index",
+    "pages/map/index"
   ],
   "window": {
     "navigationStyle": "custom",

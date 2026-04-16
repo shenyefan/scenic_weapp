@@ -72,6 +72,8 @@ Page({
         userName: item.user?.userNickname || item.user?.userAccount || '未知用户',
         address: item.checkinAddress || '',
         checkinTime: item.createTime ? formatDateTime(item.createTime) : '—',
+        latitude: item.checkinLat,
+        longitude: item.checkinLng,
       }))
       const list = page === 1 ? newItems : [...this.data.list, ...newItems]
       this.setData({ list, page, hasMore: list.length < total, skeleton: false, loadingMore: false })
@@ -176,7 +178,7 @@ Page({
 
   onViewTap(e: any) {
     const id = e.currentTarget.dataset.id
-    if (id) wx.navigateTo({ url: `../checkin-record/detail?id=${id}` })
+    if (id) wx.navigateTo({ url: `/pages/map/index?type=checkin&id=${id}` })
   },
 
   stopPropagation() {},

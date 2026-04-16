@@ -54,11 +54,11 @@
           </view>
           <view class="attraction-item-meta">
             <t-icon name="mail" size="14px" color="#999" />
-            <text class="attraction-item-meta-text">{{item.email || '暂无邮符1'}}</text>
+            <text class="attraction-item-meta-text">{{item.email || '暂无邮箱'}}</text>
           </view>
         </view>
       </view>
-      <!-- 手机 + 邮符1操作行 -->
+      <!-- 手机 + 邮箱操作行 -->
       <t-row class="attraction-item-actions" gutter="0" catchtap="stopPropagation">
         <t-col span="12">
           <view

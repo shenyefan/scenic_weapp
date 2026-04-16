@@ -24,7 +24,7 @@
       <text class="address-text">{{address}}</text>
     </view>
     <view class="address-relocate" bind:tap="onRelocalTap">
-      <t-icon name="refresh" size="34rpx" color="rgba(255,255,255,0.7)" />
+      <t-icon name="refresh" size="34rpx" color="#0052d9" />
     </view>
   </view>
 
@@ -62,9 +62,9 @@
 
     <!-- 签到记录入口 -->
     <view class="history-btn" bind:tap="onHistoryTap" hover-class="history-btn--pressed" hover-stay-time="70">
-      <t-icon name="time" size="32rpx" color="rgba(255,255,255,0.65)" />
+      <t-icon name="time" size="32rpx" color="#0052d9" />
       <text class="history-btn-text">查看签到记录</text>
-      <t-icon name="chevron-right" size="28rpx" color="rgba(255,255,255,0.35)" />
+      <t-icon name="chevron-right" size="28rpx" color="#a6b7cc" />
     </view>
   </view>
 
