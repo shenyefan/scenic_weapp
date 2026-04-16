@@ -12,6 +12,7 @@ Page({
     isEdit: false,
     initLoading: false,
     submitting: false,
+    locating: false,
     showTypePicker: false,
     showInspectorPicker: false,
     typeOptions: [] as { id: string; label: string }[],
@@ -104,6 +105,26 @@ Page({
   onDescChange(e: any) { this.setData({ 'form.attractionsDescription': e.detail?.value ?? '' }) },
   onLngChange(e: any) { this.setData({ 'form.lngStr': e.detail?.value ?? '' }) },
   onLatChange(e: any) { this.setData({ 'form.latStr': e.detail?.value ?? '' }) },
+
+  onFillCurrentLocationTap() {
+    if (this.data.locating) return
+    this.setData({ locating: true })
+    wx.getLocation({
+      type: 'gcj02',
+      success: (res) => {
+        this.setData({
+          locating: false,
+          'form.lngStr': String(res.longitude.toFixed(6)),
+          'form.latStr': String(res.latitude.toFixed(6)),
+        })
+        Toast({ context: this, selector: '#t-toast', message: '已填充当前位置坐标', theme: 'success' })
+      },
+      fail: () => {
+        this.setData({ locating: false })
+        Toast({ context: this, selector: '#t-toast', message: '获取当前位置失败，请检查定位权限', theme: 'error' })
+      },
+    })
+  },
 
   // 景点类型多选
   onTypePickerTap() { this.setData({ showTypePicker: true }) },

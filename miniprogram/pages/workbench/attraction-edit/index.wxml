@@ -91,6 +91,15 @@
         type="digit"
         bind:change="onLatChange"
       />
+      <view class="location-action-row">
+        <t-button
+          theme="primary"
+          variant="outline"
+          size="small"
+          loading="{{locating}}"
+          bind:tap="onFillCurrentLocationTap"
+        >获取当前位置</t-button>
+      </view>
     </view>
 
     <!-- 景点图片 -->
