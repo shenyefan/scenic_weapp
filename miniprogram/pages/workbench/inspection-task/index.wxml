@@ -197,6 +197,7 @@
     visible="{{showDatePicker}}"
     title="选择任务日期"
     mode="date"
+    format="YYYY-MM-DD"
     value="{{datePickerValue}}"
     cancelBtn="取消"
     confirmBtn="确认"

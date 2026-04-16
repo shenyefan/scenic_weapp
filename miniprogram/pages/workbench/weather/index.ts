@@ -19,26 +19,15 @@ Page({
     searchKeyword: '',
     selectedDate: '',
     showDatePicker: false,
-    datePickerValue: [] as string[],
-    dateYearOptions: [] as { label: string; value: string }[],
-    dateMonthOptions: [] as { label: string; value: string }[],
-    dateDayOptions: [] as { label: string; value: string }[],
+    datePickerValue: '',
   },
 
   _searchTimer: null as ReturnType<typeof setTimeout> | null,
 
   onLoad() {
-    const { years, months, days } = this.buildDateOptions()
     const now = new Date()
     this.setData({
-      dateYearOptions: years,
-      dateMonthOptions: months,
-      dateDayOptions: days,
-      datePickerValue: [
-        String(now.getFullYear()),
-        String(now.getMonth() + 1).padStart(2, '0'),
-        String(now.getDate()).padStart(2, '0'),
-      ],
+      datePickerValue: `${String(now.getFullYear())}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`,
     })
     this.fetchList(1)
   },
@@ -116,24 +105,6 @@ Page({
     this.fetchList(1)
   },
 
-  buildDateOptions() {
-    const now = new Date()
-    const currentYear = now.getFullYear()
-    const years: { label: string; value: string }[] = []
-    for (let year = 2020; year <= currentYear + 1; year++) {
-      years.push({ label: `${year}年`, value: String(year) })
-    }
-    const months: { label: string; value: string }[] = []
-    for (let month = 1; month <= 12; month++) {
-      months.push({ label: `${String(month).padStart(2, '0')}月`, value: String(month).padStart(2, '0') })
-    }
-    const days: { label: string; value: string }[] = []
-    for (let day = 1; day <= 31; day++) {
-      days.push({ label: `${String(day).padStart(2, '0')}日`, value: String(day).padStart(2, '0') })
-    }
-    return { years, months, days }
-  },
-
   onDateFilterTap() {
     if (this.data.selectedDate) {
       this.setData({ selectedDate: '', list: [], page: 1, hasMore: true, skeleton: true })
@@ -148,10 +119,9 @@ Page({
   },
 
   onDatePickerConfirm(e: any) {
-    const value: string[] = e.detail.value ?? []
-    const selectedDate = value.join('-')
+    const selectedDate = String(e.detail?.value ?? '')
     this.setData({
-      datePickerValue: value,
+      datePickerValue: selectedDate,
       selectedDate,
       showDatePicker: false,
       list: [],

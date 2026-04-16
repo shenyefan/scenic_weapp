@@ -99,7 +99,8 @@ Page({
   },
 
   onItemTap(e: any) {
-    // 暂无详情页，点击等同于编辑（管理员）
+    const id = e.currentTarget.dataset.id
+    if (id) wx.navigateTo({ url: `../route-detail/index?id=${id}` })
   },
 
   onAddTap() {

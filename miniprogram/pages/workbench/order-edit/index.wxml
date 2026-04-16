@@ -98,20 +98,18 @@
   </block>
 
   <!-- 游览日期 picker -->
-  <t-picker
+  <t-date-time-picker
     visible="{{showDatePicker}}"
     value="{{datePickerValue}}"
     title="选择游览日期"
+    mode="date"
+    format="YYYY-MM-DD"
     cancelBtn="取消"
     confirmBtn="确认"
     usingCustomNavbar
-    bindchange="onDatePickerConfirm"
+    bind:confirm="onDatePickerConfirm"
     bindcancel="onDatePickerCancel"
-  >
-    <t-picker-item options="{{dateYearOptions}}" />
-    <t-picker-item options="{{dateMonthOptions}}" />
-    <t-picker-item options="{{dateDayOptions}}" />
-  </t-picker>
+  />
 
   <!-- 订单状态 picker -->
   <t-picker

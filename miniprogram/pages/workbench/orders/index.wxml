@@ -124,20 +124,18 @@
   <t-empty wx:elif="{{!skeleton}}" description="暂无订单" />
 
   <!-- 日期 picker -->
-  <t-picker
+  <t-date-time-picker
     visible="{{showDatePicker}}"
     value="{{datePickerValue}}"
     title="选择日期"
+    mode="date"
+    format="YYYY-MM-DD"
     cancelBtn="取消"
     confirmBtn="确认"
     usingCustomNavbar
-    bindchange="onDatePickerConfirm"
+    bind:confirm="onDatePickerConfirm"
     bindcancel="onDatePickerCancel"
-  >
-    <t-picker-item options="{{dateYearOptions}}" />
-    <t-picker-item options="{{dateMonthOptions}}" />
-    <t-picker-item options="{{dateDayOptions}}" />
-  </t-picker>
+  />
 
   <!-- 删除确认 -->
   <t-dialog

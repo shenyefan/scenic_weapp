@@ -15,10 +15,7 @@ Page({
     submitting: false,
     showDatePicker: false,
     showStatusPicker: false,
-    datePickerValue: [] as string[],
-    dateYearOptions: [] as { label: string; value: string }[],
-    dateMonthOptions: [] as { label: string; value: string }[],
-    dateDayOptions: [] as { label: string; value: string }[],
+    datePickerValue: '',
     statusPickerValue: [''] as string[],
     statusPickerOptions: STATUS_OPTIONS.map((s) => ({ label: s.label, value: s.value })),
     form: {
@@ -36,11 +33,9 @@ Page({
   _editId: '',
 
   onLoad(options: any) {
-    const { years, months, days } = this.buildDateOptions()
     const now = new Date()
     this.setData({
-      dateYearOptions: years, dateMonthOptions: months, dateDayOptions: days,
-      datePickerValue: [String(now.getFullYear()), String(now.getMonth() + 1).padStart(2, '0'), String(now.getDate()).padStart(2, '0')],
+      datePickerValue: `${String(now.getFullYear())}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`,
     })
     if (options?.id) {
       this._editId = options.id
@@ -59,11 +54,7 @@ Page({
       const status = item.orderStatus || ''
       const statusLabel = STATUS_OPTIONS.find((s) => s.value === status)?.label || status
       const visitDate = item.visitDate || ''
-      let datePickerValue = this.data.datePickerValue
-      if (visitDate) {
-        const parts = visitDate.split('-')
-        if (parts.length === 3) datePickerValue = parts
-      }
+      const datePickerValue = visitDate || this.data.datePickerValue
       this.setData({
         initLoading: false,
         datePickerValue,
@@ -91,17 +82,6 @@ Page({
     }
   },
 
-  buildDateOptions() {
-    const now = new Date()
-    const years: { label: string; value: string }[] = []
-    for (let y = 2020; y <= now.getFullYear() + 2; y++) years.push({ label: `${y}年`, value: String(y) })
-    const months: { label: string; value: string }[] = []
-    for (let m = 1; m <= 12; m++) months.push({ label: `${String(m).padStart(2, '0')}月`, value: String(m).padStart(2, '0') })
-    const days: { label: string; value: string }[] = []
-    for (let d = 1; d <= 31; d++) days.push({ label: `${String(d).padStart(2, '0')}日`, value: String(d).padStart(2, '0') })
-    return { years, months, days }
-  },
-
   onContactNameChange(e: any) { this.setData({ 'form.contactName': e.detail?.value ?? '' }) },
   onContactPhoneChange(e: any) { this.setData({ 'form.contactPhone': e.detail?.value ?? '' }) },
   onTotalPriceChange(e: any) { this.setData({ 'form.totalPriceStr': e.detail?.value ?? '' }) },
@@ -109,9 +89,8 @@ Page({
   onDatePickerTap() { this.setData({ showDatePicker: true }) },
   onDatePickerCancel() { this.setData({ showDatePicker: false }) },
   onDatePickerConfirm(e: any) {
-    const vals: string[] = e.detail.value ?? []
-    const date = vals.join('-')
-    this.setData({ datePickerValue: vals, 'form.visitDate': date, showDatePicker: false })
+    const date = String(e.detail?.value ?? '')
+    this.setData({ datePickerValue: date, 'form.visitDate': date, showDatePicker: false })
   },
 
   onStatusPickerTap() { this.setData({ showStatusPicker: true }) },

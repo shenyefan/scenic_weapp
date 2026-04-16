@@ -6,6 +6,7 @@
     "t-input": "tdesign-miniprogram/input/input",
     "t-cell": "tdesign-miniprogram/cell/cell",
     "t-button": "tdesign-miniprogram/button/button",
+    "t-date-time-picker": "tdesign-miniprogram/date-time-picker/date-time-picker",
     "t-picker": "tdesign-miniprogram/picker/picker",
     "t-picker-item": "tdesign-miniprogram/picker-item/picker-item",
     "t-toast": "tdesign-miniprogram/toast/toast"

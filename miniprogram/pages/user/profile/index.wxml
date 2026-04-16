@@ -89,6 +89,7 @@
     visible="{{birthdayPickerVisible}}"
     title="选择生日"
     mode="date"
+    format="YYYY-MM-DD"
     value="{{form.userBirthDate || today}}"
     start="1900-01-01"
     end="{{today}}"
