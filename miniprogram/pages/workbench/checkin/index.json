@@ -2,6 +2,10 @@
   "navigationStyle": "custom",
   "styleIsolation": "shared",
   "usingComponents": {
-    "t-navbar": "tdesign-miniprogram/navbar/navbar"
+    "t-navbar": "tdesign-miniprogram/navbar/navbar",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-loading": "tdesign-miniprogram/loading/loading",
+    "t-toast": "tdesign-miniprogram/toast/toast"
   }
 }
+

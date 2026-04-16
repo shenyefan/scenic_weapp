@@ -1,6 +1,73 @@
 <view class="page-container">
-  <t-navbar title="签到" leftArrow/>
-  <view class="page-body">
-    <view>功能开发中…</view>
+  <map
+    id="checkin-map"
+    class="full-map"
+    latitude="{{latitude}}"
+    longitude="{{longitude}}"
+    scale="{{scale}}"
+    min-scale="{{minScale}}"
+    max-scale="{{maxScale}}"
+    setting="{{setting}}"
+    show-location
+    show-compass="{{false}}"
+    show-scale="{{false}}"
+  />
+
+  <t-navbar title="签到" leftArrow placeholder class="checkin-navbar"/>
+
+  <view class="overlay-address-card">
+    <view class="address-icon-wrap">
+      <t-icon name="location" size="36rpx" color="#0052d9" />
+    </view>
+    <view class="address-text-wrap">
+      <text class="address-label">当前位置</text>
+      <text class="address-text">{{address}}</text>
+    </view>
+    <view class="address-relocate" bind:tap="onRelocalTap">
+      <t-icon name="refresh" size="34rpx" color="rgba(255,255,255,0.7)" />
+    </view>
   </view>
+
+  <!-- 底部悬浮区 -->
+  <view class="overlay-bottom">
+    <!-- 时间 + 签到主按钮 -->
+    <view class="checkin-card">
+      <!-- 时间区域 -->
+      <view class="checkin-card-time">
+        <text class="checkin-time">{{timeStr}}</text>
+        <text class="checkin-date">{{dateStr}}</text>
+      </view>
+
+      <!-- 分隔线 -->
+      <view class="checkin-card-divider" />
+
+      <!-- 签到按钮 -->
+      <view
+        class="checkin-action-btn{{checkinDone ? ' checkin-action-btn--done' : ''}}{{checkinLoading ? ' checkin-action-btn--loading' : ''}}"
+        hover-class="checkin-action-btn--pressed"
+        hover-stay-time="80"
+        bind:tap="onCheckinTap"
+      >
+        <t-loading wx:if="{{checkinLoading}}" theme="circular" size="40rpx" color="#fff" />
+        <block wx:elif="{{checkinDone}}">
+          <t-icon name="check-circle" size="48rpx" color="#fff" />
+          <text class="checkin-action-label">已签到</text>
+        </block>
+        <block wx:else>
+          <t-icon name="location" size="48rpx" color="#fff" />
+          <text class="checkin-action-label">立即签到</text>
+        </block>
+      </view>
+    </view>
+
+    <!-- 签到记录入口 -->
+    <view class="history-btn" bind:tap="onHistoryTap" hover-class="history-btn--pressed" hover-stay-time="70">
+      <t-icon name="time" size="32rpx" color="rgba(255,255,255,0.65)" />
+      <text class="history-btn-text">查看签到记录</text>
+      <t-icon name="chevron-right" size="28rpx" color="rgba(255,255,255,0.35)" />
+    </view>
+  </view>
+
+  <t-toast id="t-toast" />
 </view>
+

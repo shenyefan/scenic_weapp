@@ -68,5 +68,16 @@
     ]
   },
   "componentFramework": "glass-easel",
-  "lazyCodeLoading": "requiredComponents"
+  "lazyCodeLoading": "requiredComponents",
+  "permission": {
+    "scope.userLocation": {
+      "desc": "请将小程序设置的[位置信息]改为[使用小程序时和离开后允许]"
+    }
+  },
+  "requiredBackgroundModes": [
+    "location"
+  ],
+  "requiredPrivateInfos": [
+    "getLocation"
+  ]
 }
