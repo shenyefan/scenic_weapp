@@ -1,6 +1,88 @@
 <view class="page-container">
-  <t-navbar title="天气信息" leftArrow/>
-  <view class="page-body">
-    <view>功能开发中…</view>
+  <t-navbar title="天气信息" leftArrow placeholder z-index="100"/>
+
+  <view class="search-bar-wrap">
+    <t-button icon="calendar" bind:tap="onDateFilterTap" class="filter-icon-btn{{selectedDate ? ' filter-btn-active' : ''}}" />
+    <t-search
+      class="search-input"
+      value="{{searchKeyword}}"
+      placeholder="搜索"
+      shape="square"
+      action-text=""
+      bind:change="onSearchChange"
+      bind:clear="onSearchClear"
+    />
   </view>
+
+  <view class="skeleton-list" wx:if="{{skeleton}}">
+    <view class="skeleton-cell" wx:for="{{[1,2,3,4,5]}}" wx:key="*this">
+      <view class="skeleton-cell-body">
+        <view class="skeleton-cell-title"></view>
+        <view class="skeleton-cell-line" style="width:30%;"></view>
+        <view class="skeleton-grid">
+          <view class="skeleton-grid-item" wx:for="{{[1,2,3,4]}}" wx:key="*this"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:elif="{{list.length > 0}}" class="item-group">
+    <view class="info-item" wx:for="{{list}}" wx:key="id">
+      <view class="info-item-body">
+        <view class="info-item-top">
+          <text class="info-item-name">{{item.weatherTime}}</text>
+        </view>
+
+        <view class="weather-metrics-grid">
+          <view class="weather-metric-cell">
+            <text class="weather-metric-label">温度</text>
+            <text class="weather-metric-value">{{item.tempText}}</text>
+          </view>
+          <view class="weather-metric-cell">
+            <text class="weather-metric-label">湿度</text>
+            <text class="weather-metric-value">{{item.humidityText}}</text>
+          </view>
+          <view class="weather-metric-cell">
+            <text class="weather-metric-label">风速</text>
+            <text class="weather-metric-value">{{item.windSpeedText}}</text>
+          </view>
+          <view class="weather-metric-cell">
+            <text class="weather-metric-label">风向角</text>
+            <text class="weather-metric-value">{{item.windDegText}}</text>
+          </view>
+          <view class="weather-metric-cell">
+            <text class="weather-metric-label">气压</text>
+            <text class="weather-metric-value">{{item.pressureText}}</text>
+          </view>
+          <view class="weather-metric-cell">
+            <text class="weather-metric-label">降水量</text>
+            <text class="weather-metric-value">{{item.rainText}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    <t-divider content="已加载全部" wx:if="{{!hasMore}}" />
+    <view class="load-more-wrap" wx:if="{{loadingMore}}">
+      <t-loading theme="circular" size="28px" text="加载更多..." />
+    </view>
+  </view>
+
+  <t-empty wx:elif="{{!skeleton}}" description="暂无天气信息" />
+
+  <t-picker
+    visible="{{showDatePicker}}"
+    value="{{datePickerValue}}"
+    title="选择日期"
+    cancelBtn="取消"
+    confirmBtn="确认"
+    usingCustomNavbar
+    bindchange="onDatePickerConfirm"
+    bindcancel="onDatePickerCancel"
+  >
+    <t-picker-item options="{{dateYearOptions}}" />
+    <t-picker-item options="{{dateMonthOptions}}" />
+    <t-picker-item options="{{dateDayOptions}}" />
+  </t-picker>
+
+  <t-toast id="t-toast" />
 </view>
