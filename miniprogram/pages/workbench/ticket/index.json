@@ -1,7 +1,16 @@
 {
   "navigationStyle": "custom",
+  "enablePullDownRefresh": true,
   "styleIsolation": "shared",
   "usingComponents": {
-    "t-navbar": "tdesign-miniprogram/navbar/navbar"
+    "t-navbar": "tdesign-miniprogram/navbar/navbar",
+    "t-search": "tdesign-miniprogram/search/search",
+    "t-image": "tdesign-miniprogram/image/image",
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-stepper": "tdesign-miniprogram/stepper/stepper",
+    "t-empty": "tdesign-miniprogram/empty/empty",
+    "t-loading": "tdesign-miniprogram/loading/loading",
+    "t-divider": "tdesign-miniprogram/divider/divider",
+    "t-toast": "tdesign-miniprogram/toast/toast"
   }
 }

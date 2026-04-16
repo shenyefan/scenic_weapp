@@ -1,6 +1,67 @@
 <view class="page-container">
-  <t-navbar title="门票购买" leftArrow/>
-  <view class="page-body">
-    <view>功能开发中…</view>
+  <t-navbar title="门票购买" leftArrow placeholder z-index="100"/>
+
+  <view class="search-bar-wrap">
+    <t-search
+      class="search-input"
+      value="{{searchKeyword}}"
+      placeholder="搜索门票名称"
+      shape="square"
+      action-text=""
+      bind:change="onSearchChange"
+      bind:clear="onSearchClear"
+    />
   </view>
+
+  <view class="skeleton-list" wx:if="{{skeleton}}">
+    <view class="skeleton-cell" wx:for="{{[1,2,3,4,5]}}" wx:key="*this">
+      <view class="skeleton-cell-img"></view>
+      <view class="skeleton-cell-body">
+        <view class="skeleton-cell-title"></view>
+        <view class="skeleton-cell-line"></view>
+        <view class="skeleton-cell-line" style="width:40%;"></view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:elif="{{list.length > 0}}" class="item-group">
+    <view class="ticket-row" wx:for="{{list}}" wx:key="id">
+      <t-image class="ticket-row-img" src="{{item.image}}" mode="aspectFill" />
+      <view class="ticket-row-main">
+        <view class="ticket-row-top">
+          <text class="ticket-row-name">{{item.name}}</text>
+          <text class="ticket-row-price">¥{{item.price}}</text>
+        </view>
+        <text class="ticket-row-desc">{{item.description}}</text>
+        <view class="ticket-row-bottom">
+          <text class="ticket-row-meta-text">有效期 {{item.validDays}} 天 · 库存 {{item.stockQuantity}} 张</text>
+          <t-stepper
+              value="{{item.quantity}}"
+              theme="filled"
+              min="0"
+              max="{{item.stockQuantity}}"
+              disabled="{{item.soldOut}}"
+              bind:change="onStepperChange"
+              data-id="{{item.id}}"
+            />
+        </view>
+      </view>
+    </view>
+    <t-divider content="已加载全部" wx:if="{{!hasMore}}" />
+    <view class="load-more-wrap" wx:if="{{loadingMore}}">
+      <t-loading theme="circular" size="28px" text="加载更多..." />
+    </view>
+  </view>
+
+  <t-empty wx:elif="{{!skeleton}}" description="暂无可购买门票" />
+
+  <view class="buy-bar">
+    <view class="buy-bar-summary">
+      <text class="buy-bar-qty">已选 {{totalQuantity}} 张</text>
+      <text class="buy-bar-price">合计 ¥{{subtotal}}</text>
+    </view>
+    <t-button theme="primary" size="large" disabled="{{totalQuantity <= 0}}" bind:tap="onBuyTap">立即购买</t-button>
+  </view>
+
+  <t-toast id="t-toast" />
 </view>
