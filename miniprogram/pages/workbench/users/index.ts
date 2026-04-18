@@ -134,7 +134,7 @@ Page({
 
   onEditTap(e: any) {
     const id = e.currentTarget.dataset.id
-    if (id) wx.navigateTo({ url: `../users/edit?id=${id}` })
+    if (id) wx.navigateTo({ url: `/pages/workbench/users/edit/index?id=${id}` })
   },
 
   stopPropagation() {},
