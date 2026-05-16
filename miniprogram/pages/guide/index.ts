@@ -48,10 +48,12 @@ Page(withInspectionStatus({
     loading: false,
     disabled: false,
     userAvatar: DEFAULT_USER_AVATAR,
-    markdownOptions: {
-      gfm: true,
-      pedantic: false,
-      breaks: true,
+    markdownProps: {
+      options: {
+        gfm: true,
+        pedantic: false,
+        breaks: true,
+      },
     },
     sessionId: undefined as string | undefined,
     renderPresets: [{ name: 'send', type: 'icon' }],
@@ -157,7 +159,9 @@ Page(withInspectionStatus({
             avatar: m.role === AiChatMessageRole.ASSISTANT ? BOT_AVATAR : this.data.userAvatar,
             role: m.role === AiChatMessageRole.USER ? 'user' : 'assistant',
             status: 'complete',
-            content: [{ type: 'markdown', data: m.content || '' }],
+            content: m.role === AiChatMessageRole.ASSISTANT
+              ? [{ type: 'markdown', data: m.content || '' }]
+              : [{ type: 'text', data: m.content || '' }],
           }))
           .reverse()
         this.setData({ chatList: mapped.length > 0 ? mapped : [makeWelcomeMessage()] })
@@ -256,9 +260,10 @@ Page(withInspectionStatus({
           this.setData({ sessionId: sid })
         },
         onContent: (chunk: string) => {
+          const data = this.data.chatList[0].content[0].data + chunk
           this.setData({
             'chatList[0].status': 'streaming',
-            'chatList[0].content[0].data': this.data.chatList[0].content[0].data + chunk,
+            'chatList[0].content[0].data': data,
           })
         },
         onDone: () => {

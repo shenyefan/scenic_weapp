@@ -11,7 +11,7 @@
       <block wx:for="{{chatList}}" wx:key="chatId">
         <t-chat-message wx:if="{{item.role === 'assistant' && item.content[0].type === 'markdown'}}" chat-id="{{item.chatId}}" avatar="{{item.avatar || ''}}" name="{{item.name || ''}}" datetime="{{item.datetime || ''}}" content="{{[]}}" role="{{item.role}}" placement="{{item.role === 'user' ? 'right' : 'left'}}" status="{{item.status || ''}}" bind:message-longpress="showPopover">
           <view slot="content" class="guide-markdown-content">
-            <t-chat-markdown content="{{item.content[0].data}}" options="{{markdownOptions}}" />
+            <t-chat-content content="{{item.content[0]}}" markdown-props="{{markdownProps}}" role="{{item.role}}" status="{{item.status}}" />
           </view>
         </t-chat-message>
         <t-chat-message wx:else chat-id="{{item.chatId}}" avatar="{{item.avatar || ''}}" name="{{item.name || ''}}" datetime="{{item.datetime || ''}}" content="{{item.content}}" role="{{item.role}}" placement="{{item.role === 'user' ? 'right' : 'left'}}" status="{{item.status || ''}}" bind:message-longpress="showPopover">
