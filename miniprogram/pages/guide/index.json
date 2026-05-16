@@ -6,6 +6,7 @@
     "t-icon": "tdesign-miniprogram/icon/icon",
     "t-popup": "tdesign-miniprogram/popup/popup",
     "t-chat-message": "tdesign-miniprogram/chat-message/chat-message",
+    "t-chat-markdown": "tdesign-miniprogram/chat-markdown/chat-markdown",
     "t-chat-content": "tdesign-miniprogram/chat-content/chat-content",
     "t-chat": "tdesign-miniprogram/chat-list/chat-list",
     "t-chat-sender": "tdesign-miniprogram/chat-sender/chat-sender",

@@ -6,7 +6,7 @@ import { formatDate } from '../../utils/util'
 import Toast from 'tdesign-miniprogram/toast/index'
 
 const BOT_AVATAR = 'https://tdesign.gtimg.com/site/chat-avatar.png'
-const DEFAULT_USER_AVATAR = 'https://tdesign.gtimg.com/site/chat-avatar.png'
+const DEFAULT_USER_AVATAR = 'https://tdesign.gtimg.com/site/avatar.jpg'
 
 let uniqueId = 0
 function genId() {
@@ -29,6 +29,16 @@ function makeWelcomeMessage() {
   }
 }
 
+function getStoredUserAvatar() {
+  try {
+    const raw = wx.getStorageSync('userInfo')
+    const userInfo = raw ? JSON.parse(raw) : null
+    return userInfo?.avatar || ''
+  } catch {
+    return ''
+  }
+}
+
 Page(withInspectionStatus({
   data: {
     contentHeight: '100vh',
@@ -37,6 +47,12 @@ Page(withInspectionStatus({
     value: '',
     loading: false,
     disabled: false,
+    userAvatar: DEFAULT_USER_AVATAR,
+    markdownOptions: {
+      gfm: true,
+      pedantic: false,
+      breaks: true,
+    },
     sessionId: undefined as string | undefined,
     renderPresets: [{ name: 'send', type: 'icon' }],
     activePopoverId: '',
@@ -49,11 +65,13 @@ Page(withInspectionStatus({
   _requestTask: null as WechatMiniprogram.RequestTask | null,
 
   onLoad() {
+    this.refreshUserAvatar()
     this.setData({ chatList: [makeWelcomeMessage()] })
   },
 
   onShow() {
     // 每次显示时预加载会话列表（静默）
+    this.refreshUserAvatar()
     this.fetchSessions()
   },
 
@@ -63,6 +81,10 @@ Page(withInspectionStatus({
   },
 
   // 会话列表
+
+  refreshUserAvatar() {
+    this.setData({ userAvatar: getStoredUserAvatar() || DEFAULT_USER_AVATAR })
+  },
 
   fetchSessions() {
     this.setData({ sessionsLoading: true })
@@ -132,7 +154,7 @@ Page(withInspectionStatus({
           .filter((m: any) => m.role)
           .map((m: any) => ({
             chatId: m.id || genId(),
-            avatar: m.role === AiChatMessageRole.ASSISTANT ? BOT_AVATAR : DEFAULT_USER_AVATAR,
+            avatar: m.role === AiChatMessageRole.ASSISTANT ? BOT_AVATAR : this.data.userAvatar,
             role: m.role === AiChatMessageRole.USER ? 'user' : 'assistant',
             status: 'complete',
             content: [{ type: 'markdown', data: m.content || '' }],
@@ -197,7 +219,7 @@ Page(withInspectionStatus({
 
     const userMessage = {
       role: 'user',
-      avatar: DEFAULT_USER_AVATAR,
+      avatar: this.data.userAvatar,
       content: [{ type: 'text', data: value.trim() }],
       chatId: genId(),
     }
