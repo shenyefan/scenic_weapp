@@ -82,6 +82,7 @@ function buildSections(role: string): GridSection[] {
           { text: '巡查轨迹', image: '/assets/workbench/track.svg', url: '/pages/workbench/track/index' },
           { text: '处置任务', image: '/assets/workbench/disposal.svg', url: '/pages/workbench/disposal/index' },
           { text: '用户管理', image: '/assets/workbench/users.svg', url: '/pages/workbench/users/index' },
+          { text: '景点类型', image: '/assets/workbench/attraction.svg', url: '/pages/workbench/attraction-type/index' },
         ],
       })
     }

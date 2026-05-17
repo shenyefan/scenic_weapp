@@ -1,0 +1,30 @@
+@import '../../../variable.less';
+
+page {
+  background: @color-bg;
+}
+
+.page-container {
+  min-height: 100vh;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 48rpx);
+}
+
+.section-header {
+  font-size: @font-size-caption;
+  color: @color-text-hint;
+  padding: 24rpx @page-padding 12rpx;
+  text-transform: uppercase;
+  letter-spacing: 1rpx;
+}
+
+.form-group {
+  background: @color-white;
+}
+
+.desc-textarea {
+  padding: 24rpx @page-padding;
+}
+
+.form-footer {
+  margin: 48rpx @page-padding 0;
+}

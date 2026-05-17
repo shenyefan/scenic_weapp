@@ -1,0 +1,40 @@
+<view class="page-container">
+  <t-navbar title="{{isEdit ? '编辑景点类型' : '新建景点类型'}}" leftArrow placeholder z-index="100"/>
+
+  <view class="section-header">基本信息</view>
+  <view class="form-group">
+    <t-input
+      label="类型名称"
+      align="right"
+      value="{{form.typeName}}"
+      placeholder="请输入类型名称（必填）"
+      maxlength="50"
+      bind:change="onNameChange"
+    />
+  </view>
+
+  <view class="section-header">类型说明</view>
+  <view class="form-group">
+    <t-textarea
+      value="{{form.typeDescription}}"
+      placeholder="请输入类型说明（可选）"
+      maxlength="512"
+      indicator
+      autosize
+      bind:change="onDescChange"
+      class="desc-textarea"
+    />
+  </view>
+
+  <view class="form-footer">
+    <t-button
+      theme="primary"
+      size="large"
+      style="width:100%;"
+      loading="{{submitting}}"
+      bind:tap="onSubmit"
+    >{{isEdit ? '保存修改' : '新建类型'}}</t-button>
+  </view>
+
+  <t-toast id="t-toast" />
+</view>

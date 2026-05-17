@@ -1,0 +1,83 @@
+<view class="page-container">
+  <t-navbar title="景点类型{{isInspectionRunning ? ' · 巡查中' : ''}}" leftArrow placeholder z-index="100"/>
+
+  <view class="search-bar-wrap">
+    <t-search
+      class="search-input"
+      value="{{searchKeyword}}"
+      placeholder="搜索类型名称/描述"
+      shape="square"
+      action-text=""
+      bind:change="onSearchChange"
+      bind:clear="onSearchClear"
+    />
+    <view class="action-btn-wrap">
+      <t-button theme="primary" bind:tap="onAddTap" icon="add"></t-button>
+    </view>
+  </view>
+
+  <view class="skeleton-list" wx:if="{{skeleton}}">
+    <view class="skeleton-cell" wx:for="{{[1,2,3,4,5]}}" wx:key="*this">
+      <view class="skeleton-cell-icon"></view>
+      <view class="skeleton-cell-body">
+        <view class="skeleton-cell-title"></view>
+        <view class="skeleton-cell-line"></view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:elif="{{filteredList.length > 0}}" class="item-group">
+    <view
+      class="type-item"
+      wx:for="{{filteredList}}"
+      wx:key="id"
+      hover-class="type-item--hover"
+      hover-stay-time="70"
+    >
+      <view class="type-item-body">
+        <view class="type-item-icon">
+          <t-icon name="location" size="38rpx" color="#0052d9" />
+        </view>
+        <view class="type-item-right">
+          <text class="type-item-name">{{item.typeName}}</text>
+          <text class="type-item-desc">{{item.typeDescription || '暂无类型说明'}}</text>
+        </view>
+      </view>
+      <t-row class="type-item-actions" gutter="0" catchtap="stopPropagation">
+        <t-col span="12">
+          <view
+            class="action-col action-col-btn"
+            style="border-left:none;"
+            catchtap="onEditTap"
+            data-id="{{item.id}}"
+            data-name="{{item.typeName}}"
+            data-desc="{{item.typeDescription}}"
+          >
+            <t-icon name="edit" size="20px" color="#0052d9" />
+            <text class="action-btn-text action-edit-text">编辑</text>
+          </view>
+        </t-col>
+        <t-col span="12">
+          <view class="action-col action-col-btn action-col-delete" catchtap="onDeleteTap" data-id="{{item.id}}" data-name="{{item.typeName}}">
+            <t-icon name="delete" size="20px" color="#e34d59" />
+            <text class="action-btn-text action-delete-text">删除</text>
+          </view>
+        </t-col>
+      </t-row>
+    </view>
+  </view>
+
+  <t-empty wx:elif="{{!skeleton}}" description="暂无景点类型" />
+
+  <t-dialog
+    visible="{{showDeleteDialog}}"
+    title="确认删除"
+    content="确定要删除景点类型「{{deleteTargetName}}」吗？此操作不可恢复。"
+    confirm-btn="删除"
+    cancel-btn="取消"
+    bind:confirm="onDeleteConfirm"
+    bind:cancel="onDeleteCancel"
+  />
+
+  <t-toast id="t-toast" />
+</view>
