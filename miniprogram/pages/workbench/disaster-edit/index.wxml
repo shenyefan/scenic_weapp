@@ -1,0 +1,79 @@
+<view class="page-container">
+  <t-navbar title="{{isEdit ? '编辑灾害信息' : '新建灾害信息'}}" leftArrow placeholder z-index="100"/>
+
+  <block wx:if="{{initLoading}}">
+    <view class="skeleton-section-header"></view>
+    <view class="form-group">
+      <view class="skeleton-cell-row" wx:for="{{[1,2,3,4]}}" wx:key="*this">
+        <view class="skeleton-block skeleton-cell-label"></view>
+        <view class="skeleton-block skeleton-cell-value"></view>
+      </view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="section-header">基本信息</view>
+    <view class="form-group">
+      <t-input label="灾害标题" align="right" value="{{form.disastersTitle}}" placeholder="请输入灾害标题（必填）" maxlength="100" bind:change="onTitleChange" />
+      <t-cell title="严重程度" note="{{form.severityLabel}}" arrow hover bind:click="onSeverityPickerTap" />
+      <t-cell title="开始时间" note="{{form.disastersStartTime || '请选择开始时间'}}" arrow hover bind:click="onStartPickerTap" />
+      <t-cell title="结束时间" note="{{form.disastersEndTime || '请选择结束时间'}}" arrow hover bind:click="onEndPickerTap" />
+    </view>
+
+    <view class="section-header">灾害描述</view>
+    <view class="form-group">
+      <t-textarea
+        value="{{form.disastersDescription}}"
+        placeholder="请输入灾害描述"
+        maxlength="1000"
+        indicator
+        autosize
+        bind:change="onDescChange"
+        class="desc-textarea"
+      />
+    </view>
+
+    <view class="form-footer">
+      <t-button theme="primary" size="large" style="width:100%;" loading="{{submitting}}" bind:tap="onSubmit">
+        {{isEdit ? '保存修改' : '新建灾害信息'}}
+      </t-button>
+    </view>
+  </block>
+
+  <t-picker
+    visible="{{showSeverityPicker}}"
+    value="{{severityPickerValue}}"
+    title="选择严重程度"
+    cancelBtn="取消"
+    confirmBtn="确认"
+    usingCustomNavbar
+    bindchange="onSeverityPickerConfirm"
+    bindcancel="onSeverityPickerCancel"
+  >
+    <t-picker-item options="{{severityOptions}}" />
+  </t-picker>
+
+  <t-date-time-picker
+    visible="{{showStartPicker}}"
+    value="{{startPickerValue}}"
+    title="选择开始时间"
+    mode="second"
+    format="YYYY-MM-DD HH:mm:ss"
+    bindchange="onStartPickerConfirm"
+    bindpick="onStartPickerColumnChange"
+    bindcancel="onStartPickerCancel"
+  />
+
+  <t-date-time-picker
+    visible="{{showEndPicker}}"
+    value="{{endPickerValue}}"
+    title="选择结束时间"
+    mode="second"
+    format="YYYY-MM-DD HH:mm:ss"
+    bindchange="onEndPickerConfirm"
+    bindpick="onEndPickerColumnChange"
+    bindcancel="onEndPickerCancel"
+  />
+
+  <t-toast id="t-toast" />
+</view>

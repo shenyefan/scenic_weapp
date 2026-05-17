@@ -1,0 +1,55 @@
+<view class="page-container">
+  <t-navbar title="{{isEdit ? '编辑天气信息' : '新建天气信息'}}" leftArrow placeholder z-index="100"/>
+
+  <block wx:if="{{initLoading}}">
+    <view class="skeleton-section-header"></view>
+    <view class="form-group">
+      <view class="skeleton-cell-row" wx:for="{{[1,2,3,4,5,6]}}" wx:key="*this">
+        <view class="skeleton-block skeleton-cell-label"></view>
+        <view class="skeleton-block skeleton-cell-value"></view>
+      </view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="section-header">记录信息</view>
+    <view class="form-group">
+      <t-cell
+        title="记录时间"
+        note="{{form.weatherTime || '请选择记录时间'}}"
+        arrow
+        hover
+        bind:click="onTimePickerTap"
+      />
+    </view>
+
+    <view class="section-header">气象指标</view>
+    <view class="form-group">
+      <t-input label="温度" align="right" value="{{form.tempStr}}" placeholder="摄氏度" type="digit" bind:change="onTempChange" />
+      <t-input label="湿度" align="right" value="{{form.humidityStr}}" placeholder="0-100" type="digit" bind:change="onHumidityChange" />
+      <t-input label="气压" align="right" value="{{form.pressureStr}}" placeholder="hPa" type="digit" bind:change="onPressureChange" />
+      <t-input label="风速" align="right" value="{{form.windSpeedStr}}" placeholder="m/s" type="digit" bind:change="onWindSpeedChange" />
+      <t-input label="风向角" align="right" value="{{form.windDegStr}}" placeholder="0-360" type="digit" bind:change="onWindDegChange" />
+      <t-input label="降水量" align="right" value="{{form.rainStr}}" placeholder="mm" type="digit" bind:change="onRainChange" />
+    </view>
+
+    <view class="form-footer">
+      <t-button theme="primary" size="large" style="width:100%;" loading="{{submitting}}" bind:tap="onSubmit">
+        {{isEdit ? '保存修改' : '新建天气信息'}}
+      </t-button>
+    </view>
+  </block>
+
+  <t-date-time-picker
+    visible="{{showTimePicker}}"
+    value="{{timePickerValue}}"
+    title="选择记录时间"
+    mode="second"
+    format="YYYY-MM-DD HH:mm:ss"
+    bindchange="onTimePickerConfirm"
+    bindpick="onTimePickerColumnChange"
+    bindcancel="onTimePickerCancel"
+  />
+
+  <t-toast id="t-toast" />
+</view>

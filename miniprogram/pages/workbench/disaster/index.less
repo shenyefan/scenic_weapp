@@ -35,6 +35,10 @@ page {
   min-width: 0;
 }
 
+.action-btn-wrap {
+  flex-shrink: 0;
+}
+
 @keyframes skeleton-shimmer {
   0% { background-position: -600rpx 0; }
   100% { background-position: 600rpx 0; }
@@ -112,6 +116,35 @@ page {
   flex-direction: column;
   gap: 12rpx;
   padding: 24rpx @page-padding;
+}
+
+.info-item-actions {
+  padding: 16rpx @page-padding;
+  border-top: 1rpx solid @color-border;
+}
+
+.action-col {
+  display: flex;
+  align-items: center;
+  height: 52rpx;
+}
+
+.action-col-btn {
+  justify-content: center;
+  gap: 6rpx;
+  border-left: 1rpx solid @color-border;
+}
+
+.action-btn-text {
+  font-size: @font-size-body;
+}
+
+.action-edit-text {
+  color: @color-brand;
+}
+
+.action-delete-text {
+  color: @color-error;
 }
 
 .info-item-top {

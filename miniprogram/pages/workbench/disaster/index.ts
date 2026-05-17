@@ -1,5 +1,5 @@
 import Toast from 'tdesign-miniprogram/toast/index'
-import { listDisastersByPage } from '../../../api/controller/natural-disasters-controller/natural-disasters-controller'
+import { deleteDisasters, listDisastersByPage } from '../../../api/controller/natural-disasters-controller/natural-disasters-controller'
 import { formatDateTime } from '../../../utils/util'
 
 const PAGE_SIZE = 10
@@ -23,6 +23,7 @@ const SEVERITY_STYLE_MAP: Record<string, { label: string; theme: string }> = {
 
 Page({
   data: {
+    role: 'user',
     skeleton: true,
     loadingMore: false,
     list: [] as any[],
@@ -32,11 +33,18 @@ Page({
     selectedDate: '',
     showDatePicker: false,
     datePickerValue: '',
+    showDeleteDialog: false,
+    deleteTargetId: '',
+    deleteTargetName: '',
   },
 
   _searchTimer: null as ReturnType<typeof setTimeout> | null,
 
   onLoad() {
+    try {
+      const raw = wx.getStorageSync('userInfo')
+      if (raw) this.setData({ role: JSON.parse(raw)?.role || 'user' })
+    } catch {}
     const now = new Date()
     this.setData({
       datePickerValue: `${String(now.getFullYear())}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`,
@@ -49,8 +57,12 @@ Page({
   },
 
   onPullDownRefresh() {
+    this.refreshList().finally(() => wx.stopPullDownRefresh())
+  },
+
+  refreshList() {
     this.setData({ list: [], page: 1, hasMore: true, skeleton: true })
-    this.fetchList(1).finally(() => wx.stopPullDownRefresh())
+    return this.fetchList(1)
   },
 
   async fetchList(page: number) {
@@ -144,4 +156,47 @@ Page({
     })
     this.fetchList(1)
   },
+
+  onAddTap() {
+    wx.navigateTo({
+      url: '/pages/workbench/disaster-edit/index',
+      events: { disasterChanged: () => this.refreshList() },
+    })
+  },
+
+  onEditTap(e: any) {
+    const id = e.currentTarget.dataset.id
+    if (!id) return
+    wx.navigateTo({
+      url: `/pages/workbench/disaster-edit/index?id=${id}`,
+      events: { disasterChanged: () => this.refreshList() },
+    })
+  },
+
+  onDeleteTap(e: any) {
+    const { id, name } = e.currentTarget.dataset
+    this.setData({ showDeleteDialog: true, deleteTargetId: id, deleteTargetName: name })
+  },
+
+  onDeleteCancel() {
+    this.setData({ showDeleteDialog: false, deleteTargetId: '', deleteTargetName: '' })
+  },
+
+  async onDeleteConfirm() {
+    const { deleteTargetId, list } = this.data
+    try {
+      await deleteDisasters({ id: deleteTargetId })
+      this.setData({
+        list: list.filter((item: any) => item.id !== deleteTargetId),
+        showDeleteDialog: false,
+        deleteTargetId: '',
+        deleteTargetName: '',
+      })
+      Toast({ context: this, selector: '#t-toast', message: '删除成功', theme: 'success' })
+    } catch {
+      Toast({ context: this, selector: '#t-toast', message: '删除失败', theme: 'error' })
+    }
+  },
+
+  stopPropagation() {},
 })

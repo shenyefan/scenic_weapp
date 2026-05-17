@@ -12,6 +12,9 @@
       bind:change="onSearchChange"
       bind:clear="onSearchClear"
     />
+    <view wx:if="{{role == 'admin'}}" class="action-btn-wrap">
+      <t-button theme="primary" bind:tap="onAddTap" icon="add"></t-button>
+    </view>
   </view>
 
   <view class="skeleton-list" wx:if="{{skeleton}}">
@@ -43,6 +46,20 @@
           <text class="info-item-meta-text">结束时间：{{item.endTime}}</text>
         </view>
       </view>
+      <t-row wx:if="{{role == 'admin'}}" class="info-item-actions" gutter="0" catchtap="stopPropagation">
+        <t-col span="12">
+          <view class="action-col action-col-btn" style="border-left:none;" catchtap="onEditTap" data-id="{{item.id}}">
+            <t-icon name="edit" size="20px" color="#0052d9" />
+            <text class="action-btn-text action-edit-text">编辑</text>
+          </view>
+        </t-col>
+        <t-col span="12">
+          <view class="action-col action-col-btn action-col-delete" catchtap="onDeleteTap" data-id="{{item.id}}" data-name="{{item.title}}">
+            <t-icon name="delete" size="20px" color="#e34d59" />
+            <text class="action-btn-text action-delete-text">删除</text>
+          </view>
+        </t-col>
+      </t-row>
     </view>
     <t-divider content="已加载全部" wx:if="{{!hasMore}}" />
     <view class="load-more-wrap" wx:if="{{loadingMore}}">
@@ -63,6 +80,16 @@
     usingCustomNavbar
     bind:confirm="onDatePickerConfirm"
     bindcancel="onDatePickerCancel"
+  />
+
+  <t-dialog
+    visible="{{showDeleteDialog}}"
+    title="确认删除"
+    content="确定要删除灾害信息「{{deleteTargetName}}」吗？此操作不可恢复。"
+    confirm-btn="删除"
+    cancel-btn="取消"
+    bind:confirm="onDeleteConfirm"
+    bind:cancel="onDeleteCancel"
   />
 
   <t-toast id="t-toast" />
