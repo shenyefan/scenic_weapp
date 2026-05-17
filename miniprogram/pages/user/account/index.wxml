@@ -1,9 +1,7 @@
 <view class="account-page">
-  <t-navbar title="编辑" leftArrow placeholder />
-
-  <view class="scenic-title">账号安全</view>
-  <view class="scenic-desc">管理您的账号安全信息</view>
+  <t-navbar title="账号安全" leftArrow placeholder />
   
+  <view class="account-section-title">账号信息</view>
   <t-cell-group>
     <t-input
       label="账号"
@@ -49,7 +47,7 @@
 
 
   <!-- 安全验证码（修改敏感信息时需要） -->
-  <view wx:if="{{needsCode || needsCode}}" class="account-section-title">安全验证</view>
+  <view wx:if="{{needsCode}}" class="account-section-title">安全验证</view>
   <t-cell-group wx:if="{{needsCode}}">
     <t-input
       wx:if="{{isEmailChanged}}"

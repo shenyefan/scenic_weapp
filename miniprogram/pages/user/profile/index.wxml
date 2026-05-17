@@ -1,10 +1,8 @@
 <view class="profile-page">
-  <t-navbar title="编辑" leftArrow placeholder />
-
-  <view class="scenic-title">个人资料</view>
-  <view class="scenic-desc">管理您在系统中的公开信息</view>
+  <t-navbar title="个人资料" leftArrow placeholder />
 
   <!-- 头像 -->
+  <view class="section-header">头像</view>
   <t-cell-group class="profile-info">
     <button
       class="profile-avatar-cell"
@@ -24,6 +22,7 @@
     </button>
   </t-cell-group>
 
+  <view class="section-header">基本信息</view>
   <t-cell-group class="profile-info" >
     <t-input
       label="昵称"
@@ -49,6 +48,7 @@
     />
   </t-cell-group>
 
+  <view class="section-header">个人简介</view>
   <t-cell-group class="profile-info" >
     <t-textarea
       label="个人简介"

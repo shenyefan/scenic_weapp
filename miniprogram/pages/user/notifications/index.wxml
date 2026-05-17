@@ -1,9 +1,6 @@
 <!--pages/user/notifications/index.wxml-->
 <view class="notif-page">
-  <t-navbar title="编辑" leftArrow placeholder />
-
-  <view class="scenic-title">消息通知</view>
-  <view class="scenic-desc">配置业务邮件通知</view>
+  <t-navbar title="消息通知" leftArrow placeholder />
   
   <view wx:if="{{loading}}" class="notif-loading">
     <t-loading theme="circular" size="40px" text="加载中..." />

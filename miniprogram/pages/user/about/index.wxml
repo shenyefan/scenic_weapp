@@ -5,7 +5,7 @@
   <!-- Logo 区域 -->
   <view class="about-logo">
     <view class="about-logo__icon">
-      <t-icon name="map" size="80rpx" color="#0052d9" />
+      <image class="about-logo__img" src="/assets/logo.svg" mode="aspectFit" />
     </view>
     <view class="about-logo__name">智慧文旅管理系统</view>
   </view>
