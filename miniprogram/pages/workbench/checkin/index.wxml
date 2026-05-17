@@ -9,6 +9,8 @@
     max-scale="{{maxScale}}"
     setting="{{setting}}"
     show-location
+    enable-scroll="{{true}}"
+    enable-zoom="{{true}}"
     show-compass="{{false}}"
     show-scale="{{false}}"
   />
@@ -70,4 +72,3 @@
 
   <t-toast id="t-toast" />
 </view>
-

@@ -8,6 +8,8 @@
     polyline="{{polyline}}"
     scale="{{scale}}"
     show-location
+    enable-scroll="{{true}}"
+    enable-zoom="{{true}}"
     enable-overlooking="{{overlooking}}"
     enable-satellite="{{satellite}}"
     enable-3D
@@ -98,6 +100,7 @@
     </view>
 
     <multi-select-picker
+      class="filter-picker"
       visible="{{showTypeFilter}}"
       title="景点类型"
       options="{{typeOptions}}"

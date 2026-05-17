@@ -29,6 +29,8 @@
       markers="{{mapMarkers}}"
       polyline="{{mapPolyline}}"
       show-location="{{false}}"
+      enable-scroll="{{true}}"
+      enable-zoom="{{true}}"
       wx:if="{{mapMarkers.length > 0}}"
     />
     <view class="detail-hero detail-hero-placeholder" wx:else>

@@ -8,6 +8,8 @@
 		polyline="{{polyline}}"
 		scale="{{scale}}"
 		show-location
+		enable-scroll="{{true}}"
+		enable-zoom="{{true}}"
 		enable-satellite="{{satellite}}"
 		enable-3D
 		show-compass="{{false}}"

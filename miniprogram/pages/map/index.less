@@ -21,6 +21,7 @@ page {
   position: absolute;
   inset: 0;
   overflow: hidden;
+  pointer-events: none;
 }
 
 .full-map {
@@ -126,6 +127,7 @@ page {
   background: rgba(255, 255, 255, 0.45);
   backdrop-filter: blur(6rpx);
   z-index: 10;
+  pointer-events: auto;
 }
 
 /* 点位数量角标 */
@@ -197,6 +199,7 @@ page {
   flex-direction: column;
   gap: @radius-md;
   z-index: 11;
+  pointer-events: auto;
 }
 
 .tool-stack--left {
@@ -231,10 +234,16 @@ page {
   z-index: 20;
   transform: translateY(100%);
   transition: transform 0.28s ease;
+  pointer-events: none;
 
   &--show {
     transform: translateY(0);
+    pointer-events: auto;
   }
+}
+
+.filter-picker {
+  pointer-events: auto;
 }
 
 .info-panel-inner {
