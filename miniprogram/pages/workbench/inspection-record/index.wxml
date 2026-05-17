@@ -14,7 +14,7 @@
         bind:change="onSearchChange"
         bind:clear="onSearchClear"
       />
-      <t-button wx:if="{{role == 'admin'}}" theme="primary" icon="add" bind:tap="onAddTap" class="add-btn">新增</t-button>
+      <t-button wx:if="{{role == 'admin'}}" theme="primary" icon="add" bind:tap="onAddTap" class="add-btn"></t-button>
     </view>
 
   <!-- 任务状态 Tab -->

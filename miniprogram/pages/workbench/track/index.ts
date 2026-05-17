@@ -75,7 +75,7 @@ Page(withInspectionStatus({
         endTime: item.trackEndTime ? formatDateTime(item.trackEndTime) : '',
         trackStatus: item.trackStatus || '',
         statusLabel: item.trackStatus === 'running' ? '巡查中' : item.trackStatus === 'finished' ? '已结束' : item.trackStatus === 'interrupted' ? '已中断' : '未知',
-        statusType: item.trackStatus === 'running' ? 'primary' : item.trackStatus === 'finished' ? 'success' : item.trackStatus === 'interrupted' ? 'error' : 'default',
+        statusType: item.trackStatus === 'running' ? 'primary' : item.trackStatus === 'finished' ? 'success' : item.trackStatus === 'interrupted' ? 'danger' : 'default',
       }))
       const list = page === 1 ? newItems : [...this.data.list, ...newItems]
       this.setData({ list, page, hasMore: list.length < total, skeleton: false, loadingMore: false })
