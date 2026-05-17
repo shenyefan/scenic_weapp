@@ -25,6 +25,8 @@
     "pages/workbench/weather/index",
     "pages/workbench/disaster/index",
     "pages/workbench/ticket/index",
+    "pages/workbench/ticket-manage/index",
+    "pages/workbench/ticket-edit/index",
     "pages/workbench/buy/index",
     "pages/workbench/orders/index",
     "pages/workbench/order-detail/index",

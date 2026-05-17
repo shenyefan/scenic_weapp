@@ -1,0 +1,106 @@
+<view class="page-container">
+  <t-navbar title="{{isEdit ? '编辑门票' : '新建门票'}}" leftArrow placeholder z-index="100"/>
+
+  <block wx:if="{{initLoading}}">
+    <view class="skeleton-section-header"></view>
+    <view class="form-group">
+      <view class="skeleton-cell-row" wx:for="{{[1,2,3,4]}}" wx:key="*this">
+        <view class="skeleton-block skeleton-cell-label"></view>
+        <view class="skeleton-block skeleton-cell-value"></view>
+      </view>
+    </view>
+    <view class="skeleton-section-header" style="margin-top:24rpx;"></view>
+    <view class="form-group skeleton-media-block"></view>
+  </block>
+
+  <block wx:else>
+    <view class="section-header">基本信息</view>
+    <view class="form-group">
+      <t-input
+        label="门票名称"
+        align="right"
+        value="{{form.ticketName}}"
+        placeholder="请输入门票名称（必填）"
+        maxlength="100"
+        bind:change="onNameChange"
+      />
+      <t-input
+        label="门票价格"
+        align="right"
+        value="{{form.ticketPriceStr}}"
+        placeholder="请输入价格，如 68"
+        type="digit"
+        bind:change="onPriceChange"
+      />
+      <t-input
+        label="有效天数"
+        align="right"
+        value="{{form.validDaysStr}}"
+        placeholder="自激活起有效天数"
+        type="number"
+        bind:change="onValidDaysChange"
+      />
+      <t-input
+        label="库存数量"
+        align="right"
+        value="{{form.stockQuantityStr}}"
+        placeholder="请输入库存数量"
+        type="number"
+        bind:change="onStockChange"
+      />
+      <t-cell
+        title="发布状态"
+        note="{{form.statusLabel}}"
+        arrow
+        hover
+        bind:click="onStatusPickerTap"
+      />
+    </view>
+
+    <view class="section-header">门票说明</view>
+    <view class="form-group">
+      <t-textarea
+        value="{{form.ticketDescription}}"
+        placeholder="请输入门票使用说明、适用人群或核销规则"
+        maxlength="2000"
+        indicator
+        autosize
+        bind:change="onDescChange"
+        class="desc-textarea"
+      />
+    </view>
+
+    <view class="section-header">门票图片</view>
+    <view class="form-group media-section">
+      <media-uploader
+        src="{{form.ticketImage}}"
+        folder="ticket"
+        mediaType="image"
+        hint="支持 JPG/PNG，建议比例 16:9"
+        emptyText="点击上传图片"
+        bind:change="onImageChange"
+      />
+    </view>
+
+    <view class="form-footer">
+      <t-button
+        theme="primary"
+        size="large"
+        style="width:100%;"
+        loading="{{submitting}}"
+        bind:tap="onSubmit"
+      >{{isEdit ? '保存修改' : '新建门票'}}</t-button>
+    </view>
+  </block>
+
+  <t-picker
+    visible="{{showStatusPicker}}"
+    title="选择状态"
+    bind:cancel="onStatusPickerCancel"
+    bind:confirm="onStatusPickerConfirm"
+  >
+    <t-picker-item options="{{statusOptions}}" value="{{statusPickerValue[0]}}" />
+  </t-picker>
+
+  <t-toast id="t-toast" />
+</view>

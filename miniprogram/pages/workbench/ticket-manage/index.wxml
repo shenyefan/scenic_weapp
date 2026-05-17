@@ -1,0 +1,103 @@
+<view class="page-container">
+  <t-navbar title="门票管理{{isInspectionRunning ? ' · 巡查中' : ''}}" leftArrow placeholder z-index="100"/>
+
+  <t-sticky offset-top="{{navBarHeight}}">
+    <view class="search-bar-wrap">
+      <t-button icon="filter-2" bind:tap="onStatusFilterTap" class="filter-icon-btn{{selectedStatus ? ' filter-btn-active' : ''}}" />
+      <t-search
+        class="search-input"
+        value="{{searchKeyword}}"
+        placeholder="搜索门票名称"
+        shape="square"
+        action-text=""
+        bind:change="onSearchChange"
+        bind:clear="onSearchClear"
+      />
+      <view class="action-btn-wrap">
+        <t-button theme="primary" bind:tap="onAddTap" icon="add"></t-button>
+      </view>
+    </view>
+  </t-sticky>
+
+  <view class="skeleton-list" wx:if="{{skeleton}}">
+    <view class="skeleton-cell" wx:for="{{[1,2,3,4,5]}}" wx:key="*this">
+      <view class="skeleton-cell-img"></view>
+      <view class="skeleton-cell-body">
+        <view class="skeleton-cell-title"></view>
+        <view class="skeleton-cell-line"></view>
+        <view class="skeleton-cell-line" style="width:40%;"></view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:elif="{{list.length > 0}}" class="item-group">
+    <view
+      class="ticket-item"
+      wx:for="{{list}}"
+      wx:key="id"
+      hover-class="ticket-item--hover"
+      hover-stay-time="70"
+    >
+      <view class="ticket-item-body">
+        <t-image class="ticket-item-img" src="{{item.image}}" mode="aspectFill" />
+        <view class="ticket-item-right">
+          <view class="ticket-item-top">
+            <text class="ticket-item-name">{{item.name}}</text>
+            <t-tag size="small" theme="{{item.statusType}}" variant="light">{{item.statusLabel}}</t-tag>
+          </view>
+          <text class="ticket-item-desc" wx:if="{{item.description}}">{{item.description}}</text>
+          <view class="ticket-item-meta">
+            <text class="ticket-item-price">¥{{item.price}}</text>
+            <text class="ticket-item-meta-text">有效期 {{item.validDays}} 天</text>
+            <text class="ticket-item-meta-text">库存 {{item.stockQuantity}} 张</text>
+          </view>
+        </view>
+      </view>
+      <t-row class="ticket-item-actions" gutter="0" catchtap="stopPropagation">
+        <t-col span="12">
+          <view class="action-col action-col-btn" style="border-left:none;" catchtap="onEditTap" data-id="{{item.id}}">
+            <t-icon name="edit" size="20px" color="#0052d9" />
+            <text class="action-btn-text action-edit-text">编辑</text>
+          </view>
+        </t-col>
+        <t-col span="12">
+          <view class="action-col action-col-btn action-col-delete" catchtap="onDeleteTap" data-id="{{item.id}}" data-name="{{item.name}}">
+            <t-icon name="delete" size="20px" color="#e34d59" />
+            <text class="action-btn-text action-delete-text">删除</text>
+          </view>
+        </t-col>
+      </t-row>
+    </view>
+    <t-divider content="已加载全部" wx:if="{{!hasMore}}" />
+    <view class="load-more-wrap" wx:if="{{loadingMore}}">
+      <t-loading theme="circular" size="28px" text="加载更多..." />
+    </view>
+  </view>
+
+  <t-empty wx:elif="{{!skeleton}}" description="暂无门票数据" />
+
+  <t-picker
+    visible="{{showStatusPicker}}"
+    value="{{statusPickerValue}}"
+    title="门票状态"
+    cancelBtn="取消"
+    confirmBtn="确认"
+    usingCustomNavbar
+    bindchange="onStatusPickerConfirm"
+    bindcancel="onStatusPickerCancel"
+  >
+    <t-picker-item options="{{statusOptions}}" />
+  </t-picker>
+
+  <t-dialog
+    visible="{{showDeleteDialog}}"
+    title="确认删除"
+    content="确定要删除门票「{{deleteTargetName}}」吗？此操作不可恢复。"
+    confirm-btn="删除"
+    cancel-btn="取消"
+    bind:confirm="onDeleteConfirm"
+    bind:cancel="onDeleteCancel"
+  />
+
+  <t-toast id="t-toast" />
+</view>
