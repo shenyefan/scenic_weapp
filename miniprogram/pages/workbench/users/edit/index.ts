@@ -1,5 +1,5 @@
 import Toast from 'tdesign-miniprogram/toast/index'
-import { getUserById, updateUser } from '../../../../api/controller/user-controller/user-controller'
+import { addUser, getUserById, updateUser } from '../../../../api/controller/user-controller/user-controller'
 import { uploadFile } from '../../../../api/upload'
 
 const ROLE_OPTIONS = [
@@ -22,15 +22,18 @@ const ROLE_LABEL_MAP: Record<string, string> = {
 
 Page({
   data: {
-    initLoading: true,
+    isEdit: false,
+    initLoading: false,
     submitting: false,
     avatarUploading: false,
     showRolePicker: false,
     showGenderPicker: false,
+    showBirthDatePicker: false,
     rolePickerValue: ['user'] as string[],
     genderPickerValue: [''] as string[],
     roleOptions: ROLE_OPTIONS.map((r) => ({ label: r.label, value: r.value })),
     genderOptions: GENDER_OPTIONS.map((g) => ({ label: g.label, value: g.value })),
+    today: new Date().toISOString().slice(0, 10),
     form: {
       userNickname: '',
       userAccount: '',
@@ -39,6 +42,7 @@ Page({
       userProfile: '',
       userAvatar: '',
       userGender: '',
+      userBirthDate: '',
       genderLabel: '未设置',
       userRole: 'user',
       roleLabel: '普通用户',
@@ -51,10 +55,8 @@ Page({
   onLoad(options: any) {
     if (options?.id) {
       this._editId = options.id
+      this.setData({ isEdit: true, initLoading: true })
       this.fetchDetail(options.id)
-    } else {
-      Toast({ context: this, selector: '#t-toast', message: '参数错误', theme: 'error' })
-      this.setData({ initLoading: false })
     }
   },
 
@@ -78,6 +80,7 @@ Page({
           userEmail: (item as any).userEmail || '',
           userProfile: (item as any).userProfile || '',
           userGender: gender,
+          userBirthDate: (item as any).userBirthDate || '',
           genderLabel,
           userRole: role,
           roleLabel: ROLE_LABEL_MAP[role] || role,
@@ -163,45 +166,79 @@ Page({
     })
   },
 
+  onBirthDatePickerTap() {
+    this.setData({ showBirthDatePicker: true })
+  },
+
+  onBirthDatePickerCancel() {
+    this.setData({ showBirthDatePicker: false })
+  },
+
+  onBirthDatePickerConfirm(e: any) {
+    const value: string = e.detail.value ?? ''
+    this.setData({
+      showBirthDatePicker: false,
+      'form.userBirthDate': value,
+    })
+  },
+
   async onSubmit() {
-    const { form, submitting } = this.data
+    const { form, isEdit, submitting } = this.data
     if (submitting) return
 
-    if (!form.userNickname.trim()) {
-      Toast({ context: this, selector: '#t-toast', message: '请输入昵称', theme: 'warning' })
+    const userNickname = form.userNickname.trim()
+    const userAccount = form.userAccount.trim()
+    const userPassword = form.userPassword.trim()
+    const userPhone = form.userPhone.trim()
+    const userEmail = form.userEmail.trim()
+    const userProfile = form.userProfile.trim()
+
+    if (!userNickname || userNickname.length < 2) {
+      Toast({ context: this, selector: '#t-toast', message: '昵称至少2个字符', theme: 'warning' })
       return
     }
-    if (!form.userAccount.trim()) {
-      Toast({ context: this, selector: '#t-toast', message: '请输入登录账号', theme: 'warning' })
+    if (!userAccount || userAccount.length < 4) {
+      Toast({ context: this, selector: '#t-toast', message: '登录账号至少4个字符', theme: 'warning' })
       return
     }
-    if (form.userPassword && form.userPassword.length < 8) {
-      Toast({ context: this, selector: '#t-toast', message: '新密码不能少于8位', theme: 'warning' })
+    if (!isEdit && !userPassword) {
+      Toast({ context: this, selector: '#t-toast', message: '请输入初始密码', theme: 'warning' })
+      return
+    }
+    if (userPassword && userPassword.length < 8) {
+      Toast({ context: this, selector: '#t-toast', message: isEdit ? '新密码不能少于8位' : '初始密码不能少于8位', theme: 'warning' })
       return
     }
 
     this.setData({ submitting: true })
     try {
       const payload: Record<string, any> = {
-        id: this._editId,
         userAvatar: form.userAvatar || undefined,
-        userNickname: form.userNickname.trim(),
-        userAccount: form.userAccount.trim(),
-        userPhone: form.userPhone.trim() || undefined,
-        userEmail: form.userEmail.trim() || undefined,
-        userProfile: form.userProfile.trim() || undefined,
+        userNickname,
+        userAccount,
+        userPhone: userPhone || undefined,
+        userEmail: userEmail || undefined,
+        userProfile: userProfile || undefined,
         userGender: form.userGender || undefined,
+        userBirthDate: form.userBirthDate || undefined,
         userRole: form.userRole as any,
       }
-      if (form.userPassword) {
-        payload.userPassword = form.userPassword
+      if (userPassword) {
+        payload.userPassword = userPassword
       }
-      await updateUser(payload as any)
-      Toast({ context: this, selector: '#t-toast', message: '保存成功', theme: 'success' })
-      setTimeout(() => wx.navigateBack(), 800)
+      if (isEdit) {
+        await updateUser({ ...payload, id: this._editId } as any)
+      } else {
+        await addUser(payload as any)
+      }
+      try {
+        this.getOpenerEventChannel().emit('userChanged')
+      } catch {}
+      Toast({ context: this, selector: '#t-toast', message: isEdit ? '保存成功' : '新建成功', theme: 'success' })
+      setTimeout(() => wx.navigateBack(), 1200)
     } catch {
       this.setData({ submitting: false })
-      Toast({ context: this, selector: '#t-toast', message: '保存失败', theme: 'error' })
+      Toast({ context: this, selector: '#t-toast', message: isEdit ? '保存失败' : '新建失败', theme: 'error' })
     }
   },
 })

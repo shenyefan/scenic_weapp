@@ -45,8 +45,12 @@ Page({
   onReachBottom() { this.loadMore() },
 
   onPullDownRefresh() {
+    this.refreshList().finally(() => wx.stopPullDownRefresh())
+  },
+
+  refreshList() {
     this.setData({ list: [], page: 1, hasMore: true, skeleton: true })
-    this.fetchList(1).finally(() => wx.stopPullDownRefresh())
+    return this.fetchList(1)
   },
 
   async fetchList(page: number) {
@@ -134,7 +138,19 @@ Page({
 
   onEditTap(e: any) {
     const id = e.currentTarget.dataset.id
-    if (id) wx.navigateTo({ url: `/pages/workbench/users/edit/index?id=${id}` })
+    if (id) {
+      wx.navigateTo({
+        url: `/pages/workbench/users/edit/index?id=${id}`,
+        events: { userChanged: () => this.refreshList() },
+      })
+    }
+  },
+
+  onAddTap() {
+    wx.navigateTo({
+      url: '/pages/workbench/users/edit/index',
+      events: { userChanged: () => this.refreshList() },
+    })
   },
 
   stopPropagation() {},

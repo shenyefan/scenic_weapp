@@ -13,6 +13,9 @@
       bind:change="onSearchChange"
       bind:clear="onSearchClear"
     />
+    <view class="action-btn-wrap">
+      <t-button theme="primary" bind:tap="onAddTap" icon="add"></t-button>
+    </view>
   </view>
 
   <!-- 骨架屏 -->

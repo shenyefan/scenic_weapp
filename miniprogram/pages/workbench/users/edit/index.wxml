@@ -1,5 +1,5 @@
 <view class="page-container">
-  <t-navbar title="编辑用户" leftArrow placeholder z-index="100"/>
+  <t-navbar title="{{isEdit ? '编辑用户' : '新建用户'}}" leftArrow placeholder z-index="100"/>
 
   <!-- 骨架屏 -->
   <block wx:if="{{initLoading}}">
@@ -68,6 +68,13 @@
         hover
         bind:click="onGenderPickerTap"
       />
+      <t-cell
+        title="生日"
+        note="{{form.userBirthDate || '未设置'}}"
+        arrow
+        hover
+        bind:click="onBirthDatePickerTap"
+      />
     </view>
 
     <!-- 账号设置 -->
@@ -99,10 +106,10 @@
         bind:change="onEmailChange"
       />
       <t-input
-        label="新密码"
+        label="{{isEdit ? '新密码' : '初始密码'}}"
         align="right"
         value="{{form.userPassword}}"
-        placeholder="留空则不修改密码（8-32位）"
+        placeholder="{{isEdit ? '留空则不修改密码（8-32位）' : '请输入初始密码（8-32位）'}}"
         password
         maxlength="32"
         bind:change="onPasswordChange"
@@ -129,7 +136,7 @@
         style="width:100%;"
         loading="{{submitting}}"
         bind:tap="onSubmit"
-      >保存修改</t-button>
+      >{{isEdit ? '保存修改' : '新建用户'}}</t-button>
     </view>
   </block>
 
@@ -152,6 +159,20 @@
   >
     <t-picker-item options="{{genderOptions}}" value="{{genderPickerValue[0]}}" />
   </t-picker>
+
+  <!-- 生日选择器 -->
+  <t-date-time-picker
+    visible="{{showBirthDatePicker}}"
+    title="选择生日"
+    mode="date"
+    format="YYYY-MM-DD"
+    value="{{form.userBirthDate || today}}"
+    start="1900-01-01"
+    end="{{today}}"
+    bind:confirm="onBirthDatePickerConfirm"
+    bind:cancel="onBirthDatePickerCancel"
+    bind:close="onBirthDatePickerCancel"
+  />
 
   <t-toast id="t-toast" />
 </view>
