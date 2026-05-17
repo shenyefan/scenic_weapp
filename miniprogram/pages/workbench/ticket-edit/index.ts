@@ -49,7 +49,7 @@ Page({
 
   async fetchDetail(id: string) {
     try {
-      const res = await getTicketById({ req: { id } })
+      const res = await getTicketById({ id } as any)
       const item = res?.data
       if (!item) throw new Error()
       const status = (item as any).ticketStatus || 'draft'
