@@ -18,7 +18,7 @@
 
 	<t-navbar title="巡查检查{{isInspectionRunning ? ' · 巡查中' : ''}}" leftArrow placeholder class="inspection-navbar" />
 
-	<view class="map-wrap">
+	<block>
 		<view class="loading-overlay" wx:if="{{loading}}">
 			<t-loading theme="circular" size="40px" text="加载中..." />
 		</view>
@@ -89,7 +89,7 @@
 				<t-icon name="chevron-right" size="28rpx" color="#a6b7cc" />
 			</view>
 		</view>
-	</view>
+	</block>
 
 	<t-toast id="t-toast" />
 </view>

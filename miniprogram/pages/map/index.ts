@@ -420,6 +420,7 @@ Page(withInspectionStatus({
       this._clusterMarkerIds = []
       return
     }
+    if (!this._clusterMarkerIds.length) return
     try {
       ctx.removeMarkers({ markerIds: this._clusterMarkerIds, clear: true })
     } catch {}
@@ -502,7 +503,7 @@ Page(withInspectionStatus({
   },
 
   onMarkerTap(e: any) {
-    const markerId = e?.detail?.markerId
+    const markerId = e?.detail?.markerId ?? e?.markerId
     const item = this._markerDataMap[markerId]
     if (!item) return
     let panel: PanelInfo

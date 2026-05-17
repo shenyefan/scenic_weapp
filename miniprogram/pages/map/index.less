@@ -17,13 +17,6 @@ page {
   backdrop-filter: blur(10rpx);
 }
 
-.map-wrap {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
 .full-map {
   position: absolute;
   inset: 0;
@@ -285,9 +278,13 @@ page {
 
 .info-panel-meta {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 8rpx;
   margin-bottom: 12rpx;
+}
+
+.info-panel-meta :first-child {
+  flex-shrink: 0;
 }
 
 .info-panel-meta-text {
